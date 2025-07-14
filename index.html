@@ -1,162 +1,165 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Malla Curricular Ingeniería Industrial</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malla Curricular Interactiva</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 20px;
-      background-color: #f4f4f4;
+      background: #f3f4f6;
+      padding: 2rem;
     }
     h1 {
       text-align: center;
-      margin-bottom: 20px;
     }
-    .grid-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-      gap: 16px;
-      padding: 0 20px;
+    .ciclo {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem;
+      background: #e5e7eb;
+      border-radius: 1rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
     }
-    .card {
-      background-color: white;
-      border-radius: 12px;
-      padding: 16px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    .titulo-ciclo {
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+    .curso {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: white;
+      border-left: 6px solid #3b82f6;
+      padding: 0.8rem 1rem;
+      border-radius: 1rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      position: relative;
       cursor: pointer;
-      transition: 0.2s;
-      border-left: 8px solid gray;
+      transition: opacity 0.3s;
     }
-    .card:hover {
-      transform: translateY(-3px);
+    .curso.completado {
+      opacity: 0.3;
+      text-decoration: line-through;
     }
-    .completado {
-      border-left-color: green;
-      background-color: #eafbea;
+    .nombre {
+      font-weight: bold;
+      flex-grow: 1;
     }
-    .disponible {
-      border-left-color: #f1c40f;
-      background-color: #fffde7;
-    }
-    .bloqueado {
-      border-left-color: #e74c3c;
-      background-color: #fdecea;
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-    .card h3 {
-      margin-top: 0;
-      font-size: 1.1em;
-    }
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.6);
+    .icono-info {
+      background: #3b82f6;
+      color: white;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 999;
-    }
-    .modal-content {
-      background-color: white;
-      padding: 24px;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 500px;
-      position: relative;
-    }
-    .hidden {
-      display: none;
-    }
-    .close-btn {
-      position: absolute;
-      top: 8px;
-      right: 12px;
-      font-size: 24px;
+      font-size: 14px;
       cursor: pointer;
+      margin-left: 10px;
+    }
+    .descripcion {
+      display: none;
+      background: #f9fafb;
+      margin-top: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
-  <h1>Malla Curricular Ingeniería Industrial</h1>
-  <div id="malla-container" class="grid-container"></div>
-  <div id="modal" class="modal hidden">
-    <div class="modal-content">
-      <span class="close-btn" id="closeModal">&times;</span>
-      <h2 id="modal-title"></h2>
-      <p><strong>Código:</strong> <span id="modal-codigo"></span></p>
-      <p><strong>Créditos:</strong> <span id="modal-creditos"></span></p>
-      <p><strong>Área:</strong> <span id="modal-area"></span></p>
-      <p><strong>Prerrequisitos:</strong> <span id="modal-prerequisitos"></span></p>
-      <p><strong>Descripción:</strong></p>
-      <p id="modal-descripcion"></p>
-    </div>
-  </div>
+  <h1>Malla Curricular Interactiva</h1>
+  <div id="contenedor"></div>
+
   <script>
     const cursos = [
-      { Curso: "Matemática básica", Codigo: "6382", Ciclo: 1, Créditos: 5, Área: "Ciencias", Prerrequisitos: "", Descripción: "Conjuntos de números reales...", Estado: "✅ Completado", EstadoCalculado: "✅ Completado" },
-      { Curso: "Metodologías de la Investigación", Codigo: "6508", Ciclo: 1, Créditos: 3, Área: "", Prerrequisitos: "", Descripción: "Busca desarrollar...", Estado: "✅ Completado", EstadoCalculado: "✅ Completado" },
-      // Agrega aquí todos los demás cursos en el mismo formato...
+      {
+        nombre: "Matemática básica",
+        ciclo: 1,
+        descripcion: "Conjuntos de números reales, ecuaciones e inecuaciones, geometría analítica y funciones...",
+        prerrequisitos: []
+      },
+      {
+        nombre: "Cálculo I",
+        ciclo: 2,
+        descripcion: "Funciones trigonométricas, límites y continuidad, derivadas, integral indefinida...",
+        prerrequisitos: ["Matemática básica"]
+      },
+      {
+        nombre: "Álgebra Lineal",
+        ciclo: 2,
+        descripcion: "Vectores, matrices, álgebra matricial...",
+        prerrequisitos: ["Matemática básica"]
+      }
+      // Agregar todos los demás cursos en formato similar...
     ];
 
-    const estadoIcono = {
-      '✅ Completado': 'completado',
-      '💛 Disponible': 'disponible',
-      '🔒 Bloqueado': 'bloqueado'
-    };
+    const estadoCursos = {};
 
-    const ciclos = {};
-    cursos.forEach(curso => {
-      const ciclo = curso['Ciclo'];
-      if (!ciclos[ciclo]) ciclos[ciclo] = [];
-      ciclos[ciclo].push(curso);
-    });
+    function render() {
+      const contenedor = document.getElementById("contenedor");
+      contenedor.innerHTML = "";
 
-    const contenedor = document.getElementById('malla-container');
+      const ciclosUnicos = [...new Set(cursos.map(c => c.ciclo))].sort((a, b) => a - b);
 
-    Object.keys(ciclos).sort((a, b) => a - b).forEach(ciclo => {
-      const columna = document.createElement('div');
-      const titulo = document.createElement('h2');
-      titulo.textContent = `Ciclo ${ciclo}`;
-      columna.appendChild(titulo);
+      ciclosUnicos.forEach(ciclo => {
+        const bloque = document.createElement("div");
+        bloque.className = "ciclo";
 
-      ciclos[ciclo].forEach(curso => {
-        const card = document.createElement('div');
-        const estadoClase = estadoIcono[curso['EstadoCalculado']] || 'bloqueado';
-        card.className = `card ${estadoClase}`;
-        card.innerHTML = `
-          <h3>${curso['Curso']}</h3>
-          <p><strong>Código:</strong> ${curso['Codigo']}</p>
-          <p><strong>Créditos:</strong> ${curso['Créditos']}</p>
-        `;
-        if (estadoClase !== 'bloqueado') {
-          card.addEventListener('click', () => mostrarModal(curso));
-        }
-        columna.appendChild(card);
+        const titulo = document.createElement("div");
+        titulo.className = "titulo-ciclo";
+        titulo.textContent = `Ciclo ${ciclo}`;
+        bloque.appendChild(titulo);
+
+        cursos.filter(c => c.ciclo === ciclo).forEach(curso => {
+          const div = document.createElement("div");
+          div.className = "curso";
+          div.dataset.nombre = curso.nombre;
+          if (!prerrequisitosCumplidos(curso)) div.style.opacity = 0.2;
+          if (estadoCursos[curso.nombre]) div.classList.add("completado");
+
+          const span = document.createElement("span");
+          span.className = "nombre";
+          span.textContent = curso.nombre;
+          div.appendChild(span);
+
+          const info = document.createElement("div");
+          info.className = "icono-info";
+          info.textContent = "i";
+          info.onclick = e => {
+            e.stopPropagation();
+            descripcion.style.display = descripcion.style.display === "block" ? "none" : "block";
+          };
+
+          const descripcion = document.createElement("div");
+          descripcion.className = "descripcion";
+          descripcion.textContent = curso.descripcion;
+
+          div.appendChild(info);
+          div.appendChild(descripcion);
+
+          div.onclick = () => {
+            estadoCursos[curso.nombre] = !estadoCursos[curso.nombre];
+            render();
+          };
+
+          bloque.appendChild(div);
+        });
+
+        contenedor.appendChild(bloque);
       });
-
-      contenedor.appendChild(columna);
-    });
-
-    function mostrarModal(curso) {
-      document.getElementById('modal-title').textContent = curso['Curso'];
-      document.getElementById('modal-codigo').textContent = curso['Codigo'];
-      document.getElementById('modal-creditos').textContent = curso['Créditos'];
-      document.getElementById('modal-area').textContent = curso['Área'];
-      document.getElementById('modal-prerequisitos').textContent = curso['Prerrequisitos'];
-      document.getElementById('modal-descripcion').textContent = curso['Descripción'];
-      document.getElementById('modal').classList.remove('hidden');
     }
 
-    document.getElementById('closeModal').addEventListener('click', () => {
-      document.getElementById('modal').classList.add('hidden');
-    });
+    function prerrequisitosCumplidos(curso) {
+      return curso.prerrequisitos.every(p => estadoCursos[p]);
+    }
+
+    render();
   </script>
 </body>
 </html>
