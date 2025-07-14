@@ -4,42 +4,45 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Malla Curricular - Ingeniería Industrial</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Poppins', sans-serif;
       margin: 0;
       padding: 2rem;
-      background: #f9f9f9;
+      background: #f6f5fa;
     }
     h1 {
       text-align: center;
       margin-bottom: 2rem;
+      color: #5d3d9c;
     }
     .grid {
       display: flex;
-      gap: 1rem;
+      gap: 1.5rem;
       overflow-x: auto;
+      padding-bottom: 1rem;
     }
     .ciclo-col {
-      min-width: 240px;
+      min-width: 250px;
       flex-shrink: 0;
       background-color: #ffffff;
-      border-radius: 1rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-radius: 1.5rem;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
       padding: 1rem;
     }
     .ciclo-title {
-      font-weight: bold;
+      font-weight: 600;
       font-size: 1.2rem;
       margin-bottom: 1rem;
-      color: #333;
+      color: #5d3d9c;
       text-align: center;
     }
     .curso {
-      background-color: #e7f1fc;
-      border-left: 6px solid #007acc;
+      background-color: #e9ecfb;
+      border-left: 6px solid #7c66e3;
       padding: 0.75rem;
-      border-radius: 0.75rem;
+      border-radius: 1rem;
       margin-bottom: 0.75rem;
       position: relative;
       cursor: pointer;
@@ -51,12 +54,13 @@
     }
     .curso.bloqueado {
       opacity: 0.3;
+      pointer-events: none;
     }
     .info-btn {
       position: absolute;
       top: 0.5rem;
       right: 0.5rem;
-      background-color: #007acc;
+      background-color: #7c66e3;
       color: white;
       border-radius: 50%;
       width: 24px;
@@ -73,20 +77,34 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: #fff;
-      padding: 1rem;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      border-radius: 1rem;
+      background: #ffffff;
+      padding: 1.5rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      border-radius: 1.5rem;
       z-index: 99;
-      max-width: 400px;
+      max-width: 450px;
       width: 90%;
     }
     .popup h3 {
       margin-top: 0;
+      color: #5d3d9c;
     }
     .popup small {
       display: block;
       margin-bottom: 0.5rem;
+      color: #444;
+    }
+    .popup button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: #5d3d9c;
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+    .popup button:hover {
+      background-color: #684fc1;
     }
     .overlay {
       position: fixed;
@@ -96,6 +114,14 @@
       z-index: 98;
     }
     .hidden { display: none; }
+    .curso-title {
+      font-weight: 600;
+      color: #333;
+    }
+    .curso small {
+      color: #555;
+      font-size: 0.85rem;
+    }
   </style>
 </head>
 <body>
@@ -138,7 +164,7 @@
         creditos: 3,
         prerrequisitos: ["Matemática básica"],
         descripcion: "Vectores y matrices, álgebra vectorial y matricial..."
-      },
+      }
     ];
 
     const estadoCursos = {};
@@ -217,3 +243,4 @@
   </script>
 </body>
 </html>
+
