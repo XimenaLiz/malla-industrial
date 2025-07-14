@@ -54,7 +54,6 @@
     }
     .curso.bloqueado {
       opacity: 0.3;
-      pointer-events: none;
     }
     .info-btn {
       position: absolute;
@@ -226,7 +225,7 @@
 
           card.appendChild(infoBtn);
           card.addEventListener("click", () => {
-            if (!card.classList.contains("bloqueado")) {
+            if (!estaBloqueado) {
               estadoCursos[curso.curso] = !estadoCursos[curso.curso];
               renderMalla();
             }
@@ -243,4 +242,3 @@
   </script>
 </body>
 </html>
-
