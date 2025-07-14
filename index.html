@@ -223,7 +223,19 @@
   <div id="overlay" class="overlay hidden"></div>
   <div id="popup" class="popup hidden"></div>
 
+  <footer style="text-align: center; font-size: 0.85rem; color: #666; margin-top: 2rem;">
+    <p>
+      Creado por <strong>Adriana Lizares</strong> ❤️<br>
+      Contacto: <a href="mailto:adriana.liza@outlook.com">adriana.liza@outlook.com</a><br>
+      Última actualización: <span id="fecha-actualizacion"></span>
+    </p>
+  </footer>
+
   <script>
+    document.getElementById("fecha-actualizacion").textContent = new Date().toLocaleDateString("es-PE", {
+      year: 'numeric', month: 'long', day: 'numeric'
+    });
+
     const carreras = {
       ingenieria: [
         { ciclo: 1, curso: "Matemática básica", codigo: "6382", creditos: 5, prerrequisitos: [], descripcion: "Conjuntos de números reales, ecuaciones e inecuaciones..." },
@@ -311,8 +323,7 @@
     }
 
     function eliminarCurso(nombre) {
-      const confirmacion = confirm(`¿Estás seguro de que quieres eliminar el curso "${nombre}"?`);
-      if (!confirmacion) return;
+      if (!confirm(`¿Eliminar "${nombre}"?`)) return;
       carreras.personalizada = carreras.personalizada.filter(c => c.curso !== nombre);
       guardarCursosPersonalizados();
       renderMalla();
@@ -335,10 +346,7 @@
       ciclos.forEach(ciclo => {
         const col = document.createElement("div");
         col.className = "ciclo-col";
-        const title = document.createElement("div");
-        title.className = "ciclo-title";
-        title.textContent = `Ciclo ${ciclo}`;
-        col.appendChild(title);
+        col.innerHTML = `<div class="ciclo-title">Ciclo ${ciclo}</div>`;
 
         cursos.filter(c => c.ciclo === ciclo).forEach(curso => {
           const card = document.createElement("div");
@@ -349,20 +357,17 @@
           if (estaBloqueado) card.classList.add("bloqueado");
           if (estadoCursos[curso.curso]) card.classList.add("completado");
 
-          const infoBtn = document.createElement("div");
-          infoBtn.className = "info-btn";
-          infoBtn.textContent = "i";
-          infoBtn.addEventListener("click", e => {
-            e.stopPropagation();
-            renderPopup(curso);
-          });
-
           card.innerHTML = `
             <div class="curso-title">${curso.curso}</div>
             <small><strong>Código:</strong> ${curso.codigo}</small>
             <small><strong>Créditos:</strong> ${curso.creditos}</small>
+            <div class="info-btn">i</div>
           `;
-          card.appendChild(infoBtn);
+
+          card.querySelector(".info-btn").addEventListener("click", e => {
+            e.stopPropagation();
+            renderPopup(curso);
+          });
 
           if (carreraActual === 'personalizada') {
             const actions = document.createElement('div');
