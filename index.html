@@ -202,6 +202,27 @@
   </style>
 </head>
 <body>
+  <h1>Malla Curricular - ULIMA</h1>
+  <div class="tabs" id="carreras">
+    <button class="active" onclick="cambiarCarrera('ingenieria')">Ingeniería Industrial</button>
+    <button onclick="cambiarCarrera('personalizada')">Personalizada</button>
+  </div>
+  <div class="grid" id="malla"></div>
+
+  <form id="formulario-personalizado" class="hidden" onsubmit="agregarCurso(event)">
+    <h3>Agregar curso personalizado</h3>
+    <input type="text" id="curso-nombre" placeholder="Nombre del curso" required>
+    <input type="text" id="curso-codigo" placeholder="Código del curso">
+    <input type="number" id="curso-creditos" placeholder="Créditos" required>
+    <input type="number" id="curso-ciclo" placeholder="Ciclo" required>
+    <input type="text" id="curso-prerreq" placeholder="Prerrequisitos (separados por coma)">
+    <textarea id="curso-descripcion" placeholder="Descripción del curso"></textarea>
+    <button type="submit">Agregar curso</button>
+  </form>
+
+  <div id="overlay" class="overlay hidden"></div>
+  <div id="popup" class="popup hidden"></div>
+
   <script>
     const carreras = {
       ingenieria: [
@@ -213,10 +234,66 @@
       personalizada: JSON.parse(localStorage.getItem("cursosPersonalizados")) || []
     };
 
+    let carreraActual = 'ingenieria';
     const estadoCursos = JSON.parse(localStorage.getItem("estadoCursosULIMA")) || {};
 
     function guardarCursosPersonalizados() {
       localStorage.setItem("cursosPersonalizados", JSON.stringify(carreras.personalizada));
+    }
+
+    function lanzarConfetti() {
+      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+    }
+
+    function mostrarAlerta(mensaje) {
+      const alerta = document.createElement("div");
+      alerta.className = "alerta-desbloqueo";
+      alerta.innerHTML = `<img src="https://media.giphy.com/media/L0a0RgItTjX3WgYgKn/giphy.gif" alt="Desbloqueado"> <span>${mensaje}</span>`;
+      document.body.appendChild(alerta);
+      setTimeout(() => alerta.remove(), 3000);
+    }
+
+    function renderPopup(curso) {
+      const popup = document.getElementById("popup");
+      const overlay = document.getElementById("overlay");
+      const prerreq = curso.prerrequisitos.length ? curso.prerrequisitos.join(", ") : "Ninguno";
+      popup.innerHTML = `
+        <h3>${curso.curso}</h3>
+        <small><strong>Código:</strong> ${curso.codigo}</small>
+        <small><strong>Créditos:</strong> ${curso.creditos}</small>
+        <small><strong>Prerrequisitos:</strong> ${prerreq}</small>
+        <p>${curso.descripcion}</p>
+        <button onclick="cerrarPopup()">Cerrar</button>
+      `;
+      popup.classList.remove("hidden");
+      overlay.classList.remove("hidden");
+    }
+
+    function cerrarPopup() {
+      document.getElementById("popup").classList.add("hidden");
+      document.getElementById("overlay").classList.add("hidden");
+    }
+
+    function cambiarCarrera(nombre) {
+      document.querySelectorAll('.tabs button').forEach(btn => btn.classList.remove('active'));
+      document.querySelector(`.tabs button[onclick*="${nombre}"]`).classList.add('active');
+      carreraActual = nombre;
+      document.getElementById("formulario-personalizado").classList.toggle("hidden", nombre !== "personalizada");
+      renderMalla();
+    }
+
+    function agregarCurso(e) {
+      e.preventDefault();
+      const nombre = document.getElementById("curso-nombre").value;
+      const codigo = document.getElementById("curso-codigo").value;
+      const creditos = parseInt(document.getElementById("curso-creditos").value);
+      const ciclo = parseInt(document.getElementById("curso-ciclo").value);
+      const prerreq = document.getElementById("curso-prerreq").value.split(",").map(p => p.trim()).filter(Boolean);
+      const descripcion = document.getElementById("curso-descripcion").value;
+      carreras.personalizada.push({ curso: nombre, codigo, creditos, ciclo, prerrequisitos: prerreq, descripcion });
+      guardarCursosPersonalizados();
+      e.target.reset();
+      renderMalla();
     }
 
     function editarCurso(nombre) {
@@ -240,6 +317,80 @@
       guardarCursosPersonalizados();
       renderMalla();
     }
+
+    function renderMalla() {
+      const cursos = carreras[carreraActual];
+      const container = document.getElementById("malla");
+      const ciclos = [...new Set(cursos.map(c => c.ciclo))].sort((a,b) => a-b);
+      container.innerHTML = "";
+
+      cursos.forEach(curso => {
+        const fueBloqueado = curso.prerrequisitos.some(pre => !estadoCursos[pre]);
+        const ahoraDesbloqueado = curso.prerrequisitos.every(pre => estadoCursos[pre]);
+        if (!estadoCursos[curso.curso] && fueBloqueado && ahoraDesbloqueado && localStorage.getItem("estadoCursosULIMA")) {
+          mostrarAlerta(`¡Ya puedes llevar \"${curso.curso}\"!`);
+        }
+      });
+
+      ciclos.forEach(ciclo => {
+        const col = document.createElement("div");
+        col.className = "ciclo-col";
+        const title = document.createElement("div");
+        title.className = "ciclo-title";
+        title.textContent = `Ciclo ${ciclo}`;
+        col.appendChild(title);
+
+        cursos.filter(c => c.ciclo === ciclo).forEach(curso => {
+          const card = document.createElement("div");
+          card.className = "curso";
+          card.dataset.nombre = curso.curso;
+
+          const estaBloqueado = curso.prerrequisitos.some(pre => !estadoCursos[pre]);
+          if (estaBloqueado) card.classList.add("bloqueado");
+          if (estadoCursos[curso.curso]) card.classList.add("completado");
+
+          const infoBtn = document.createElement("div");
+          infoBtn.className = "info-btn";
+          infoBtn.textContent = "i";
+          infoBtn.addEventListener("click", e => {
+            e.stopPropagation();
+            renderPopup(curso);
+          });
+
+          card.innerHTML = `
+            <div class="curso-title">${curso.curso}</div>
+            <small><strong>Código:</strong> ${curso.codigo}</small>
+            <small><strong>Créditos:</strong> ${curso.creditos}</small>
+          `;
+          card.appendChild(infoBtn);
+
+          if (carreraActual === 'personalizada') {
+            const actions = document.createElement('div');
+            actions.className = 'action-btn';
+            actions.innerHTML = `
+              <button onclick="event.stopPropagation(); editarCurso('${curso.curso}')">✏️</button>
+              <button onclick="event.stopPropagation(); eliminarCurso('${curso.curso}')">🗑️</button>
+            `;
+            card.appendChild(actions);
+          }
+
+          card.addEventListener("click", () => {
+            if (!estaBloqueado) {
+              estadoCursos[curso.curso] = !estadoCursos[curso.curso];
+              localStorage.setItem("estadoCursosULIMA", JSON.stringify(estadoCursos));
+              renderMalla();
+              if (estadoCursos[curso.curso]) lanzarConfetti();
+            }
+          });
+
+          col.appendChild(card);
+        });
+
+        container.appendChild(col);
+      });
+    }
+
+    renderMalla();
   </script>
 </body>
 </html>
