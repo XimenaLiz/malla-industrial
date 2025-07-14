@@ -332,8 +332,9 @@
         { ciclo: 9, curso: "Ingeniería Comercial", codigo: "560072", creditos: 3, prerrequisitos: ["Modelos de Sistemas Logísticos"], descripcion: "Evalúa la gestión del proceso comercial usando herramientas innovadoras. Aborda segmentación de mercados, comportamiento del consumidor, marketing, ventas y CRM." },
 
         { ciclo: 10, curso: "Proyecto de Ingeniería Aplicada II", codigo: "560073", creditos: 4, prerrequisitos: ["Proyecto de Ingeniería Aplicada I", "Simulación de Procesos"], descripcion: "Segunda etapa del proyecto de ingeniería. Evalúa viabilidad del modelo propuesto mediante simulación crítica de un caso real." },
-        { ciclo: 10, curso: "Gerencia Estratégica", codigo: "560074", creditos: 4, prerrequisitos: ["Ingeniería Financiera", "Ingeniería Comercial"], descripcion: "Crea un plan estratégico competitivo. Aborda análisis estratégico, formulación de estrategias, Balanced Scorecard y modelo GRC." }
+        { ciclo: 10, curso: "Gerencia Estratégica", codigo: "560074", creditos: 4, prerrequisitos: ["Ingeniería Financiera", "Ingeniería Comercial"], descripcion: "Crea un plan estratégico competitivo. Aborda análisis estratégico, formulación de estrategias, Balanced Scorecard y modelo GRC." },
 ],
+
       personalizada: JSON.parse(localStorage.getItem("cursosPersonalizados")) || []
     };
 
@@ -486,7 +487,6 @@
       });
     }
 
-    renderMalla();
     const cursosElectivos = [
       { ciclo: 1, curso: "Electivo 1", codigo: "EL101", creditos: 3, prerrequisitos: [], descripcion: "Curso electivo ejemplo número 1." },
       { ciclo: 2, curso: "Electivo 2", codigo: "EL102", creditos: 3, prerrequisitos: [], descripcion: "Curso electivo ejemplo número 2." },
@@ -547,12 +547,11 @@
         });
       });
     }
-  window.onload = () => {
-    renderMalla();
-    renderElectivos();
-  };
 
-
+    window.onload = () => {
+      renderMalla();
+      renderElectivos();
+    };
   </script>
 </body>
 </html>
