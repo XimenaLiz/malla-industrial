@@ -2,13 +2,28 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Malla Curricular - Ingeniería Industrial</title>
-  <link rel="stylesheet" href="estilos.css">
+  <title>Malla Curricular Ingeniería Industrial</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1 class="titulo">Malla Curricular de Ingeniería Industrial</h1>
-  <div id="contenedor-cursos" class="contenedor"></div>
+  <h1>Malla Curricular Ingeniería Industrial</h1>
+  <div id="malla"></div>
+
+  <!-- Modal -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 id="modal-title"></h2>
+      <p><strong>Código:</strong> <span id="modal-codigo"></span></p>
+      <p><strong>Créditos:</strong> <span id="modal-creditos"></span></p>
+      <p><strong>Área:</strong> <span id="modal-area"></span></p>
+      <p><strong>Prerrequisitos:</strong> <span id="modal-prereq"></span></p>
+      <p><strong>Descripción:</strong></p>
+      <p id="modal-desc"></p>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
 </html>
+
