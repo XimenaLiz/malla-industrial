@@ -199,6 +199,36 @@
       border-radius: 0.5rem;
       cursor: pointer;
     }
+    .electivo {
+      background-color: #ffe9ec;
+      border-left: 6px solid #d94e6a;
+      padding: 0.75rem;
+      border-radius: 1rem;
+      margin-bottom: 0.75rem;
+      position: relative;
+      cursor: grab;
+    }
+    .electivo.dragging {
+      opacity: 0.4;
+    }
+    .electivo .info-btn {
+      background-color: #d94e6a;
+    }
+    .electivo-dropzone {
+      min-width: 250px;
+      flex-shrink: 0;
+      background-color: #fff4f5;
+      border-radius: 1.5rem;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+      padding: 1rem;
+    }
+    .electivo-title {
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: #d94e6a;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -222,6 +252,10 @@
 
   <div id="overlay" class="overlay hidden"></div>
   <div id="popup" class="popup hidden"></div>
+  <div style="margin-top: 2rem;">
+  <h2 style="text-align: center; color: #5d3d9c;">Cursos Electivos</h2>
+  <div id="electivos-container" class="grid" style="flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2rem;"></div>
+  </div>
 
   <footer style="text-align: center; font-size: 0.85rem; color: #666; margin-top: 2rem;">
     <p>
@@ -453,6 +487,69 @@
     }
 
     renderMalla();
+    const cursosElectivos = [
+      { ciclo: 1, curso: "Electivo 1", codigo: "EL101", creditos: 3, prerrequisitos: [], descripcion: "Curso electivo ejemplo número 1." },
+      { ciclo: 2, curso: "Electivo 2", codigo: "EL102", creditos: 3, prerrequisitos: [], descripcion: "Curso electivo ejemplo número 2." },
+      { ciclo: 3, curso: "Electivo 3", codigo: "EL103", creditos: 3, prerrequisitos: [], descripcion: "Curso electivo ejemplo número 3." }
+    ];
+
+    function renderElectivos() {
+      const container = document.getElementById("electivos-container");
+      container.innerHTML = "";
+
+      const ciclos = [...new Set(cursosElectivos.map(c => c.ciclo))].sort((a,b) => a-b);
+      ciclos.forEach(ciclo => {
+        const col = document.createElement("div");
+        col.className = "electivo-dropzone";
+        col.dataset.ciclo = ciclo;
+        col.innerHTML = `<div class="electivo-title">Ciclo ${ciclo}</div>`;
+        container.appendChild(col);
+      });
+
+      cursosElectivos.forEach(curso => {
+        const card = document.createElement("div");
+        card.className = "electivo";
+        card.setAttribute("draggable", "true");
+        card.dataset.curso = curso.curso;
+        card.dataset.ciclo = curso.ciclo;
+        card.innerHTML = `
+          <div class="curso-title">${curso.curso}</div>
+          <small><strong>Código:</strong> ${curso.codigo}</small>
+          <small><strong>Créditos:</strong> ${curso.creditos}</small>
+          <div class="info-btn">i</div>
+        `;
+
+        card.querySelector(".info-btn").addEventListener("click", e => {
+          e.stopPropagation();
+          renderPopup(curso);
+        });
+
+        card.addEventListener("dragstart", () => {
+          card.classList.add("dragging");
+        });
+
+        card.addEventListener("dragend", () => {
+          card.classList.remove("dragging");
+        });
+
+        const dropzone = container.querySelector(`.electivo-dropzone[data-ciclo="${curso.ciclo}"]`);
+        if (dropzone) dropzone.appendChild(card);
+      });
+
+      document.querySelectorAll('.electivo-dropzone').forEach(zone => {
+        zone.addEventListener('dragover', e => {
+          e.preventDefault();
+          const dragged = document.querySelector('.electivo.dragging');
+          if (dragged) {
+            zone.appendChild(dragged);
+            dragged.dataset.ciclo = zone.dataset.ciclo;
+          }
+        });
+      });
+    }
+
+    renderElectivos();
+
   </script>
 </body>
 </html>
