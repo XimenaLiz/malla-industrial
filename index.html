@@ -202,17 +202,21 @@
   </style>
 </head>
 <body>
-  <!-- CONTENIDO OMITIDO PARA BREVIDAD -->
-
   <script>
-    // Dentro de renderMalla, añade este bloque luego de crear el card:
-    if (carreraActual === 'personalizada') {
-      const actions = document.createElement('div');
-      actions.className = 'action-btn';
-      actions.innerHTML = `
-        <button onclick="event.stopPropagation(); editarCurso('${curso.curso}')">✏️</button>
-        <button onclick="event.stopPropagation(); eliminarCurso('${curso.curso}')">🗑️</button>`;
-      card.appendChild(actions);
+    const carreras = {
+      ingenieria: [
+        { ciclo: 1, curso: "Matemática básica", codigo: "6382", creditos: 5, prerrequisitos: [], descripcion: "Conjuntos de números reales, ecuaciones e inecuaciones..." },
+        { ciclo: 1, curso: "Metodologías de la Investigación", codigo: "6508", creditos: 3, prerrequisitos: [], descripcion: "Capacidad de formular, desarrollar y comunicar proyectos..." },
+        { ciclo: 2, curso: "Cálculo I", codigo: "6503", creditos: 5, prerrequisitos: ["Matemática básica"], descripcion: "Funciones trigonométricas, derivadas e integrales..." },
+        { ciclo: 2, curso: "Álgebra Lineal", codigo: "6384", creditos: 3, prerrequisitos: ["Matemática básica"], descripcion: "Vectores y matrices, álgebra vectorial y matricial..." }
+      ],
+      personalizada: JSON.parse(localStorage.getItem("cursosPersonalizados")) || []
+    };
+
+    const estadoCursos = JSON.parse(localStorage.getItem("estadoCursosULIMA")) || {};
+
+    function guardarCursosPersonalizados() {
+      localStorage.setItem("cursosPersonalizados", JSON.stringify(carreras.personalizada));
     }
 
     function editarCurso(nombre) {
@@ -225,6 +229,7 @@
       document.getElementById("curso-prerreq").value = curso.prerrequisitos.join(", ");
       document.getElementById("curso-descripcion").value = curso.descripcion;
       carreras.personalizada = carreras.personalizada.filter(c => c.curso !== nombre);
+      guardarCursosPersonalizados();
       renderMalla();
     }
 
@@ -232,9 +237,11 @@
       const confirmacion = confirm(`¿Estás seguro de que quieres eliminar el curso "${nombre}"?`);
       if (!confirmacion) return;
       carreras.personalizada = carreras.personalizada.filter(c => c.curso !== nombre);
+      guardarCursosPersonalizados();
       renderMalla();
     }
   </script>
 </body>
 </html>
+
 
