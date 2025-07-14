@@ -7,23 +7,21 @@
 </head>
 <body>
   <h1>Malla Curricular Ingeniería Industrial</h1>
-  <div id="malla"></div>
+  <div id="malla-container"></div>
 
-  <!-- Modal -->
-  <div id="modal" class="modal hidden">
+  <!-- Modal para mostrar detalles del curso -->
+  <div id="modal" class="modal">
     <div class="modal-content">
-      <span class="close">&times;</span>
+      <span class="close" id="closeModal">×</span>
       <h2 id="modal-title"></h2>
       <p><strong>Código:</strong> <span id="modal-codigo"></span></p>
       <p><strong>Créditos:</strong> <span id="modal-creditos"></span></p>
       <p><strong>Área:</strong> <span id="modal-area"></span></p>
       <p><strong>Prerrequisitos:</strong> <span id="modal-prereq"></span></p>
-      <p><strong>Descripción:</strong></p>
-      <p id="modal-desc"></p>
+      <p><strong>Descripción:</strong> <span id="modal-desc"></span></p>
     </div>
   </div>
 
   <script src="script.js"></script>
 </body>
 </html>
-
