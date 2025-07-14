@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Malla Curricular - Ingeniería Industrial ULIMA</title>
+  <title>Malla Curricular - ULIMA</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
@@ -15,8 +15,27 @@
     }
     h1 {
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
       color: #5d3d9c;
+    }
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      gap: 1rem;
+    }
+    .tabs button {
+      padding: 0.5rem 1rem;
+      background: #e0ddf5;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      color: #5d3d9c;
+    }
+    .tabs button.active {
+      background: #7c66e3;
+      color: white;
     }
     .grid {
       display: flex;
@@ -103,9 +122,6 @@
       border-radius: 0.5rem;
       cursor: pointer;
     }
-    .popup button:hover {
-      background-color: #684fc1;
-    }
     .overlay {
       position: fixed;
       top: 0; left: 0;
@@ -117,10 +133,6 @@
     .curso-title {
       font-weight: 600;
       color: #333;
-    }
-    .curso small {
-      color: #555;
-      font-size: 0.85rem;
     }
     .alerta-desbloqueo {
       position: fixed;
@@ -134,6 +146,13 @@
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
       z-index: 100;
       animation: fadeInOut 3s ease forwards;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .alerta-desbloqueo img {
+      width: 24px;
+      height: 24px;
     }
     @keyframes fadeInOut {
       0% { opacity: 0; }
@@ -144,20 +163,27 @@
   </style>
 </head>
 <body>
-  <h1>Malla Curricular - Ingeniería Industrial ULIMA</h1>
+  <h1>Malla Curricular - ULIMA</h1>
+  <div class="tabs" id="carreras">
+    <button class="active" onclick="cambiarCarrera('ingenieria')">Ingeniería Industrial</button>
+    <button onclick="cambiarCarrera('personalizada')">Personalizada</button>
+  </div>
   <div class="grid" id="malla"></div>
-
   <div id="overlay" class="overlay hidden"></div>
   <div id="popup" class="popup hidden"></div>
 
   <script>
-    const cursos = [
-      { ciclo: 1, curso: "Matemática básica", codigo: "6382", creditos: 5, prerrequisitos: [], descripcion: "Conjuntos de números reales, ecuaciones e inecuaciones..." },
-      { ciclo: 1, curso: "Metodologías de la Investigación", codigo: "6508", creditos: 3, prerrequisitos: [], descripcion: "Capacidad de formular, desarrollar y comunicar proyectos..." },
-      { ciclo: 2, curso: "Cálculo I", codigo: "6503", creditos: 5, prerrequisitos: ["Matemática básica"], descripcion: "Funciones trigonométricas, derivadas e integrales..." },
-      { ciclo: 2, curso: "Álgebra Lineal", codigo: "6384", creditos: 3, prerrequisitos: ["Matemática básica"], descripcion: "Vectores y matrices, álgebra vectorial y matricial..." }
-    ];
+    const carreras = {
+      ingenieria: [
+        { ciclo: 1, curso: "Matemática básica", codigo: "6382", creditos: 5, prerrequisitos: [], descripcion: "Conjuntos de números reales, ecuaciones e inecuaciones..." },
+        { ciclo: 1, curso: "Metodologías de la Investigación", codigo: "6508", creditos: 3, prerrequisitos: [], descripcion: "Capacidad de formular, desarrollar y comunicar proyectos..." },
+        { ciclo: 2, curso: "Cálculo I", codigo: "6503", creditos: 5, prerrequisitos: ["Matemática básica"], descripcion: "Funciones trigonométricas, derivadas e integrales..." },
+        { ciclo: 2, curso: "Álgebra Lineal", codigo: "6384", creditos: 3, prerrequisitos: ["Matemática básica"], descripcion: "Vectores y matrices, álgebra vectorial y matricial..." }
+      ],
+      personalizada: []
+    };
 
+    let carreraActual = 'ingenieria';
     const estadoCursos = JSON.parse(localStorage.getItem("estadoCursosULIMA")) || {};
 
     function lanzarConfetti() {
@@ -167,7 +193,7 @@
     function mostrarAlerta(mensaje) {
       const alerta = document.createElement("div");
       alerta.className = "alerta-desbloqueo";
-      alerta.innerHTML = `🔓 ${mensaje}`;
+      alerta.innerHTML = `<img src="https://i.ibb.co/KFgz4Pb/unlock.gif" alt="Desbloqueado"> <span>${mensaje}</span>`;
       document.body.appendChild(alerta);
       setTimeout(() => alerta.remove(), 3000);
     }
@@ -193,7 +219,15 @@
       document.getElementById("overlay").classList.add("hidden");
     }
 
+    function cambiarCarrera(nombre) {
+      document.querySelectorAll('.tabs button').forEach(btn => btn.classList.remove('active'));
+      document.querySelector(`.tabs button[onclick*="${nombre}"]`).classList.add('active');
+      carreraActual = nombre;
+      renderMalla();
+    }
+
     function renderMalla() {
+      const cursos = carreras[carreraActual];
       const container = document.getElementById("malla");
       const ciclos = [...new Set(cursos.map(c => c.ciclo))].sort((a,b) => a-b);
       container.innerHTML = "";
@@ -202,7 +236,7 @@
         const fueBloqueado = curso.prerrequisitos.some(pre => !estadoCursos[pre]);
         const ahoraDesbloqueado = curso.prerrequisitos.every(pre => estadoCursos[pre]);
         if (!estadoCursos[curso.curso] && fueBloqueado && ahoraDesbloqueado && localStorage.getItem("estadoCursosULIMA")) {
-          mostrarAlerta(`¡Ya puedes llevar "${curso.curso}"!`);
+          mostrarAlerta(`¡Ya puedes llevar \"${curso.curso}\"!`);
         }
       });
 
@@ -258,4 +292,3 @@
   </script>
 </body>
 </html>
-
