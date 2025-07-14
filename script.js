@@ -1,42 +1,79 @@
-const cursos = [
-  {
-    nombre: "Matemática básica",
-    codigo: "6382",
-    ciclo: 1,
-    creditos: 5,
-    estado: "✅ Completado",
-    descripcion: "Conjuntos, ecuaciones, funciones y geometría analítica.",
-  },
-  {
-    nombre: "Cálculo I",
-    codigo: "6503",
-    ciclo: 2,
-    creditos: 5,
-    estado: "✅ Completado",
-    descripcion: "Funciones, derivadas e integrales en una variable.",
-  },
-  {
-    nombre: "Investigación de Operaciones I",
-    codigo: "560048",
-    ciclo: 5,
-    creditos: 4,
-    estado: "❌ Pendiente",
-    descripcion: "Modelos de programación lineal para gestión de operaciones.",
-  },
-];
+const csvURL = 'https://raw.githubusercontent.com/XimenaLiz/malla-industrial/main/malla.csv';
 
-const contenedor = document.getElementById("contenedor-cursos");
+const estadoIcono = {
+  '✅ Completado': 'completado',
+  '💛 Disponible': 'disponible',
+  '🔒 Bloqueado': 'bloqueado'
+};
 
-cursos.forEach(curso => {
-  const div = document.createElement("div");
-  div.className = `curso ${curso.estado.includes("✅") ? "completado" : "pendiente"}`;
-  div.innerHTML = `
-    <h3>${curso.nombre}</h3>
-    <p><strong>Código:</strong> ${curso.codigo}</p>
-    <p><strong>Ciclo:</strong> ${curso.ciclo}</p>
-    <p><strong>Créditos:</strong> ${curso.creditos}</p>
-    <p><strong>Estado:</strong> ${curso.estado}</p>
-    <p>${curso.descripcion}</p>
-  `;
-  contenedor.appendChild(div);
+const estadoTexto = {
+  '✅ Completado': 'Completado',
+  '💛 Disponible': 'Disponible',
+  '🔒 Bloqueado': 'Bloqueado'
+};
+
+async function cargarMalla() {
+  const res = await fetch(csvURL);
+  const text = await res.text();
+  const filas = text.trim().split('\n');
+  const encabezado = filas.shift().split('\t');
+
+  const cursos = filas.map(fila => {
+    const datos = fila.split('\t');
+    const curso = {};
+    encabezado.forEach((col, i) => {
+      curso[col.trim()] = datos[i] ? datos[i].trim() : '';
+    });
+    return curso;
+  });
+
+  const ciclos = {};
+  cursos.forEach(curso => {
+    const ciclo = curso['Ciclo'];
+    if (!ciclos[ciclo]) ciclos[ciclo] = [];
+    ciclos[ciclo].push(curso);
+  });
+
+  const contenedor = document.getElementById('malla-container');
+  contenedor.innerHTML = '';
+
+  Object.keys(ciclos).sort((a, b) => a - b).forEach(ciclo => {
+    const columna = document.createElement('div');
+    const titulo = document.createElement('h2');
+    titulo.textContent = `Ciclo ${ciclo}`;
+    columna.appendChild(titulo);
+
+    ciclos[ciclo].forEach(curso => {
+      const card = document.createElement('div');
+      const estadoClase = estadoIcono[curso['Estado Calculado']] || 'bloqueado';
+      card.className = `card ${estadoClase}`;
+      card.innerHTML = `
+        <h3>${curso['Curso']}</h3>
+        <p><strong>Código:</strong> ${curso['Codigo']}</p>
+        <p><strong>Créditos:</strong> ${curso['Créditos']}</p>
+      `;
+      if (estadoClase !== 'bloqueado') {
+        card.addEventListener('click', () => mostrarModal(curso));
+      }
+      columna.appendChild(card);
+    });
+
+    contenedor.appendChild(columna);
+  });
+}
+
+function mostrarModal(curso) {
+  document.getElementById('modal-title').textContent = curso['Curso'];
+  document.getElementById('modal-codigo').textContent = curso['Codigo'];
+  document.getElementById('modal-creditos').textContent = curso['Créditos'];
+  document.getElementById('modal-area').textContent = curso['Área'];
+  document.getElementById('modal-prerequisitos').textContent = curso['Prerrequisitos'];
+  document.getElementById('modal-descripcion').textContent = curso['Descripción'];
+  document.getElementById('modal').classList.remove('hidden');
+}
+
+document.getElementById('closeModal').addEventListener('click', () => {
+  document.getElementById('modal').classList.add('hidden');
 });
+
+cargarMalla();

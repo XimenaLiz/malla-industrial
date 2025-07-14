@@ -1,69 +1,87 @@
 body {
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f4f6f9;
-  margin: 0;
-  padding: 2rem;
-  color: #333;
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background-color: #f4f4f4;
 }
 
 h1 {
   text-align: center;
-  margin-bottom: 2rem;
-  color: #1e293b;
+  margin-bottom: 20px;
 }
 
-.grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem;
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 16px;
+  padding: 0 20px;
 }
 
 .card {
-  background-color: #fff;
-  border-radius: 1rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  padding: 1.2rem;
-  width: 280px;
-  transition: transform 0.2s;
-  display: flex;
-  flex-direction: column;
+  background-color: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: 0.2s;
+  border-left: 8px solid gray;
 }
 
 .card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
 }
 
-.card h2 {
-  font-size: 1.1rem;
-  margin: 0 0 0.5rem;
+.card.completado {
+  border-left-color: green;
+  background-color: #eafbea;
 }
 
-.card p {
-  margin: 0.3rem 0;
-  font-size: 0.9rem;
-  line-height: 1.3;
+.card.disponible {
+  border-left-color: #f1c40f;
+  background-color: #fffde7;
 }
 
-.estado {
-  font-weight: bold;
-  padding: 0.3rem 0.5rem;
-  border-radius: 0.5rem;
-  width: fit-content;
-  margin-top: auto;
+.card.bloqueado {
+  border-left-color: #e74c3c;
+  background-color: #fdecea;
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
-.estado.completado {
-  background-color: #d1fae5;
-  color: #065f46;
+.card h3 {
+  margin-top: 0;
+  font-size: 1.1em;
 }
 
-.estado.disponible {
-  background-color: #fef9c3;
-  color: #92400e;
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
 }
 
-.estado.bloqueado {
-  background-color: #f3f4f6;
-  color: #6b7280;
+.modal-content {
+  background-color: white;
+  padding: 24px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+}
+
+.hidden {
+  display: none;
+}
+
+.close-btn {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 24px;
+  cursor: pointer;
 }
