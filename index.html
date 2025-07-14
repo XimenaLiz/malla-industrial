@@ -104,24 +104,6 @@
       max-width: 450px;
       width: 90%;
     }
-    .popup h3 {
-      margin-top: 0;
-      color: #5d3d9c;
-    }
-    .popup small {
-      display: block;
-      margin-bottom: 0.5rem;
-      color: #444;
-    }
-    .popup button {
-      margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      background-color: #5d3d9c;
-      color: white;
-      border: none;
-      border-radius: 0.5rem;
-      cursor: pointer;
-    }
     .overlay {
       position: fixed;
       top: 0; left: 0;
@@ -160,6 +142,31 @@
       90% { opacity: 1; }
       100% { opacity: 0; }
     }
+    form {
+      margin-top: 2rem;
+      background: #fff;
+      padding: 1rem;
+      border-radius: 1rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 0 15px rgba(0,0,0,0.05);
+    }
+    form input, form textarea {
+      width: 100%;
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+    }
+    form button {
+      background: #5d3d9c;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -169,6 +176,18 @@
     <button onclick="cambiarCarrera('personalizada')">Personalizada</button>
   </div>
   <div class="grid" id="malla"></div>
+
+  <form id="formulario-personalizado" class="hidden" onsubmit="agregarCurso(event)">
+    <h3>Agregar curso personalizado</h3>
+    <input type="text" id="curso-nombre" placeholder="Nombre del curso" required>
+    <input type="text" id="curso-codigo" placeholder="Código del curso">
+    <input type="number" id="curso-creditos" placeholder="Créditos" required>
+    <input type="number" id="curso-ciclo" placeholder="Ciclo" required>
+    <input type="text" id="curso-prerreq" placeholder="Prerrequisitos (separados por coma)">
+    <textarea id="curso-descripcion" placeholder="Descripción del curso"></textarea>
+    <button type="submit">Agregar curso</button>
+  </form>
+
   <div id="overlay" class="overlay hidden"></div>
   <div id="popup" class="popup hidden"></div>
 
@@ -193,7 +212,7 @@
     function mostrarAlerta(mensaje) {
       const alerta = document.createElement("div");
       alerta.className = "alerta-desbloqueo";
-      alerta.innerHTML = `<img src="https://i.ibb.co/KFgz4Pb/unlock.gif" alt="Desbloqueado"> <span>${mensaje}</span>`;
+      alerta.innerHTML = `<img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcXdsNm5wcHZnZmFkb3dzN2F4bWNkaG1nc3VyYjU2eDQ1Y2Z2eGQxeCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/L0a0RgItTjX3WgYgKn/giphy.gif" alt="Desbloqueado"> <span>${mensaje}</span>`;
       document.body.appendChild(alerta);
       setTimeout(() => alerta.remove(), 3000);
     }
@@ -223,6 +242,20 @@
       document.querySelectorAll('.tabs button').forEach(btn => btn.classList.remove('active'));
       document.querySelector(`.tabs button[onclick*="${nombre}"]`).classList.add('active');
       carreraActual = nombre;
+      document.getElementById("formulario-personalizado").classList.toggle("hidden", nombre !== "personalizada");
+      renderMalla();
+    }
+
+    function agregarCurso(e) {
+      e.preventDefault();
+      const nombre = document.getElementById("curso-nombre").value;
+      const codigo = document.getElementById("curso-codigo").value;
+      const creditos = parseInt(document.getElementById("curso-creditos").value);
+      const ciclo = parseInt(document.getElementById("curso-ciclo").value);
+      const prerreq = document.getElementById("curso-prerreq").value.split(",").map(p => p.trim()).filter(Boolean);
+      const descripcion = document.getElementById("curso-descripcion").value;
+      carreras.personalizada.push({ curso: nombre, codigo, creditos, ciclo, prerrequisitos: prerreq, descripcion });
+      e.target.reset();
       renderMalla();
     }
 
