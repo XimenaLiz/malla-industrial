@@ -704,6 +704,7 @@ card.innerHTML = `
     diploma: "BA" // Business Analytics
   }
 ];
+let diplomaSeleccionado = "todos";
 
 function renderElectivos() {
   const container = document.getElementById("electivos-container");
@@ -758,7 +759,7 @@ function renderElectivos() {
 
     window.onload = () => {
       renderMalla();
-      renderElectivos();
+      filtrarDiploma("todos");
       mostrarCreditosAprobados();
     };
 document.addEventListener("DOMContentLoaded", () => {
