@@ -443,6 +443,9 @@
         cursos.filter(c => c.ciclo === ciclo).forEach(curso => {
           const card = document.createElement("div");
           card.className = "curso";
+          if (cursosElectivos.some(e => e.curso === curso.curso)) {
+              habilitarBotonEliminarElectivo(card, curso);
+          }
           card.dataset.nombre = curso.curso;
 
           const estaBloqueado = curso.prerrequisitos.some(pre => !estadoCursos[pre]);
@@ -575,6 +578,36 @@
       }
     });
   });
+  // Permitir regresar electivos desde la malla general
+function habilitarBotonEliminarElectivo(card, curso) {
+  const boton = document.createElement("button");
+  boton.innerText = "⏪";
+  boton.title = "Quitar de la malla y devolver a Electivos";
+  boton.style.position = "absolute";
+  boton.style.bottom = "0.5rem";
+  boton.style.left = "0.5rem";
+  boton.style.background = "transparent";
+  boton.style.border = "none";
+  boton.style.cursor = "pointer";
+  boton.style.color = "#d94e6a";
+  boton.style.fontSize = "14px";
+
+  boton.addEventListener("click", (e) => {
+    e.stopPropagation();
+    // Eliminar de la malla
+    const index = carreras[carreraActual].findIndex(c => c.curso === curso.curso);
+    if (index !== -1) {
+      carreras[carreraActual].splice(index, 1);
+      // Borrar su estado (completado o no)
+      delete estadoCursos[curso.curso];
+      localStorage.setItem("estadoCursosULIMA", JSON.stringify(estadoCursos));
+      renderMalla();
+      renderElectivos();
+    }
+  });
+
+  card.appendChild(boton);
+}
   </script>
 </body>
 </html>
