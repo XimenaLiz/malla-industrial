@@ -470,7 +470,21 @@
           }
           card.dataset.nombre = curso.curso;
 
-          const estaBloqueado = curso.prerrequisitos.some(pre => !estadoCursos[pre]);
+          const creditosCompletados = Object.entries(estadoCursos)
+            .filter(([_, aprobado]) => aprobado)
+            .map(([nombre]) => {
+              const cursoEncontrado = carreras[carreraActual].find(c => c.curso === nombre);
+              return cursoEncontrado ? cursoEncontrado.creditos : 0;
+            })
+            .reduce((a, b) => a + b, 0);
+
+          const estaBloqueado = curso.prerrequisitos.some(pre => {
+            if (pre.startsWith("créditos:")) {
+              const requeridos = parseInt(pre.split(":")[1]);
+              return creditosCompletados < requeridos;
+            }
+            return !estadoCursos[pre];
+          });
           if (estaBloqueado) card.classList.add("bloqueado");
           if (estadoCursos[curso.curso]) card.classList.add("completado");
 
@@ -522,7 +536,15 @@
     const cursosElectivos = [
       { ciclo: 1, curso: "Electivo 1", codigo: "EL101", creditos: 3, prerrequisitos: [], descripcion: "Curso electivo ejemplo número 1." },
       { ciclo: 2, curso: "Electivo 2", codigo: "EL102", creditos: 3, prerrequisitos: [], descripcion: "Curso electivo ejemplo número 2." },
-      { ciclo: 3, curso: "Electivo 3", codigo: "EL103", creditos: 3, prerrequisitos: [], descripcion: "Curso electivo ejemplo número 3." }
+      { ciclo: 3, curso: "Electivo 3", codigo: "EL103", creditos: 3, prerrequisitos: [], descripcion: "Curso electivo ejemplo número 3." },
+      {
+        ciclo: 7,
+        curso: "Electivo Avanzado",
+        codigo: "EL200",
+        creditos: 3,
+        prerrequisitos: ["créditos:100"],
+        descripcion: "Curso solo habilitado si completaste al menos 100 créditos."
+      }
     ];
 
 function renderElectivos() {
