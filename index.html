@@ -252,7 +252,13 @@
 </head>
 <body>
   <h1>Malla Curricular - ULIMA</h1>
-  <div id="creditos-aprobados" style="text-align: center; font-weight: bold; margin-bottom: 1rem;"></div>
+  <div id="creditos-container" style="margin: 1rem auto; max-width: 500px; text-align: center;">
+  <div id="creditos-texto" style="font-weight: bold; margin-bottom: 0.5rem;">Créditos aprobados: 0 / 200</div>
+  <div style="background: #eee; height: 20px; border-radius: 10px; overflow: hidden;">
+    <div id="creditos-barra" style="height: 100%; width: 0%; background: #4caf50; transition: width 0.3s;"></div>
+  </div>
+</div>
+
   <div class="tabs" id="carreras">
     <button class="active" onclick="cambiarCarrera('ingenieria')">Ingeniería Industrial</button>
     <button onclick="cambiarCarrera('personalizada')">Personalizada</button>
@@ -535,6 +541,7 @@
       mostrarCreditosAprobados();
     }
     function mostrarCreditosAprobados() {
+  const creditosTotales = 200; // ← Ajusta este número si tu carrera tiene otro total
   const creditosCompletados = Object.entries(estadoCursos)
     .filter(([_, aprobado]) => aprobado)
     .map(([nombre]) => {
@@ -543,8 +550,10 @@
     })
     .reduce((a, b) => a + b, 0);
 
-  const creditosDiv = document.getElementById("creditos-aprobados");
-  creditosDiv.textContent = `Créditos aprobados: ${creditosCompletados}`;
+  const porcentaje = Math.min(100, Math.round((creditosCompletados / creditosTotales) * 100));
+
+  document.getElementById("creditos-texto").textContent = `Créditos aprobados: ${creditosCompletados} / ${creditosTotales}`;
+  document.getElementById("creditos-barra").style.width = `${porcentaje}%`;
 }
 
     const cursosElectivos = [
