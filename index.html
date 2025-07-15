@@ -248,6 +248,88 @@
   gap: 12px;
   justify-content: flex-start;
 }
+/* Estilo para distintivos de diplomas */
+.badge {
+  display: inline-block;
+  font-size: 12px;
+  background-color: #ccc;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 8px;
+  margin-left: 6px;
+  font-weight: 600;
+}
+
+/* Colores por diploma */
+.badge.IT { background-color: #7b9acc; }       /* Innovación Tecnológica */
+.badge.BA { background-color: #e88941; }       /* Business Analytics */
+.badge.SCM { background-color: #4dbf98; }      /* Supply Chain */
+.badge.EPM { background-color: #c875c4; }      /* Engineering Project Mgmt */
+.badge.IE { background-color: #f1b21d; }       /* Ingeniería Empresarial */
+.badge.ninguno { background-color: #aaa; }     /* Sin diploma */
+
+/* Filtro Toggle de diplomas */
+.filtros-diplomas {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.filtros-diplomas button {
+  background-color: #e0ddf5;
+  color: #5d3d9c;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filtros-diplomas button.active {
+  background-color: #5d3d9c;
+  color: white;
+}
+.badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  margin-top: 4px;
+  margin-bottom: 6px;
+  background-color: #ccc;
+  color: white;
+}
+.badge.IT { background-color: #4caf50; }     /* Verde */
+.badge.BA { background-color: #2196f3; }     /* Azul */
+.badge.SCM { background-color: #ff9800; }    /* Naranja */
+.badge.EPM { background-color: #9c27b0; }    /* Púrpura */
+.badge.IE { background-color: #f44336; }     /* Rojo */
+.badge.ninguno { background-color: #607d8b; }/* Gris */
+.filtros-diplomas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1rem auto;
+}
+.filtros-diplomas button {
+  padding: 0.5rem 1rem;
+  background: #eee;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.filtros-diplomas button:hover {
+  background: #ddd;
+}
+.filtros-diplomas button.active {
+  background: #5d3d9c;
+  color: white;
+}
   </style>
 </head>
 <body>
@@ -282,6 +364,17 @@
 <!-- Cursos Electivos sin agrupación -->
 <div id="electivos-contenedor" style="margin-top: 2rem;">
 <h2 style="text-align: center; color: #5d3d9c;">Cursos Electivos</h2>
+<!-- Filtros por diploma -->
+<div class="filtros-diplomas">
+  <button onclick="filtrarDiploma('todos')" class="active">Todos</button>
+  <button onclick="filtrarDiploma('IT')">Innovación Tecnológica</button>
+  <button onclick="filtrarDiploma('BA')">Business Analytics</button>
+  <button onclick="filtrarDiploma('SCM')">Supply Chain Mgmt</button>
+  <button onclick="filtrarDiploma('EPM')">Engineering PM</button>
+  <button onclick="filtrarDiploma('IE')">Ing. Empresarial</button>
+  <button onclick="filtrarDiploma('ninguno')">Sin Diploma</button>
+</div>
+
 <div id="electivos-container" class="electivos-flex"></div>
 </div>
 
@@ -557,52 +650,94 @@
 }
 
     const cursosElectivos = [
-      { ciclo: 1, curso: "Electivo 1", codigo: "EL101", creditos: 3, prerrequisitos: [], descripcion: "Curso electivo ejemplo número 1." },
-      { ciclo: 2, curso: "Electivo 2", codigo: "EL102", creditos: 3, prerrequisitos: [], descripcion: "Curso electivo ejemplo número 2." },
-      { ciclo: 3, curso: "Electivo 3", codigo: "EL103", creditos: 3, prerrequisitos: [], descripcion: "Curso electivo ejemplo número 3." },
-      {
-        ciclo: 7,
-        curso: "Electivo Avanzado",
-        codigo: "EL200",
-        creditos: 3,
-        prerrequisitos: ["créditos:100"],
-        descripcion: "Curso solo habilitado si completaste al menos 100 créditos."
-      }
-    ];
+  {
+    ciclo: 1,
+    curso: "Electivo 1",
+    codigo: "EL101",
+    creditos: 3,
+    prerrequisitos: [],
+    descripcion: "Curso electivo ejemplo número 1.",
+    diploma: "IT" // Innovación Tecnológica
+  },
+  {
+    ciclo: 2,
+    curso: "Electivo 2",
+    codigo: "EL102",
+    creditos: 3,
+    prerrequisitos: [],
+    descripcion: "Curso electivo ejemplo número 2.",
+    diploma: "SCM" // Supply Chain Mgmt
+  },
+  {
+    ciclo: 3,
+    curso: "Electivo 3",
+    codigo: "EL103",
+    creditos: 3,
+    prerrequisitos: [],
+    descripcion: "Curso electivo ejemplo número 3.",
+    diploma: "ninguno" // Sin diploma
+  },
+  {
+    ciclo: 7,
+    curso: "Electivo Avanzado",
+    codigo: "EL200",
+    creditos: 3,
+    prerrequisitos: ["créditos:100"],
+    descripcion: "Curso solo habilitado si completaste al menos 100 créditos.",
+    diploma: "BA" // Business Analytics
+  }
+];
 
 function renderElectivos() {
   const container = document.getElementById("electivos-container");
   container.innerHTML = "";
 
-  cursosElectivos.forEach(curso => {
-    const card = document.createElement("div");
-    card.className = "electivo";
-    card.setAttribute("draggable", "true");
-    card.dataset.curso = curso.curso;
-    card.dataset.ciclo = curso.ciclo;
-    card.innerHTML = `
-      <div class="curso-title">${curso.curso}</div>
-      <small><strong>Código:</strong> ${curso.codigo}</small>
-      <small><strong>Créditos:</strong> ${curso.creditos}</small>
-      <div class="info-btn">i</div>
-    `;
+  cursosElectivos
+    .filter(curso => diplomaSeleccionado === 'todos' || curso.diploma === diplomaSeleccionado || (diplomaSeleccionado === 'ninguno' && !curso.diploma))
+    .forEach(curso => {
+      const card = document.createElement("div");
+      card.className = "electivo";
+      card.setAttribute("draggable", "true");
+      card.dataset.curso = curso.curso;
+      card.dataset.ciclo = curso.ciclo;
 
-    card.querySelector(".info-btn").addEventListener("click", e => {
-      e.stopPropagation();
-      renderPopup(curso);
+      let badge = "";
+      if (curso.diploma && curso.diploma !== "ninguno") {
+        badge = `<span class="badge ${curso.diploma}">${curso.diploma}</span>`;
+      } else if (curso.diploma === "ninguno") {
+        badge = `<span class="badge ninguno">Sin diploma</span>`;
+      }
+
+      card.innerHTML = `
+        <div class="curso-title">${curso.curso}</div>
+        ${badge}
+        <small><strong>Código:</strong> ${curso.codigo}</small>
+        <small><strong>Créditos:</strong> ${curso.creditos}</small>
+        <div class="info-btn">i</div>
+      `;
+
+      card.querySelector(".info-btn").addEventListener("click", e => {
+        e.stopPropagation();
+        renderPopup(curso);
+      });
+
+      card.addEventListener("dragstart", () => {
+        card.classList.add("dragging");
+      });
+
+      card.addEventListener("dragend", () => {
+        card.classList.remove("dragging");
+      });
+
+      container.appendChild(card);
     });
-
-    card.addEventListener("dragstart", () => {
-      card.classList.add("dragging");
-    });
-
-    card.addEventListener("dragend", () => {
-      card.classList.remove("dragging");
-    });
-
-    container.appendChild(card);
-  });
 }
+    function filtrarDiploma(clave) {
+      diplomaSeleccionado = clave;
+      document.querySelectorAll(".filtros-diplomas button").forEach(btn => btn.classList.remove("active"));
+      document.querySelector(`.filtros-diplomas button[onclick*="${clave}"]`).classList.add("active");
+      renderElectivos();
+    }
 
     window.onload = () => {
       renderMalla();
