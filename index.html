@@ -412,7 +412,8 @@
       const nombre = document.getElementById("curso-nombre").value;
       const codigo = document.getElementById("curso-codigo").value;
       const creditos = parseInt(document.getElementById("curso-creditos").value);
-      const ciclo = parseInt(document.getElementById("curso-ciclo").value);
+      const cicloText = targetCol.querySelector(".ciclo-title")?.textContent || "";
+      const ciclo = parseInt(cicloText.replace("Ciclo ", "")) || 1;
       const prerreq = document.getElementById("curso-prerreq").value.split(",").map(p => p.trim()).filter(Boolean);
       const descripcion = document.getElementById("curso-descripcion").value;
       carreras.personalizada.push({ curso: nombre, codigo, creditos, ciclo, prerrequisitos: prerreq, descripcion });
@@ -562,19 +563,21 @@ function renderElectivos() {
       renderMalla();
       renderElectivos();
     };
-    document.addEventListener("DOMContentLoaded", () => {
-    const malla = document.getElementById("malla");
+document.addEventListener("DOMContentLoaded", () => {
+  const malla = document.getElementById("malla");
 
-    malla.addEventListener("dragover", e => {
-      e.preventDefault();
-      const dragged = document.querySelector(".electivo.dragging");
-      if (dragged && e.target.closest(".ciclo-col")) {
-        const targetCol = e.target.closest(".ciclo-col");
-        targetCol.appendChild(dragged);
+  malla.addEventListener("dragover", e => {
+    e.preventDefault();
+    const dragged = document.querySelector(".electivo.dragging");
+    if (dragged && e.target.closest(".ciclo-col")) {
+      const targetCol = e.target.closest(".ciclo-col");
+      targetCol.appendChild(dragged);
 
-        const nombreCurso = dragged.dataset.curso;
-        const ciclo = parseInt(dragged.dataset.ciclo);
-        const encontrado = cursosElectivos.find(c => c.curso === nombreCurso);
+      const nombreCurso = dragged.dataset.curso;
+      const cicloText = targetCol.querySelector(".ciclo-title")?.textContent || "";
+      const ciclo = parseInt(cicloText.replace("Ciclo ", "")) || 1;
+
+      const encontrado = cursosElectivos.find(c => c.curso === nombreCurso);
       if (encontrado && !carreras[carreraActual].some(c => c.curso === encontrado.curso)) {
         carreras[carreraActual].push({ ...encontrado, ciclo });
         renderMalla();
@@ -582,9 +585,9 @@ function renderElectivos() {
         estadoCursos[encontrado.curso] = false;
         localStorage.setItem("estadoCursosULIMA", JSON.stringify(estadoCursos));
       }
-      }
-    });
+    }
   });
+});
   // Permitir regresar electivos desde la malla general
 function habilitarBotonEliminarElectivo(card, curso) {
   const boton = document.createElement("button");
