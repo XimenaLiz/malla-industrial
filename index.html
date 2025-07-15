@@ -552,6 +552,29 @@
       renderMalla();
       renderElectivos();
     };
+    document.addEventListener("DOMContentLoaded", () => {
+    const malla = document.getElementById("malla");
+
+    malla.addEventListener("dragover", e => {
+      e.preventDefault();
+      const dragged = document.querySelector(".electivo.dragging");
+      if (dragged && e.target.closest(".ciclo-col")) {
+        const targetCol = e.target.closest(".ciclo-col");
+        targetCol.appendChild(dragged);
+
+        const nombreCurso = dragged.dataset.curso;
+        const ciclo = parseInt(dragged.dataset.ciclo);
+        const encontrado = cursosElectivos.find(c => c.curso === nombreCurso);
+        if (encontrado) {
+          carreras[carreraActual].push({ ...encontrado, ciclo });
+          renderMalla();
+          renderElectivos();
+          estadoCursos[encontrado.curso] = false;
+          localStorage.setItem("estadoCursosULIMA", JSON.stringify(estadoCursos));
+        }
+      }
+    });
+  });
   </script>
 </body>
 </html>
