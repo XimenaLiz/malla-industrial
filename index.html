@@ -532,6 +532,7 @@
 
         container.appendChild(col);
       });
+      mostrarCreditosAprobados();
     }
     function mostrarCreditosAprobados() {
   const creditosCompletados = Object.entries(estadoCursos)
@@ -597,6 +598,7 @@ function renderElectivos() {
     window.onload = () => {
       renderMalla();
       renderElectivos();
+      mostrarCreditosAprobados();
     };
 document.addEventListener("DOMContentLoaded", () => {
   const malla = document.getElementById("malla");
