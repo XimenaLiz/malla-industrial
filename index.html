@@ -473,7 +473,14 @@
             `;
             card.appendChild(actions);
           }
-
+          else if (cursosElectivos.some(e => e.curso === curso.curso)) {
+            const actions = document.createElement('div');
+            actions.className = 'action-btn';
+            actions.innerHTML = `
+              <button onclick="event.stopPropagation(); quitarElectivo('${curso.curso}')">🔙 Quitar</button>
+            `;
+            card.appendChild(actions);
+          }
           card.addEventListener("click", () => {
             if (!estaBloqueado) {
               estadoCursos[curso.curso] = !estadoCursos[curso.curso];
@@ -568,13 +575,13 @@
         const nombreCurso = dragged.dataset.curso;
         const ciclo = parseInt(dragged.dataset.ciclo);
         const encontrado = cursosElectivos.find(c => c.curso === nombreCurso);
-        if (encontrado) {
-          carreras[carreraActual].push({ ...encontrado, ciclo });
-          renderMalla();
-          renderElectivos();
-          estadoCursos[encontrado.curso] = false;
-          localStorage.setItem("estadoCursosULIMA", JSON.stringify(estadoCursos));
-        }
+      if (encontrado && !carreras[carreraActual].some(c => c.curso === encontrado.curso)) {
+        carreras[carreraActual].push({ ...encontrado, ciclo });
+        renderMalla();
+        renderElectivos();
+        estadoCursos[encontrado.curso] = false;
+        localStorage.setItem("estadoCursosULIMA", JSON.stringify(estadoCursos));
+      }
       }
     });
   });
@@ -607,6 +614,17 @@ function habilitarBotonEliminarElectivo(card, curso) {
   });
 
   card.appendChild(boton);
+}
+function quitarElectivo(nombreCurso) {
+  // Eliminar de la malla
+  carreras[carreraActual] = carreras[carreraActual].filter(c => c.curso !== nombreCurso);
+  
+  // También quitar su estado si tenía alguno
+  delete estadoCursos[nombreCurso];
+  localStorage.setItem("estadoCursosULIMA", JSON.stringify(estadoCursos));
+
+  renderMalla();
+  renderElectivos();
 }
   </script>
 </body>
