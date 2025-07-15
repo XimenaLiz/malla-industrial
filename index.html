@@ -588,12 +588,29 @@
           if (estaBloqueado) card.classList.add("bloqueado");
           if (estadoCursos[curso.curso]) card.classList.add("completado");
 
-          card.innerHTML = `
-            <div class="curso-title">${curso.curso}</div>
-            <small><strong>Código:</strong> ${curso.codigo}</small>
-            <small><strong>Créditos:</strong> ${curso.creditos}</small>
-            <div class="info-btn">i</div>
-          `;
+let badge = "";
+const electivoData = cursosElectivos.find(e => e.curso === curso.curso);
+if (electivoData) {
+  const diploma = electivoData.diploma || "ninguno";
+  const nombreDiploma = {
+    IT: "Innovación Tecnológica",
+    BA: "Business Analytics",
+    SCM: "Supply Chain Mgmt",
+    EPM: "Engineering PM",
+    IE: "Ing. Empresarial",
+    ninguno: "Sin diploma"
+  }[diploma];
+  badge = `<span class="badge ${diploma}">${diploma !== "ninguno" ? diploma : "Sin diploma"}</span>`;
+}
+
+card.innerHTML = `
+  <div class="curso-title">${curso.curso}</div>
+  ${badge}
+  <small><strong>Código:</strong> ${curso.codigo}</small>
+  <small><strong>Créditos:</strong> ${curso.creditos}</small>
+  <div class="info-btn">i</div>
+`;
+
 
           card.querySelector(".info-btn").addEventListener("click", e => {
             e.stopPropagation();
