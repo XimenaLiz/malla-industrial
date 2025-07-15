@@ -252,6 +252,7 @@
 </head>
 <body>
   <h1>Malla Curricular - ULIMA</h1>
+  <div id="creditos-aprobados" style="text-align: center; font-weight: bold; margin-bottom: 1rem;"></div>
   <div class="tabs" id="carreras">
     <button class="active" onclick="cambiarCarrera('ingenieria')">Ingeniería Industrial</button>
     <button onclick="cambiarCarrera('personalizada')">Personalizada</button>
@@ -532,6 +533,18 @@
         container.appendChild(col);
       });
     }
+    function mostrarCreditosAprobados() {
+  const creditosCompletados = Object.entries(estadoCursos)
+    .filter(([_, aprobado]) => aprobado)
+    .map(([nombre]) => {
+      const cursoEncontrado = carreras[carreraActual].find(c => c.curso === nombre);
+      return cursoEncontrado ? cursoEncontrado.creditos : 0;
+    })
+    .reduce((a, b) => a + b, 0);
+
+  const creditosDiv = document.getElementById("creditos-aprobados");
+  creditosDiv.textContent = `Créditos aprobados: ${creditosCompletados}`;
+}
 
     const cursosElectivos = [
       { ciclo: 1, curso: "Electivo 1", codigo: "EL101", creditos: 3, prerrequisitos: [], descripcion: "Curso electivo ejemplo número 1." },
@@ -648,6 +661,7 @@ function quitarElectivo(nombreCurso) {
   delete estadoCursos[nombreCurso];
   localStorage.setItem("estadoCursosULIMA", JSON.stringify(estadoCursos));
 
+  mostrarCreditosAprobados();
   renderMalla();
   renderElectivos();
 }
