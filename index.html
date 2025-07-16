@@ -20,7 +20,6 @@
   transition: opacity 0.5s ease;
 }
 
-/* Fondo blur */
 .bienvenida-fondo {
   position: absolute;
   inset: 0;
@@ -29,7 +28,6 @@
   z-index: 0;
 }
 
-/* Bloque principal */
 .bienvenida-content {
   position: relative;
   z-index: 1;
@@ -43,16 +41,13 @@
   animation: fadeIn 0.5s ease-out;
 }
 
-/* Título */
 .bienvenida-content h1 {
   font-size: 1.8em;
   font-weight: 700;
   color: #5e3ba6;
-  margin-bottom: 1em;
-  line-height: 1.2;
+  margin-bottom: 0.6em;
 }
 
-/* Párrafo */
 .bienvenida-content p {
   font-size: 1em;
   color: #444;
@@ -60,31 +55,27 @@
   margin: 1em 0;
 }
 
-/* Distribución horizontal */
 .bienvenida-flex {
   display: flex;
   flex-wrap: wrap;
   gap: 2em;
   justify-content: center;
   align-items: flex-start;
-  margin-top: 1.5em;
+  margin-top: 1.2em;
   margin-bottom: 1.5em;
 }
 
-/* Imagen del curso */
 .bienvenida-img {
   width: 200px;
   border-radius: 1em;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
-/* Contenedor etiquetas */
 .bienvenida-imagen-container {
   position: relative;
   width: fit-content;
 }
 
-/* Etiquetas */
 .etiqueta {
   position: absolute;
   background: #ede2faee;
@@ -96,6 +87,7 @@
   white-space: nowrap;
   font-weight: 600;
   border: 1px solid #d1bde6;
+  z-index: 1;
 }
 
 .etiqueta-nombre { top: -14px; left: 0; }
@@ -103,7 +95,6 @@
 .etiqueta-creditos { bottom: -14px; right: 0; }
 .etiqueta-info { top: -14px; right: 0; }
 
-/* Flechitas */
 .etiqueta::after {
   content: '';
   position: absolute;
@@ -131,7 +122,6 @@
   border-color: #bfa3e8 transparent transparent transparent;
 }
 
-/* Imagen del popup */
 .bienvenida-popup-container {
   text-align: center;
   max-width: 240px;
@@ -150,13 +140,11 @@
   margin-bottom: 0.5em;
 }
 
-/* Fade in */
 @keyframes fadeIn {
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
 }
 
-/* Responsive */
 @media (max-width: 600px) {
   .bienvenida-content {
     max-width: 96vw;
@@ -577,32 +565,32 @@
 </head>
 <body>
 <!-- Pantalla de bienvenida -->
-  <div id="bienvenida-overlay">
-    <div class="bienvenida-fondo"></div>
-    <div class="bienvenida-content">
-      <h1>¡Bienvenido a la Malla Interactiva de Ing. Industrial ULIMA!</h1>
+<div id="bienvenida-overlay">
+  <div class="bienvenida-fondo"></div>
+  <div class="bienvenida-content">
+    <h1>¡Bienvenido a la Malla Interactiva de Ing. Industrial ULIMA!</h1>
+    <p>Haz clic sobre los cursos completados para tacharlos y desbloquear nuevos.</p>
+    
+    <div class="bienvenida-flex">
+      <!-- Imagen 1 con etiquetas -->
+      <div class="bienvenida-imagen-container">
+        <img src="https://i.imgur.com/NArpTLE.png" alt="Curso ejemplo" class="bienvenida-img">
+        <div class="etiqueta etiqueta-nombre">Nombre del curso</div>
+        <div class="etiqueta etiqueta-codigo">Código</div>
+        <div class="etiqueta etiqueta-creditos">Créditos</div>
+        <div class="etiqueta etiqueta-info">Ver info</div>
+      </div>
 
-      <div class="bienvenida-flex">
-        <!-- Imagen del curso con etiquetas -->
-        <div class="bienvenida-imagen-container">
-          <img src="https://i.imgur.com/NArpTLE.png" alt="Ejemplo de curso" class="bienvenida-img" />
-          <div class="etiqueta etiqueta-nombre">Nombre del curso</div>
-          <div class="etiqueta etiqueta-codigo">Código</div>
-          <div class="etiqueta etiqueta-creditos">Créditos</div>
-          <div class="etiqueta etiqueta-info">Botón de información</div>
-        </div>
-
-        <!-- Imagen del contenido del popup más pequeña -->
-        <div class="bienvenida-popup-container">
-          <img src="https://i.imgur.com/XrcHCwS.png" alt="Ejemplo del contenido del popup" class="bienvenida-popup-img" />
-          <p class="popup-explicacion">Esto es lo que verás al hacer click en el botón de información.</p>
-        </div>
-
-      <p>Puedes <strong>hacer click</strong> en los cursos que ya llevaste para marcarlos como completados.<br>
-        Los cursos con prerrequisitos se desbloquearán automáticamente.</p>
-      <p><strong>Haz click en cualquier parte para comenzar.</strong></p>
+      <!-- Imagen 2 como ejemplo de popup -->
+      <div class="bienvenida-popup-container">
+        <img src="https://i.imgur.com/XrcHCwS.png" alt="Popup de curso" class="bienvenida-popup-img">
+        <div class="popup-explicacion">Ejemplo de lo que verás al hacer clic en el botón de información.</div>
+      </div>
     </div>
+
+    <p><strong>Haz clic en cualquier parte para comenzar.</strong></p>
   </div>
+</div>
   <h1>Malla Curricular - ULIMA</h1>
   <div id="creditos-container" style="margin: 1rem auto; max-width: 500px; text-align: center;">
   <div id="creditos-texto" style="font-weight: bold; margin-bottom: 0.5rem;">Créditos aprobados: 0 / 200</div>
