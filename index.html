@@ -9,43 +9,69 @@
   <style>
     #bienvenida-overlay {
       position: fixed;
-      z-index: 9999;
       inset: 0;
+      z-index: 9999;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(12px);
       display: flex;
-      align-items: center;
       justify-content: center;
-      transition: opacity 0.5s;
+      align-items: center;
+      transition: opacity 0.6s ease;
     }
+
     .bienvenida-fondo {
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 60% 40%, #ffe9ec 0%, #d94e6a88 40%, #4caf5088 60%, #2196f388 80%, #ff980088 100%);
-      filter: blur(40px);
-      opacity: 0.8;
+      background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%);
+      opacity: 0.4;
       z-index: 0;
     }
+
     .bienvenida-content {
       position: relative;
       z-index: 1;
-      background: rgba(255,255,255,0.7);
-      border-radius: 2em;
-      padding: 2.5em 2em;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 1.5em;
+      padding: 2em;
+      max-width: 600px;
       text-align: center;
-      box-shadow: 0 2px 18px rgba(0,0,0,0.10);
-      max-width: 700px;
-      margin: auto;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      animation: fadeInUp 0.8s ease;
     }
+
     .bienvenida-content h1 {
-      font-size: 2.5em;
-      margin-bottom: 0.5em;
-      color: #666;
-      font-weight: 600;
+      font-size: 2.2em;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 1em;
     }
+
     .bienvenida-content p {
-      font-size: 1.25em;
-      color: #666;
-      margin-top: 1.5em;
+      font-size: 1.2em;
+      color: #555;
+      line-height: 1.6em;
     }
+
+    .bienvenida-img {
+      width: 140px;
+      margin: 1em auto;
+      display: block;
+      border-radius: 1em;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Animación */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     body {
       font-family: 'Poppins', sans-serif;
       margin: 0;
@@ -454,13 +480,12 @@
   <div id="bienvenida-overlay">
     <div class="bienvenida-fondo"></div>
     <div class="bienvenida-content">
-      <h1>¡Bienvenido a la Malla Interactiva de Ing. Industrial ULIMA!</h1>
-      <div style="margin:2em auto; max-width:350px;">
-        <img src="https://i.imgur.com/5QXyB7k.png" alt="Ejemplo de curso" style="width:100%; border-radius:0.75em; box-shadow:0 2px 12px rgba(0,0,0,0.08);"/>
-      </div>
-      <p>Puedes tachar tus cursos aprobados haciendo click sobre ellos.<br>
-        A medida que vas aprobando cursos, se van desbloqueando los que tienen prerrequisitos.<br>
-        <b>Haz click en cualquier parte para comenzar.</b>
+      <h1>¡Bienvenido a tu Malla Interactiva!</h1>
+      <img src="https://cdn-icons-png.flaticon.com/512/860/860733.png" alt="Icono de cursos" class="bienvenida-img"/>
+      <p>
+        Marca tus cursos aprobados haciendo click sobre ellos.<br>
+        A medida que avanzas, se desbloquean los cursos con prerrequisitos.<br><br>
+        <b>Haz click en cualquier parte para comenzar</b>
       </p>
     </div>
   </div>
