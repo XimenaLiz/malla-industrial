@@ -660,8 +660,13 @@ if (electivoData) {
     badge = `<span class="badge ninguno" title="Sin diploma">Sin diploma</span>`;
   }
 }
+let alertaIcono = "";
+if (curso.curso === "Costeo de Operaciones") {
+  alertaIcono = `<span class="alerta-sirena" title="¡Atención! Cambió de 2 a 3 créditos desde 2025-1">🚨</span>`;
+}
+
 card.innerHTML = `
-  <div class="curso-title">${curso.curso}</div>
+  <div class="curso-title">${alertaIcono} ${curso.curso}</div>
   ${badge}
   <small><strong>Código:</strong> ${curso.codigo}</small>
   <small><strong>Créditos:</strong> ${curso.creditos}</small>
