@@ -682,6 +682,9 @@ body.dark-mode .tab-content {
   color: #eee;
   border-color: #7c66e3;
 }
+.hidden {
+  display: none;
+}
 
   </style>
 </head>
@@ -947,12 +950,20 @@ function renderPopup(curso) {
           `).join("")}
         </tbody>
       </table>
-      <form onsubmit="agregarEval(event, '${curso.curso}')" style="margin-top: 0.5em;">
-        <input type="text" placeholder="Evaluación" id="eval-nombre" required>
-        <input type="number" placeholder="%" id="eval-peso" min="0" max="100" required>
-        <input type="number" placeholder="Nota" id="eval-nota" step="0.5" min="0" max="20" required>
-        <button type="submit">➕ Agregar</button>
-      </form>
+      <!-- Nuevo botón toggle -->
+      <button id="toggle-eval-form-btn" type="button" style="margin: 0.5em 0;">➕ Mostrar formulario</button>
+      <!-- Nuevo botón toggle -->
+      <button id="toggle-eval-form-btn" type="button" style="margin: 0.5em 0;">➕ Mostrar formulario</button>
+
+      <!-- Envolver el formulario dentro de un contenedor ocultable -->
+      <div id="form-evaluacion-toggle" class="hidden">
+        <form onsubmit="agregarEval(event, '${curso.curso}')" style="margin-top: 0.5em;">
+          <input type="text" placeholder="Evaluación" id="eval-nombre" required>
+          <input type="number" placeholder="%" id="eval-peso" min="0" max="100" required>
+          <input type="number" placeholder="Nota" id="eval-nota" step="0.5" min="0" max="20" required>
+          <button type="submit">➕ Agregar</button>
+        </form>
+      </div>
       <p><strong>Promedio:</strong> <span id="promedio-curso">${promedio}</span></p>
     </div>
 
@@ -974,6 +985,13 @@ function renderPopup(curso) {
 
   popup.classList.remove("hidden");
   overlay.classList.remove("hidden");
+  const toggleBtn = document.getElementById("toggle-eval-form-btn");
+  const formContainer = document.getElementById("form-evaluacion-toggle");
+
+  toggleBtn.addEventListener("click", () => {
+  formContainer.classList.toggle("hidden");
+  toggleBtn.textContent = formContainer.classList.contains("hidden") ? "➕ Mostrar formulario" : "➖ Ocultar formulario";
+});
 }
 
     function cerrarPopup() {
