@@ -8,7 +8,6 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
 /* Fondo blur morado suave */
-/* Fondo blur morado suave */
 .bienvenida-fondo {
   position: absolute;
   inset: 0;
@@ -32,38 +31,36 @@
 .bienvenida-content {
   position: relative;
   z-index: 1;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 2em;
-  padding: 2.6em 2em 2.2em 2em;
-  max-width: 640px;
-  width: 95vw;
-  min-height: 540px;
-  max-height: 92vh;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  background: rgba(255,255,255,0.97);
+  border-radius: 1.2em;
+  padding: 1.4em 1.1em;
+  max-width: 430px;
+  width: 96vw;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.14);
   text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center; 
   align-items: center;
   animation: fadeIn 0.5s ease-out;
   overflow-y: visible;
 }
 
 .bienvenida-content h1 {
-  font-size: 1.65em;  /* REDUCIDO el tamaño del texto de bienvenida */
+  font-size: 1.12em;
   font-weight: 700;
   color: #5e3ba6;
-  margin-bottom: 1.25em;
-  line-height: 1.1;
+  margin-bottom: 0.85em;
+  line-height: 1.13;
 }
 
 .bienvenida-flex {
   display: flex;
-  gap: 2.2em;
+  gap: 1.1em;
   justify-content: center;
-  align-items: center; /* Cambiado a center para centrar verticalmente */
-  margin-bottom: 2em;
-  margin-top: 0.5em;
+  align-items: center;
+  margin-bottom: 1em;
+  margin-top: 0.3em;
   width: 100%;
 }
 
@@ -73,9 +70,9 @@
 }
 
 .bienvenida-img {
-  width: 280px;
-  border-radius: 1em;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  width: 122px;
+  border-radius: 0.7em;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.09);
 }
 
 .bienvenida-imagen-container {
@@ -87,8 +84,8 @@
   position: absolute;
   background: #ede2faee; /* Fondo morado suave */
   color: #5e35b1;
-  padding: 0.3em 0.7em;
-  font-size: 0.78em;
+  padding: 0.22em 0.45em;
+  font-size: 0.67em;
   border-radius: 1em;
   box-shadow: 0 2px 4px rgba(0,0,0,0.08);
   white-space: nowrap;
@@ -97,23 +94,22 @@
 }
 
 .etiqueta-nombre {
-  top: -14px;
+  top: -12px;
   left: 0;
 }
 .etiqueta-codigo {
-  bottom: -16px;
+  bottom: -12px;
   left: 0;
 }
 .etiqueta-creditos {
-  bottom: -16px;
+  bottom: -12px;
   right: 0;
 }
 .etiqueta-info {
-  top: -14px;
+  top: -12px;
   right: 0;
 }
 
-/* Flechitas (tooltips visuales) */
 .etiqueta::after {
   content: '';
   position: absolute;
@@ -121,94 +117,88 @@
   height: 0;
   border-style: solid;
 }
-
 .etiqueta-nombre::after {
   top: 100%;
-  left: 10px;
-  border-width: 6px 6px 0 6px;
+  left: 8px;
+  border-width: 5px 5px 0 5px;
   border-color: #bfa3e8 transparent transparent transparent;
 }
-
 .etiqueta-codigo::after {
   bottom: 100%;
-  left: 10px;
-  border-width: 0 6px 6px 6px;
+  left: 8px;
+  border-width: 0 5px 5px 5px;
   border-color: transparent transparent #bfa3e8 transparent;
 }
-
 .etiqueta-creditos::after {
   bottom: 100%;
-  right: 10px;
-  border-width: 0 6px 6px 6px;
+  right: 8px;
+  border-width: 0 5px 5px 5px;
   border-color: transparent transparent #bfa3e8 transparent;
 }
-
 .etiqueta-info::after {
   top: 100%;
-  right: 10px;
-  border-width: 6px 6px 0 6px;
+  right: 8px;
+  border-width: 5px 5px 0 5px;
   border-color: #bfa3e8 transparent transparent transparent;
 }
 
-/* Popup ejemplo */
 .bienvenida-popup-container {
   text-align: center;
-  max-width: 280px;
+  max-width: 130px;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
 .bienvenida-popup-img {
-  width: 240px;
-  border-radius: 1em;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  width: 110px;
+  border-radius: 0.7em;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.09);
 }
 
 .popup-explicacion {
-  font-size: 0.98em;
+  font-size: 0.77em;
   color: #555;
-  margin-top: 0.5em;
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
 }
 
-/* Texto inferior y explicaciones */
 .bienvenida-content p {
-  font-size: 1.08em;
+  font-size: 0.93em;
   color: #444;
-  line-height: 1.6em;
-  margin: 1.2em 0 0.4em 0;
+  line-height: 1.42em;
+  margin: 0.7em 0 0.3em 0;
 }
 
 .bienvenida-content .explicacion {
-  margin: 0.7em 0 1.3em 0;
-  font-size: 1em;
+  margin: 0.5em 0 1em 0;
+  font-size: 0.9em;
   color: #555;
 }
 
 .bienvenida-content .bienvenida-descripcion {
-  margin-top: 1.5em;
-  margin-bottom: 0.5em;
-  font-size: 1.13em;
+  margin-top: 0.9em;
+  margin-bottom: 0.3em;
+  font-size: 0.98em;
   color: #222;
   font-weight: 500;
 }
 
-/* Responsive */
-@media (max-width: 700px) {
+/* Responsive para móvil */
+@media (max-width: 600px) {
   .bienvenida-content {
-    padding: 2em 0.5em;
+    padding: 0.7em 0.2em;
     max-width: 98vw;
-    min-height: 340px;
   }
-  .bienvenida-flex {
-    flex-direction: column;
-    gap: 1.5em;
-    margin-bottom: 1.2em;
-    align-items: center;
+  .bienvenida-img,
+  .bienvenida-popup-img {
+    width: 90vw;
+    max-width: 110px;
+  }
+  .bienvenida-popup-container {
+    max-width: 98vw;
   }
 }
-
-/* Animación suave */
 @keyframes fadeIn {
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
@@ -638,7 +628,6 @@
           <img src="https://i.imgur.com/XrcHCwS.png" alt="Ejemplo del contenido del popup" class="bienvenida-popup-img" />
           <p class="popup-explicacion">Esto es lo que verás al hacer click en el botón de información.</p>
         </div>
-      </div>
 
       <p>Puedes <strong>hacer click</strong> en los cursos que ya llevaste para marcarlos como completados.<br>
         Los cursos con prerrequisitos se desbloquearán automáticamente.</p>
