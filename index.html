@@ -972,7 +972,6 @@ cursosElectivos
       card.dataset.ciclo = curso.ciclo;
 
       let badge = "";
-
       if (Array.isArray(curso.diploma)) {
         badge = curso.diploma.map(sigla => `<span class="badge ${sigla}">${sigla}</span>`).join(" ");
       } else if (curso.diploma && curso.diploma !== "ninguno") {
@@ -986,7 +985,6 @@ cursosElectivos
         ${badge}
         <small><strong>Código:</strong> ${curso.codigo}</small>
         <small><strong>Créditos:</strong> ${curso.creditos}</small>
-        <div class="info-btn">i</div>
       `;
 
       card.querySelector(".info-btn").addEventListener("click", e => {
