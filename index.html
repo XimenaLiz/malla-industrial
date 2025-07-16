@@ -655,6 +655,14 @@
       const bienvenida = document.getElementById("bienvenida-overlay");
       if (bienvenida) {
         bienvenida.addEventListener("click", () => {
+          // Lanza confeti
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+
+          // Oculta la bienvenida
           bienvenida.style.opacity = 0;
           setTimeout(() => bienvenida.style.display = "none", 600);
         });
