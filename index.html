@@ -656,6 +656,21 @@ body.dark-mode .bienvenida-content h1,
 body.dark-mode .bienvenida-content p {
   color: #e6e0ff;
 }
+/* Forzar texto oscuro en el popup (modo claro) */
+body:not(.dark-mode) .popup {
+  color: #333;
+}
+
+body:not(.dark-mode) .popup h3 {
+  color: #5d3d9c; /* Título con color lila institucional */
+}
+
+body:not(.dark-mode) .popup small {
+  color: #444;
+}
+body:not(.dark-mode) .popup {
+  background: #f2f2f8; /* gris lavanda claro */
+}
 
   </style>
 </head>
