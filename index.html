@@ -591,7 +591,16 @@
         col.className = "ciclo-col";
         col.innerHTML = `<div class="ciclo-title">Ciclo ${ciclo}</div>`;
 
-        cursos.filter(c => c.ciclo === ciclo).forEach(curso => {
+      cursos
+  .filter(c => c.ciclo === ciclo)
+  .filter(curso => {
+    // Si estamos en la pestaña personalizada, NO mostrar cursos electivos
+    if (carreraActual === "personalizada") {
+      return !cursosElectivos.some(e => e.curso === curso.curso);
+    }
+    return true;
+  })
+  .forEach(curso => {
           const card = document.createElement("div");
           card.className = "curso";
           if (cursosElectivos.some(e => e.curso === curso.curso)) {
