@@ -526,6 +526,11 @@
       document.querySelector(`.tabs button[onclick*="${nombre}"]`).classList.add('active');
       carreraActual = nombre;
       document.getElementById("formulario-personalizado").classList.toggle("hidden", nombre !== "personalizada");
+        if (nombre === "personalizada") {
+        document.getElementById('electivos-contenedor').style.display = 'none';
+      } else {
+        document.getElementById('electivos-contenedor').style.display = '';
+      }
       renderMalla();
     }
 
