@@ -566,7 +566,7 @@
   position: fixed;
   top: 1rem;
   right: 1rem;
-  z-index: 100;
+  z-index: 10000;
   background: #e0ddf5;
   border: none;
   color: #5d3d9c;
@@ -669,7 +669,7 @@ body.dark-mode .popup h3 {
 
 /* Subtextos (small) dentro del popup */
 body.dark-mode .popup small {
-  color: #fffefe;
+  color: #fffefe54;
 }
 
 /* Botón del popup */
@@ -794,8 +794,8 @@ body.modo-oscuro .curso.electivo {
         bienvenida.addEventListener("click", () => {
           // Lanza confeti
           confetti({
-            particleCount: 100000,
-            spread: 70,
+            particleCount: 1000,
+            spread: 80,
             origin: { y: 0.6 }
           });
 
