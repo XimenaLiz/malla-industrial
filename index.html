@@ -950,13 +950,11 @@ function renderPopup(curso) {
           `).join("")}
         </tbody>
       </table>
-      <!-- Nuevo botón toggle -->
-      <button id="toggle-eval-form-btn" type="button" style="margin: 0.5em 0;">➕ Mostrar formulario</button>
-      <!-- Nuevo botón toggle -->
-      <button id="toggle-eval-form-btn" type="button" style="margin: 0.5em 0;">➕ Mostrar formulario</button>
+      <!-- Botón toggle -->
+      <button id="toggle-eval-form-btn" type="button" style="margin: 0.5em 0;">➖ Ocultar formulario</button>
 
-      <!-- Envolver el formulario dentro de un contenedor ocultable -->
-      <div id="form-evaluacion-toggle" class="hidden">
+      <!-- Contenedor del formulario (se muestra por defecto, sin la clase hidden) -->
+      <div id="form-evaluacion-toggle">
         <form onsubmit="agregarEval(event, '${curso.curso}')" style="margin-top: 0.5em;">
           <input type="text" placeholder="Evaluación" id="eval-nombre" required>
           <input type="number" placeholder="%" id="eval-peso" min="0" max="100" required>
