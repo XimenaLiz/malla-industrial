@@ -520,29 +520,80 @@
       document.body.appendChild(alerta);
       setTimeout(() => alerta.remove(), 3000);
     }
-    function renderPopup(curso) {
-      const popup = document.getElementById("popup");
-      const overlay = document.getElementById("overlay");
-      const prerreq = curso.prerrequisitos.length ? curso.prerrequisitos.join(", ") : "Ninguno";
-      popup.innerHTML = `
-        <h3>${curso.curso}</h3>
-        <small><strong>Código:</strong> ${curso.codigo}</small>
-        <small><strong>Créditos:</strong> ${curso.creditos}</small>
-        <small><strong>Prerrequisitos:</strong> ${prerreq}</small>
-        <p>${curso.descripcion}</p>
-        ${curso.curso === "Costeo de Operaciones" ? `
-          <div style="background:#ffe9ec; color:#d94e6a; border-radius:0.5em; padding:0.8em; margin:1em 0;">
-            <strong>Nota importante:</strong><br>
-            Si cursaste <b>Costeo de Operaciones</b> antes del ciclo 2025-1, el curso tenía <b>2 créditos</b>.<br>
-            Desde 2025-1 el curso tiene <b>3 créditos</b>.<br>
-            Considera esto para tu avance curricular.
-          </div>
-        ` : ""}
-        <button onclick="cerrarPopup()">Cerrar</button>
-      `;
-      popup.classList.remove("hidden");
-      overlay.classList.remove("hidden");
-    }
+  function renderPopup(curso) {
+  const popup = document.getElementById("popup");
+  const overlay = document.getElementById("overlay");
+  const prerreq = curso.prerrequisitos.length ? curso.prerrequisitos.join(", ") : "Ninguno";
+
+  // Evaluaciones guardadas
+  const evaluaciones = JSON.parse(localStorage.getItem("evaluaciones_" + curso.curso)) || [];
+
+  // Calcular promedio ponderado
+  let promedio = 0;
+  let totalPeso = 0;
+  evaluaciones.forEach(ev => {
+    promedio += ev.peso * ev.nota;
+    totalPeso += ev.peso;
+  });
+  promedio = totalPeso > 0 ? (promedio / totalPeso).toFixed(2) : "-";
+
+  popup.innerHTML = `
+    <h3>${curso.curso}</h3>
+    <small><strong>Código:</strong> ${curso.codigo}</small><br>
+    <small><strong>Créditos:</strong> ${curso.creditos}</small><br>
+    <small><strong>Prerrequisitos:</strong> ${prerreq}</small>
+    <p>${curso.descripcion}</p>
+
+    ${curso.curso === "Costeo de Operaciones" ? `
+      <div style="background:#ffe9ec; color:#d94e6a; border-radius:0.5em; padding:0.8em; margin:1em 0;">
+        <strong>⚠️ Nota importante:</strong><br>
+        Si cursaste <b>Costeo de Operaciones</b> antes del ciclo 2025-1, el curso tenía <b>2 créditos</b>.<br>
+        Desde 2025-1 el curso tiene <b>3 créditos</b>.<br>
+        Considera esto para tu avance curricular.
+      </div>
+    ` : ""}
+
+    <hr>
+    <h4>📝 Evaluaciones</h4>
+    <table id="tabla-evals" style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr><th>Evaluación</th><th>%</th><th>Nota</th><th></th></tr>
+      </thead>
+      <tbody>
+        ${evaluaciones.map((ev, i) => `
+          <tr>
+            <td>${ev.nombre}</td>
+            <td>${(ev.peso * 100).toFixed(0)}%</td>
+            <td>${ev.nota}</td>
+            <td><button onclick="eliminarEval('${curso.curso}', ${i})">❌</button></td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+    <form onsubmit="agregarEval(event, '${curso.curso}')" style="margin-top: 0.5em;">
+      <input type="text" placeholder="Nombre" id="eval-nombre" required>
+      <input type="number" placeholder="%" id="eval-peso" min="0" max="100" required>
+      <input type="number" placeholder="Nota" id="eval-nota" step="0.1" min="0" max="20" required>
+      <button type="submit">➕ Agregar</button>
+    </form>
+    <p><strong>Promedio:</strong> <span id="promedio-curso">${promedio}</span></p>
+
+    <hr>
+    <h4>🗒️ Notas personales</h4>
+    <textarea id="nota-personal" placeholder="Escribe algo aquí..." rows="3" style="width:100%;">${localStorage.getItem("nota_" + curso.curso) || ""}</textarea>
+
+    <br><br>
+    <button onclick="cerrarPopup()">Cerrar</button>
+  `;
+
+  // Guarda nota personal en tiempo real
+  popup.querySelector("#nota-personal").addEventListener("input", e => {
+    localStorage.setItem("nota_" + curso.curso, e.target.value);
+  });
+
+  popup.classList.remove("hidden");
+  overlay.classList.remove("hidden");
+}
 
     function cerrarPopup() {
       document.getElementById("popup").classList.add("hidden");
@@ -1129,6 +1180,24 @@ cursosElectivos
 
       container.appendChild(card);
     });
+}
+function agregarEval(event, cursoNombre) {
+  event.preventDefault();
+  const nombre = document.getElementById("eval-nombre").value;
+  const peso = parseFloat(document.getElementById("eval-peso").value) / 100;
+  const nota = parseFloat(document.getElementById("eval-nota").value);
+
+  const evaluaciones = JSON.parse(localStorage.getItem("evaluaciones_" + cursoNombre)) || [];
+  evaluaciones.push({ nombre, peso, nota });
+  localStorage.setItem("evaluaciones_" + cursoNombre, JSON.stringify(evaluaciones));
+  renderPopup({ ...carreras[carreraActual].find(c => c.curso === cursoNombre) });
+}
+
+function eliminarEval(cursoNombre, index) {
+  const evaluaciones = JSON.parse(localStorage.getItem("evaluaciones_" + cursoNombre)) || [];
+  evaluaciones.splice(index, 1);
+  localStorage.setItem("evaluaciones_" + cursoNombre, JSON.stringify(evaluaciones));
+  renderPopup({ ...carreras[carreraActual].find(c => c.curso === cursoNombre) });
 }
     function filtrarDiploma(clave) {
       diplomaSeleccionado = clave;
