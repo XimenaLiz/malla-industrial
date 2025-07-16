@@ -7,70 +7,66 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
-    #bienvenida-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(12px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: opacity 0.6s ease;
-    }
+#bienvenida-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.5s ease;
+}
 
-    .bienvenida-fondo {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%);
-      opacity: 0.4;
-      z-index: 0;
-    }
+.bienvenida-fondo {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #f8f8f8 0%, #e0e0e0 100%);
+  opacity: 0.6;
+  z-index: 0;
+}
 
-    .bienvenida-content {
-      position: relative;
-      z-index: 1;
-      background: rgba(255, 255, 255, 0.85);
-      border-radius: 1.5em;
-      padding: 2em;
-      max-width: 600px;
-      text-align: center;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-      animation: fadeInUp 0.8s ease;
-    }
+.bienvenida-content {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 1.5em;
+  padding: 2em;
+  max-width: 700px;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.6s ease-out;
+}
 
-    .bienvenida-content h1 {
-      font-size: 2.2em;
-      font-weight: 700;
-      color: #333;
-      margin-bottom: 1em;
-    }
+.bienvenida-content h1 {
+  font-size: 2.2em;
+  font-weight: 700;
+  color: #444;
+  margin-bottom: 1em;
+}
 
-    .bienvenida-content p {
-      font-size: 1.2em;
-      color: #555;
-      line-height: 1.6em;
-    }
+.bienvenida-content p {
+  font-size: 1.1em;
+  color: #555;
+  margin-top: 1.5em;
+  line-height: 1.6em;
+}
 
-    .bienvenida-img {
-      width: 140px;
-      margin: 1em auto;
-      display: block;
-      border-radius: 1em;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
+.bienvenida-img {
+  width: 80%;
+  max-width: 360px;
+  margin: 1.2em auto;
+  display: block;
+  border-radius: 1em;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 
-    /* Animación */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+/* Animación suave de entrada */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
 
     body {
       font-family: 'Poppins', sans-serif;
@@ -476,19 +472,21 @@
   </style>
 </head>
 <body>
-  <!-- Pantalla de bienvenida -->
-  <div id="bienvenida-overlay">
-    <div class="bienvenida-fondo"></div>
-    <div class="bienvenida-content">
-      <h1>¡Bienvenido a tu Malla Interactiva!</h1>
-      <img src="https://cdn-icons-png.flaticon.com/512/860/860733.png" alt="Icono de cursos" class="bienvenida-img"/>
-      <p>
-        Marca tus cursos aprobados haciendo click sobre ellos.<br>
-        A medida que avanzas, se desbloquean los cursos con prerrequisitos.<br><br>
-        <b>Haz click en cualquier parte para comenzar</b>
-      </p>
-    </div>
+<!-- Pantalla de bienvenida -->
+<div id="bienvenida-overlay">
+  <div class="bienvenida-fondo"></div>
+  <div class="bienvenida-content">
+    <h1>¡Bienvenido a la Malla Interactiva de Ing. Industrial ULIMA!</h1>
+    <img src="/mnt/data/ea4394fe-b67b-4110-a9cb-29145ff24ab4.png" alt="Ejemplo de curso" class="bienvenida-img" />
+    <p>
+      Cada tarjeta representa un curso. Incluye:<br>
+      <b>– Código</b> del curso, <b>– Créditos</b>, y <b>– Prerrequisitos</b>.<br>
+      Puedes <b>marcar como aprobado</b> haciendo click.<br>
+      Se desbloquearán los que tienen prerrequisitos.<br><br>
+      <strong>Haz click en cualquier parte para comenzar.</strong>
+    </p>
   </div>
+</div>
   <h1>Malla Curricular - ULIMA</h1>
   <div id="creditos-container" style="margin: 1rem auto; max-width: 500px; text-align: center;">
   <div id="creditos-texto" style="font-weight: bold; margin-bottom: 0.5rem;">Créditos aprobados: 0 / 200</div>
