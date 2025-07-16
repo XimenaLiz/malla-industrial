@@ -373,6 +373,37 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0.2; }
 }
+.popup-tabs {
+  display: flex;
+  margin-top: 1em;
+  gap: 0.5em;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 0.5em;
+  cursor: pointer;
+  border: none;
+  background: #e5e5e5;
+  font-weight: bold;
+  border-radius: 0.5em 0.5em 0 0;
+}
+
+.tab-button.active {
+  background: #d4d4d4;
+}
+
+.tab-content {
+  display: none;
+  padding: 1em;
+  border: 1px solid #ccc;
+  border-radius: 0 0 0.5em 0.5em;
+  background: #fafafa;
+}
+
+.tab-content.active {
+  display: block;
+}
   </style>
 </head>
 <body>
@@ -512,6 +543,19 @@
     function lanzarConfetti() {
       confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
     }
+    function cambiarTab(tab) {
+  document.querySelectorAll(".tab-button").forEach(btn => btn.classList.remove("active"));
+  document.querySelectorAll(".tab-content").forEach(div => div.classList.remove("active", "hidden"));
+
+  if (tab === "eval") {
+    document.querySelector(".tab-button:nth-child(1)").classList.add("active");
+    document.getElementById("tab-eval").classList.add("active");
+  } else {
+    document.querySelector(".tab-button:nth-child(2)").classList.add("active");
+    document.getElementById("tab-notas").classList.add("active");
+  }
+}
+
 
     function mostrarAlerta(mensaje) {
       const alerta = document.createElement("div");
@@ -520,15 +564,13 @@
       document.body.appendChild(alerta);
       setTimeout(() => alerta.remove(), 3000);
     }
-  function renderPopup(curso) {
+function renderPopup(curso) {
   const popup = document.getElementById("popup");
   const overlay = document.getElementById("overlay");
   const prerreq = curso.prerrequisitos.length ? curso.prerrequisitos.join(", ") : "Ninguno";
 
-  // Evaluaciones guardadas
   const evaluaciones = JSON.parse(localStorage.getItem("evaluaciones_" + curso.curso)) || [];
 
-  // Calcular promedio ponderado
   let promedio = 0;
   let totalPeso = 0;
   evaluaciones.forEach(ev => {
@@ -536,6 +578,8 @@
     totalPeso += ev.peso;
   });
   promedio = totalPeso > 0 ? (promedio / totalPeso).toFixed(2) : "-";
+
+  const notaGuardada = localStorage.getItem("nota_" + curso.curso) || "";
 
   popup.innerHTML = `
     <h3>${curso.curso}</h3>
@@ -553,40 +597,44 @@
       </div>
     ` : ""}
 
-    <hr>
-    <h4>📝 Evaluaciones</h4>
-    <table id="tabla-evals" style="width: 100%; border-collapse: collapse;">
-      <thead>
-        <tr><th>Evaluación</th><th>%</th><th>Nota</th><th></th></tr>
-      </thead>
-      <tbody>
-        ${evaluaciones.map((ev, i) => `
-          <tr>
-            <td>${ev.nombre}</td>
-            <td>${(ev.peso * 100).toFixed(0)}%</td>
-            <td>${ev.nota}</td>
-            <td><button onclick="eliminarEval('${curso.curso}', ${i})">❌</button></td>
-          </tr>
-        `).join("")}
-      </tbody>
-    </table>
-    <form onsubmit="agregarEval(event, '${curso.curso}')" style="margin-top: 0.5em;">
-      <input type="text" placeholder="Nombre" id="eval-nombre" required>
-      <input type="number" placeholder="%" id="eval-peso" min="0" max="100" required>
-      <input type="number" placeholder="Nota" id="eval-nota" step="0.1" min="0" max="20" required>
-      <button type="submit">➕ Agregar</button>
-    </form>
-    <p><strong>Promedio:</strong> <span id="promedio-curso">${promedio}</span></p>
+    <div class="popup-tabs">
+      <button class="tab-button active" onclick="cambiarTab('eval')">📊 Evaluaciones</button>
+      <button class="tab-button" onclick="cambiarTab('notas')">🗒️ Notas</button>
+    </div>
 
-    <hr>
-    <h4>🗒️ Notas personales</h4>
-    <textarea id="nota-personal" placeholder="Escribe algo aquí..." rows="3" style="width:100%;">${localStorage.getItem("nota_" + curso.curso) || ""}</textarea>
+    <div id="tab-eval" class="tab-content active">
+      <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+          <tr><th>Evaluación</th><th>%</th><th>Nota</th><th></th></tr>
+        </thead>
+        <tbody>
+          ${evaluaciones.map((ev, i) => `
+            <tr>
+              <td>${ev.nombre}</td>
+              <td>${(ev.peso * 100).toFixed(0)}%</td>
+              <td>${ev.nota}</td>
+              <td><button onclick="eliminarEval('${curso.curso}', ${i})">❌</button></td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+      <form onsubmit="agregarEval(event, '${curso.curso}')" style="margin-top: 0.5em;">
+        <input type="text" placeholder="Nombre" id="eval-nombre" required>
+        <input type="number" placeholder="%" id="eval-peso" min="0" max="100" required>
+        <input type="number" placeholder="Nota" id="eval-nota" step="0.1" min="0" max="20" required>
+        <button type="submit">➕ Agregar</button>
+      </form>
+      <p><strong>Promedio:</strong> <span id="promedio-curso">${promedio}</span></p>
+    </div>
 
-    <br><br>
+    <div id="tab-notas" class="tab-content hidden">
+      <textarea id="nota-personal" placeholder="Escribe tus notas..." rows="5" style="width: 100%;">${notaGuardada}</textarea>
+    </div>
+
+    <br>
     <button onclick="cerrarPopup()">Cerrar</button>
   `;
 
-  // Guarda nota personal en tiempo real
   popup.querySelector("#nota-personal").addEventListener("input", e => {
     localStorage.setItem("nota_" + curso.curso, e.target.value);
   });
