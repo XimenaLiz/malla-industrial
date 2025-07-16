@@ -720,6 +720,26 @@ body.dark-mode .popup-content .info-line span {
 body.dark-mode .popup-content {
   color: #e0e0e0; /* Color general más claro en modo oscuro */
 }
+/* Estilo para la descripción del curso */
+.popup-content .descripcion {
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Mejora los textos en modo oscuro */
+body.dark-mode .popup-content {
+  color: #e0e0e0;
+  background-color: #1e1e1e;
+}
+
+body.dark-mode .popup-content strong {
+  color: #ffffff;
+}
+
+body.dark-mode .popup-content span,
+body.dark-mode .descripcion {
+  color: #dddddd;
+}
   </style>
 </head>
 <body>
@@ -951,12 +971,14 @@ function renderPopup(curso) {
       <button class="tab-button" onclick="cambiarTabPopup('notas')">📝 Notas</button>
     </div>
 
-    <div id="tab-info" class="tab-content active">
+    <div id="tab-info" class="tab-content active popup-content">
       <h3>${curso.curso}</h3>
-      <small><strong>Código:</strong> ${curso.codigo}</small><br>
-      <small><strong>Créditos:</strong> ${curso.creditos}</small><br>
-      <small><strong>Prerrequisitos:</strong> ${prerreq}</small>
-      <p style="margin-top: 0.5em;">${curso.descripcion}</p>
+
+      <div><strong>Código:</strong> <span>${curso.codigo}</span></div>
+      <div><strong>Créditos:</strong> <span>${curso.creditos}</span></div>
+      <div><strong>Prerrequisitos:</strong> <span>${prerreq}</span></div>
+
+      <p class="descripcion" style="margin-top: 0.5em;">${curso.descripcion}</p>
 
       ${curso.curso === "Costeo de Operaciones" ? `
         <div style="background:#ffe9ec; color:#d94e6a; border-radius:0.5em; padding:0.8em; margin:1em 0;">
