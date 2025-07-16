@@ -564,24 +564,28 @@
 }
 .modo-btn {
   position: fixed;
-  top: 1em;
-  right: 1em;
+  top: 1rem;
+  right: 1rem;
   z-index: 10000;
-  background: #ffffffdd;
-  border: 1px solid #ccc;
-  padding: 0.5em 1em;
-  border-radius: 1em;
+  background: #e0ddf5;
+  border: none;
+  color: #5d3d9c;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 1.5rem;
   font-size: 0.9em;
   cursor: pointer;
-  color: #333;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   transition: background 0.3s ease, color 0.3s ease;
 }
 
+.modo-btn.hidden {
+  display: none;
+}
+
 body.dark-mode .modo-btn {
-  background: #2c2c2c;
+  background: #3a2f5a;
   color: #eee;
-  border-color: #555;
 }
 body.dark-mode {
   background: #1e1e1e;
@@ -598,6 +602,44 @@ body.dark-mode .etiqueta {
   background: #3e3e3e;
   color: #cfcfff;
   border: 1px solid #6f6f6f;
+}
+body.dark-mode .ciclo-col {
+  background-color: #2e2e3a;
+}
+
+body.dark-mode .curso {
+  background-color: #3b3b4f;
+  border-left-color: #a58cff;
+}
+
+body.dark-mode .popup {
+  background: #2e2e3a;
+  color: #eee;
+}
+
+body.dark-mode .popup button {
+  background-color: #7c66e3;
+  color: white;
+}
+
+body.dark-mode .tabs button {
+  background-color: #3b3b4f;
+  color: #eee;
+}
+
+body.dark-mode .tabs button.active {
+  background-color: #a58cff;
+  color: #fff;
+}
+
+body.dark-mode .filtros-diplomas button {
+  background-color: #3b3b4f;
+  color: #eee;
+}
+
+body.dark-mode .filtros-diplomas button.active {
+  background-color: #a58cff;
+  color: #fff;
 }
 
   </style>
@@ -632,7 +674,7 @@ body.dark-mode .etiqueta {
   </div>
 </div>
 <!-- Botón de modo oscuro -->
-<button id="modo-toggle" class="modo-btn">🌙 Modo Oscuro</button>
+<button id="modo-toggle" class="modo-btn hidden">🌙 Modo Oscuro</button>
   <h1>Malla Curricular - ULIMA</h1>
   <div id="creditos-container" style="margin: 1rem auto; max-width: 500px; text-align: center;">
   <div id="creditos-texto" style="font-weight: bold; margin-bottom: 0.5rem;">Créditos aprobados: 0 / 200</div>
