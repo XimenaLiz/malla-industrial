@@ -11,8 +11,8 @@
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(8px);
+  background: rgba(245, 240, 255, 0.7);
+  backdrop-filter: blur(10px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -22,49 +22,47 @@
 .bienvenida-fondo {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #f8f8f8 0%, #e0e0e0 100%);
-  opacity: 0.6;
+  background: radial-gradient(circle at center, #e0d3ff 0%, #c6b2f3 40%, #9e83e3 100%);
+  opacity: 0.5;
   z-index: 0;
 }
 
 .bienvenida-content {
   position: relative;
   z-index: 1;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 1.5em;
-  padding: 2em;
-  max-width: 700px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 1.8em;
+  padding: 2.5em 2em;
+  max-width: 720px;
   text-align: center;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  animation: fadeIn 0.6s ease-out;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  animation: fadeIn 0.5s ease-out;
 }
 
 .bienvenida-content h1 {
-  font-size: 2.2em;
+  font-size: 2.4em;
   font-weight: 700;
-  color: #444;
+  color: #5e3ba6;
   margin-bottom: 1em;
 }
 
 .bienvenida-content p {
-  font-size: 1.1em;
-  color: #555;
-  margin-top: 1.5em;
+  font-size: 1.15em;
+  color: #444;
   line-height: 1.6em;
 }
 
 .bienvenida-img {
-  width: 80%;
-  max-width: 360px;
-  margin: 1.2em auto;
+  width: 300px;
+  margin: 1.5em auto;
   display: block;
   border-radius: 1em;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 /* Animación suave de entrada */
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.98); }
+  from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
 }
 
@@ -473,20 +471,22 @@
 </head>
 <body>
 <!-- Pantalla de bienvenida -->
-<div id="bienvenida-overlay">
-  <div class="bienvenida-fondo"></div>
-  <div class="bienvenida-content">
-    <h1>¡Bienvenido a la Malla Interactiva de Ing. Industrial ULIMA!</h1>
-    <img src="/mnt/data/ea4394fe-b67b-4110-a9cb-29145ff24ab4.png" alt="Ejemplo de curso" class="bienvenida-img" />
-    <p>
-      Cada tarjeta representa un curso. Incluye:<br>
-      <b>– Código</b> del curso, <b>– Créditos</b>, y <b>– Prerrequisitos</b>.<br>
-      Puedes <b>marcar como aprobado</b> haciendo click.<br>
-      Se desbloquearán los que tienen prerrequisitos.<br><br>
-      <strong>Haz click en cualquier parte para comenzar.</strong>
-    </p>
+  <div id="bienvenida-overlay">
+    <div class="bienvenida-fondo"></div>
+    <div class="bienvenida-content">
+      <h1>¡Bienvenido a la Malla Interactiva de Ing. Industrial ULIMA!</h1>
+      
+      <img src="/mnt/data/ca4158a8-be38-45a1-838b-d2010e0ebea2.png" alt="Ejemplo de curso" class="bienvenida-img" />
+      
+      <p>
+        Este es un ejemplo de un curso:<br>
+        Incluye el <b>nombre</b>, <b>código</b>, <b>créditos</b> y un botón de <b>información</b>.<br><br>
+        Puedes <b>hacer click</b> en los cursos que ya llevaste para marcarlos como completados.<br>
+        Los cursos con prerrequisitos se desbloquearán automáticamente.<br><br>
+        <strong>Haz click en cualquier parte para comenzar.</strong>
+      </p>
+    </div>
   </div>
-</div>
   <h1>Malla Curricular - ULIMA</h1>
   <div id="creditos-container" style="margin: 1rem auto; max-width: 500px; text-align: center;">
   <div id="creditos-texto" style="font-weight: bold; margin-bottom: 0.5rem;">Créditos aprobados: 0 / 200</div>
