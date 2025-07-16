@@ -624,9 +624,9 @@ function renderPopup(curso) {
         </tbody>
       </table>
       <form onsubmit="agregarEval(event, '${curso.curso}')" style="margin-top: 0.5em;">
-        <input type="text" placeholder="Nombre" id="eval-nombre" required>
+        <input type="text" placeholder="Evaluación" id="eval-nombre" required>
         <input type="number" placeholder="%" id="eval-peso" min="0" max="100" required>
-        <input type="number" placeholder="Nota" id="eval-nota" step="0.1" min="0" max="20" required>
+        <input type="number" placeholder="Nota" id="eval-nota" step="0.5" min="0" max="20" required>
         <button type="submit">➕ Agregar</button>
       </form>
       <p><strong>Promedio:</strong> <span id="promedio-curso">${promedio}</span></p>
