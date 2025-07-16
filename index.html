@@ -636,7 +636,7 @@ function renderPopup(curso) {
     <div id="tab-notas" class="tab-content hidden">
       <textarea id="nota-personal" placeholder="Escribe tus notas personales aquí..." rows="6" style="width: 100%;">${notaGuardada}</textarea>
     </div>
-
+    <button onclick="imprimirCurso('${curso.curso}')">🖨️ Imprimir / Descargar</button>
     <br><button onclick="cerrarPopup()">Cerrar</button>
   `;
   
@@ -656,6 +656,44 @@ function renderPopup(curso) {
     function cerrarPopup() {
       document.getElementById("popup").classList.add("hidden");
       document.getElementById("overlay").classList.add("hidden");
+    }
+    function imprimirCurso(nombreCurso) {
+      const curso = carreras[carreraActual].find(c => c.curso === nombreCurso) || cursosElectivos.find(c => c.curso === nombreCurso);
+      const evaluaciones = JSON.parse(localStorage.getItem("evaluaciones_" + nombreCurso)) || [];
+      const notaGuardada = localStorage.getItem("nota_" + nombreCurso) || "";
+
+      let html = `
+        <h2>${curso.curso}</h2>
+        <p><strong>Código:</strong> ${curso.codigo}</p>
+        <p><strong>Créditos:</strong> ${curso.creditos}</p>
+        <p><strong>Descripción:</strong> ${curso.descripcion}</p>
+        <hr>
+        <h3>Evaluaciones</h3>
+        <ul>
+          ${evaluaciones.map(ev => `<li>${ev.nombre} - ${(ev.peso * 100).toFixed(0)}% - Nota: ${ev.nota}</li>`).join("") || "<li>No hay evaluaciones registradas</li>"}
+        </ul>
+        <hr>
+        <h3>Notas personales</h3>
+        <p>${notaGuardada || "Sin anotaciones"}</p>
+      `;
+
+      const ventana = window.open("", "_blank", "width=700,height=800");
+      ventana.document.write(`
+        <html>
+        <head>
+          <title>Resumen del Curso</title>
+          <style>
+            body { font-family: Poppins, sans-serif; padding: 20px; }
+            h2, h3 { color: #5d3d9c; }
+            hr { margin: 1em 0; }
+          </style>
+        </head>
+        <body>${html}</body>
+        </html>
+      `);
+      ventana.document.close();
+      ventana.focus();
+      ventana.print();
     }
 
     function cambiarCarrera(nombre) {
