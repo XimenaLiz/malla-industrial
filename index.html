@@ -537,6 +537,7 @@
       personalizada: JSON.parse(localStorage.getItem("cursosPersonalizados")) || []
     };
     let pestañaActiva = 'info';
+    let cursoAnterior = null
     let carreraActual = 'ingenieria';
     const estadoCursos = JSON.parse(localStorage.getItem("estadoCursosULIMA")) || {};
 
@@ -638,12 +639,16 @@ function renderPopup(curso) {
 
     <br><button onclick="cerrarPopup()">Cerrar</button>
   `;
-
+  
   popup.querySelector("#nota-personal").addEventListener("input", e => {
     localStorage.setItem("nota_" + curso.curso, e.target.value);
   });
+  if (cursoAnterior !== curso.codigo) {
+  pestañaActiva = 'info'; // 🟣 Reiniciar si es un curso diferente
+  }
+  cursoAnterior = curso.codigo;
   cambiarTabPopup(pestañaActiva);
-  
+
   popup.classList.remove("hidden");
   overlay.classList.remove("hidden");
 }
