@@ -573,7 +573,12 @@
       ninguno: "Sin diploma"
     };
     function renderMalla() {
-      const cursos = carreras[carreraActual];
+      let cursos = carreras[carreraActual];
+
+      // 🔒 Evita que cursos electivos se muestren en la pestaña personalizada
+      if (carreraActual === "personalizada") {
+        cursos = cursos.filter(c => !cursosElectivos.some(e => e.curso === c.curso));
+      }
       const container = document.getElementById("malla");
       const ciclos = [...new Set(cursos.map(c => c.ciclo))].sort((a,b) => a-b);
       container.innerHTML = "";
