@@ -700,6 +700,26 @@ body.dark-mode .curso.electivo {
 body.dark-mode .electivo small {
   color: #ccc;
 }
+/* Tamaño más pequeño para la sumilla */
+.popup-content p.descripcion {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: inherit; /* Hereda el color según el modo */
+}
+
+/* Ajuste de textos dentro del popup para modo oscuro */
+body.dark-mode .popup-content .info-line strong {
+  color: #ffffff; /* Títulos como “Código:” */
+}
+
+body.dark-mode .popup-content .info-line span {
+  color: #dddddd; /* Valores como “IND123”, “3 créditos”, etc. */
+}
+
+/* Por si hay texto general que se mantiene oscuro */
+body.dark-mode .popup-content {
+  color: #e0e0e0; /* Color general más claro en modo oscuro */
+}
   </style>
 </head>
 <body>
