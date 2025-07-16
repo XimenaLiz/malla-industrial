@@ -536,7 +536,7 @@
 
       personalizada: JSON.parse(localStorage.getItem("cursosPersonalizados")) || []
     };
-
+    let pestañaActiva = 'info';
     let carreraActual = 'ingenieria';
     const estadoCursos = JSON.parse(localStorage.getItem("estadoCursosULIMA")) || {};
 
@@ -642,7 +642,8 @@ function renderPopup(curso) {
   popup.querySelector("#nota-personal").addEventListener("input", e => {
     localStorage.setItem("nota_" + curso.curso, e.target.value);
   });
-
+  cambiarTabPopup(pestañaActiva);
+  
   popup.classList.remove("hidden");
   overlay.classList.remove("hidden");
 }
@@ -694,6 +695,7 @@ function renderPopup(curso) {
       renderMalla();
     }
     function cambiarTabPopup(tab) {
+      pestañaActiva = tab; // ⬅️ Guardamos cuál está activa
       document.querySelectorAll(".popup-tabs .tab-button").forEach(btn => btn.classList.remove("active"));
       document.querySelectorAll(".tab-content").forEach(div => div.classList.remove("active"));
 
