@@ -595,9 +595,11 @@
   .filter(c => c.ciclo === ciclo)
   .filter(curso => {
     // Si estamos en la pestaña personalizada, NO mostrar cursos electivos
-    if (carreraActual !== "ingenieria") {
-      cursos = cursos.filter(c => !cursosElectivos.some(e => e.curso === c.curso));
+    if (carreraActual === "personalizada") {
+      return !cursosElectivos.some(e => e.curso === curso.curso);
     }
+    return true;
+  })
   .forEach(curso => {
           const card = document.createElement("div");
           card.className = "curso";
