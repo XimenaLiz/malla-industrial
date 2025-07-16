@@ -956,8 +956,14 @@ function renderElectivos() {
   const container = document.getElementById("electivos-container");
   container.innerHTML = "";
 
-  cursosElectivos
-    .filter(curso => diplomaSeleccionado === 'todos' || curso.diploma === diplomaSeleccionado || (diplomaSeleccionado === 'ninguno' && !curso.diploma))
+cursosElectivos
+  .filter(curso =>
+    diplomaSeleccionado === 'todos' ||
+    (Array.isArray(curso.diploma)
+      ? curso.diploma.includes(diplomaSeleccionado)
+      : curso.diploma === diplomaSeleccionado) ||
+    (diplomaSeleccionado === 'ninguno' && !curso.diploma)
+  )
     .forEach(curso => {
       const card = document.createElement("div");
       card.className = "electivo";
@@ -966,9 +972,12 @@ function renderElectivos() {
       card.dataset.ciclo = curso.ciclo;
 
       let badge = "";
-      if (curso.diploma && curso.diploma !== "ninguno") {
+
+      if (Array.isArray(curso.diploma)) {
+        badge = curso.diploma.map(sigla => `<span class="badge ${sigla}">${sigla}</span>`).join(" ");
+      } else if (curso.diploma && curso.diploma !== "ninguno") {
         badge = `<span class="badge ${curso.diploma}">${curso.diploma}</span>`;
-      } else if (curso.diploma === "ninguno") {
+      } else if (curso.diploma === "ninguno" || !curso.diploma) {
         badge = `<span class="badge ninguno">Sin diploma</span>`;
       }
 
