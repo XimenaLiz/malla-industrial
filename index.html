@@ -365,7 +365,7 @@
 
   <div class="tabs" id="carreras">
     <button class="active" onclick="cambiarCarrera('ingenieria')">Ingeniería Industrial</button>
-    <button onclick="cambiarCarrera('personalizada')">Personalizada</button>
+  <button onclick="cambiarCarrera('personalizada')">Personalizada</button>
   </div>
   <div class="grid" id="malla"></div>
 
@@ -412,13 +412,7 @@
     document.getElementById("fecha-actualizacion").textContent = new Date().toLocaleDateString("es-PE", {
       year: 'numeric', month: 'long', day: 'numeric'
     });
-    // Inicializa la estructura carreras si no existe
-    if (!carreras) var carreras = {};
 
-    // Asegura que exista la carrera "personalizada"
-    if (!carreras.personalizada) {
-      carreras.personalizada = JSON.parse(localStorage.getItem("cursosPersonalizados")) || [];
-    }
     const carreras = {
       ingenieria: [
         { ciclo: 1, curso: "Matemática básica", codigo: "6382", creditos: 5, prerrequisitos: [], descripcion: "Conjuntos de números reales, ecuaciones e inecuaciones, geometría analítica y funciones. Se enfatizan, asimismo, las representaciones gráficas en el plano cartesiano y en el tratamiento introductorio a las funciones reales." },
