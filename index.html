@@ -1672,6 +1672,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+document.getElementById("modoToggle").addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+});
 
 function quitarElectivo(nombreCurso) {
   // Eliminar de la malla
