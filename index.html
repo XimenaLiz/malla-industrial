@@ -1109,8 +1109,7 @@ function renderPopup(curso) {
       const nombre = document.getElementById("curso-nombre").value;
       const codigo = document.getElementById("curso-codigo").value;
       const creditos = parseInt(document.getElementById("curso-creditos").value);
-      const cicloText = targetCol.querySelector(".ciclo-title")?.textContent || "";
-      const ciclo = parseInt(cicloText.replace("Ciclo ", "")) || 1;
+      const ciclo = parseInt(document.getElementById("curso-ciclo").value);
       const prerreq = document.getElementById("curso-prerreq").value.split(",").map(p => p.trim()).filter(Boolean);
       const descripcion = document.getElementById("curso-descripcion").value;
       carreras.personalizada.push({ curso: nombre, codigo, creditos, ciclo, prerrequisitos: prerreq, descripcion });
