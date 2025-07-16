@@ -591,16 +591,13 @@
 let badge = "";
 const electivoData = cursosElectivos.find(e => e.curso === curso.curso);
 if (electivoData) {
-  const diploma = electivoData.diploma || "ninguno";
-  const nombreDiploma = {
-    IT: "Innovación Tecnológica",
-    BA: "Business Analytics",
-    SCM: "Supply Chain Mgmt",
-    EPM: "Engineering PM",
-    IE: "Ing. Empresarial",
-    ninguno: "Sin diploma"
-  }[diploma];
-  badge = `<span class="badge ${diploma}">${diploma !== "ninguno" ? diploma : "Sin diploma"}</span>`;
+  if (Array.isArray(electivoData.diploma)) {
+    badge = electivoData.diploma.map(sigla => `<span class="badge ${sigla}">${sigla}</span>`).join(" ");
+  } else if (electivoData.diploma && electivoData.diploma !== "ninguno") {
+    badge = `<span class="badge ${electivoData.diploma}">${electivoData.diploma}</span>`;
+  } else {
+    badge = `<span class="badge ninguno">Sin diploma</span>`;
+  }
 }
 
 card.innerHTML = `
