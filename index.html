@@ -740,6 +740,32 @@ body.dark-mode .popup-content span,
 body.dark-mode .descripcion {
   color: #dddddd;
 }
+.malla-scroll-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  width: 100%;
+  gap: 0.5rem;
+}
+
+.flecha-malla {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #5d3d9c;
+  cursor: pointer;
+  padding: 0 0.5rem;
+  z-index: 10;
+}
+
+.malla-scrollable {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 1rem;
+  flex: 1;
+}
   </style>
 </head>
 <body>
@@ -785,7 +811,13 @@ body.dark-mode .descripcion {
     <button class="active" onclick="cambiarCarrera('ingenieria')">Ingeniería Industrial</button>
   <button onclick="cambiarCarrera('personalizada')">Personalizada</button>
   </div>
-  <div class="grid" id="malla"></div>
+  <div class="malla-scroll-wrapper">
+  <button class="flecha-malla" onclick="desplazarMalla(-1)">&#x276E;</button>
+  
+  <div id="malla" class="malla-scrollable"></div>
+  
+  <button class="flecha-malla" onclick="desplazarMalla(1)">&#x276F;</button>
+</div>
 
   <button id="flecha-izquierda" class="flecha izquierda" onclick="desplazarMalla(-1)">⬅</button>
 
@@ -1119,18 +1151,18 @@ function renderPopup(curso) {
     flechaDer.style.display = scrollLeft < scrollMax - 10 ? "block" : "none";
   }
 
-  function desplazarMalla(direccion) {
-    const malla = document.getElementById("malla-container");
-    const scrollAmount = 300;
-    const nuevaPos = malla.scrollLeft + direccion * scrollAmount;
+function desplazarMalla(direccion) {
+  const malla = document.getElementById("malla");
+  const scrollAmount = 300;
+  const nuevaPos = malla.scrollLeft + direccion * scrollAmount;
 
-    malla.scrollTo({
-      left: nuevaPos,
-      behavior: "smooth"
-    });
+  malla.scrollTo({
+    left: nuevaPos,
+    behavior: "smooth"
+  });
 
-    setTimeout(actualizarVisibilidadFlechas, 350);
-  }
+  setTimeout(actualizarVisibilidadFlechas, 350); // Si vas a manejar visibilidad automática
+}
 
 
     function agregarCurso(e) {
