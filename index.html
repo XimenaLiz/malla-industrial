@@ -7,6 +7,45 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
+    #bienvenida-overlay {
+      position: fixed;
+      z-index: 9999;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.5s;
+    }
+    .bienvenida-fondo {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 60% 40%, #ffe9ec 0%, #d94e6a88 40%, #4caf5088 60%, #2196f388 80%, #ff980088 100%);
+      filter: blur(40px);
+      opacity: 0.8;
+      z-index: 0;
+    }
+    .bienvenida-content {
+      position: relative;
+      z-index: 1;
+      background: rgba(255,255,255,0.7);
+      border-radius: 2em;
+      padding: 2.5em 2em;
+      text-align: center;
+      box-shadow: 0 2px 18px rgba(0,0,0,0.10);
+      max-width: 700px;
+      margin: auto;
+    }
+    .bienvenida-content h1 {
+      font-size: 2.5em;
+      margin-bottom: 0.5em;
+      color: #666;
+      font-weight: 600;
+    }
+    .bienvenida-content p {
+      font-size: 1.25em;
+      color: #666;
+      margin-top: 1.5em;
+    }
     body {
       font-family: 'Poppins', sans-serif;
       margin: 0;
@@ -411,6 +450,20 @@
   </style>
 </head>
 <body>
+  <!-- Pantalla de bienvenida -->
+  <div id="bienvenida-overlay">
+    <div class="bienvenida-fondo"></div>
+    <div class="bienvenida-content">
+      <h1>¡Bienvenido a la Malla Interactiva de Ing. Industrial ULIMA!</h1>
+      <div style="margin:2em auto; max-width:350px;">
+        <img src="https://i.imgur.com/5QXyB7k.png" alt="Ejemplo de curso" style="width:100%; border-radius:0.75em; box-shadow:0 2px 12px rgba(0,0,0,0.08);"/>
+      </div>
+      <p>Puedes tachar tus cursos aprobados haciendo click sobre ellos.<br>
+        A medida que vas aprobando cursos, se van desbloqueando los que tienen prerrequisitos.<br>
+        <b>Haz click en cualquier parte para comenzar.</b>
+      </p>
+    </div>
+  </div>
   <h1>Malla Curricular - ULIMA</h1>
   <div id="creditos-container" style="margin: 1rem auto; max-width: 500px; text-align: center;">
   <div id="creditos-texto" style="font-weight: bold; margin-bottom: 0.5rem;">Créditos aprobados: 0 / 200</div>
@@ -467,6 +520,16 @@
   <script>
     document.getElementById("fecha-actualizacion").textContent = new Date().toLocaleDateString("es-PE", {
       year: 'numeric', month: 'long', day: 'numeric'
+    });
+    // Oculta el overlay y muestra la app al hacer click
+    document.addEventListener("DOMContentLoaded", () => {
+      const bienvenida = document.getElementById("bienvenida-overlay");
+      if (bienvenida) {
+        bienvenida.addEventListener("click", () => {
+          bienvenida.style.opacity = 0;
+          setTimeout(() => bienvenida.style.display = "none", 600);
+        });
+      }
     });
 
     const carreras = {
