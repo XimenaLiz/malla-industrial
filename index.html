@@ -16,7 +16,6 @@
   z-index: 0;
 }
 
-/* Overlay */
 #bienvenida-overlay {
   position: fixed;
   inset: 0;
@@ -29,43 +28,99 @@
   transition: opacity 0.5s ease;
 }
 
-/* Contenido principal */
 .bienvenida-content {
   position: relative;
   z-index: 1;
   background: rgba(255, 255, 255, 0.95);
-  border-radius: 1.8em;
-  padding: 1.8em 1.2em;
-  max-width: 620px;
-  max-height: 90vh;
-  overflow-y: auto;
-  text-align: center;
+  border-radius: 2em;
+  padding: 2.8em 2em 2.4em 2em;
+  max-width: 640px;
+  width: 95vw;
+  min-height: 540px;
+  max-height: 92vh;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   animation: fadeIn 0.5s ease-out;
+  overflow-y: visible;
 }
 
 .bienvenida-content h1 {
-  font-size: 2.4em;
+  font-size: 2.3em;
   font-weight: 700;
   color: #5e3ba6;
-  margin-bottom: 1em;
+  margin-bottom: 1.2em;
+}
+
+.bienvenida-img-demo {
+  margin: 2.2em auto 1em auto;
+  width: 88%;
+  max-width: 340px;
+  border-radius: 1.3em;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  display: block;
+}
+
+.bienvenida-flex {
+  display: flex;
+  gap: 2.2em;
+  justify-content: center;
+  align-items: flex-start;
+  margin-bottom: 2em;
+  margin-top: 0.5em;
+}
+
+.bienvenida-content .bienvenida-flex {
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.bienvenida-popup-container {
+  text-align: center;
+  max-width: 300px;
+}
+
+.bienvenida-popup-img {
+  width: 230px;
+  border-radius: 1em;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
 }
 
 .bienvenida-content p {
-  font-size: 1.15em;
+  font-size: 1.12em;
   color: #444;
   line-height: 1.6em;
+  margin: 1.2em 0 0.4em 0;
 }
 
-/* Flex para mostrar las dos imágenes lado a lado */
-.bienvenida-flex {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2em;
-  justify-content: center;
-  align-items: flex-start;
-  margin-top: 1em;
-  margin-bottom: 2em;
+.bienvenida-content .explicacion {
+  margin: 0.7em 0 1.3em 0;
+  font-size: 1em;
+  color: #555;
+}
+
+.bienvenida-content .bienvenida-descripcion {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-size: 1.13em;
+  color: #222;
+  font-weight: 500;
+}
+
+@media (max-width: 700px) {
+  .bienvenida-content {
+    padding: 2em 0.5em;
+    max-width: 98vw;
+    min-height: 340px;
+  }
+  .bienvenida-flex {
+    flex-direction: column;
+    gap: 1.5em;
+    margin-bottom: 1.2em;
+  }
 }
 
 /* Imagen del curso */
