@@ -1089,6 +1089,8 @@ function renderPopup(curso) {
     <div id="tab-notas" class="tab-content hidden">
       <textarea id="nota-personal" placeholder="Escribe tus notas personales aquí..." rows="6" style="width: 100%;">${notaGuardada}</textarea>
     </div>
+    <div id="overlay" class="overlay hidden"></div>
+    <div id="popup" class="popup hidden"></div>
     <button onclick="imprimirCurso('${curso.curso}')">🖨️ Imprimir / Descargar</button>
     <br><button onclick="cerrarPopup()">Cerrar</button>
   `;
@@ -1959,8 +1961,6 @@ function quitarElectivo(nombreCurso) {
   renderElectivos();
 }
   </script>
-  <div id="overlay" class="overlay hidden"></div>
-  <div id="popup" class="popup hidden"></div>
 
 </body>
 </html>
