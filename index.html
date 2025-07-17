@@ -804,7 +804,9 @@ body.dark-mode .descripcion {
   <div id="creditos-texto" style="font-weight: bold; margin-bottom: 0.5rem;">Créditos aprobados: 0 / 200</div>
   <div style="background: #eee; height: 20px; border-radius: 10px; overflow: hidden;">
     <div id="creditos-barra" style="height: 100%; width: 0%; background: #4caf50; transition: width 0.3s;"></div>
-  </div>
+  </div><button id="restaurarTodoBtn" style="margin: 10px; background-color: #d9534f; color: white; padding: 8px 16px; border: none; border-radius: 8px; cursor: pointer;">
+  🔁 Restaurar todo
+</button></div>
 </div>
 
   <div class="tabs" id="carreras">
@@ -1878,6 +1880,20 @@ function quitarElectivo(nombreCurso) {
   renderMalla();
   renderElectivos();
 }
+document.getElementById("restaurarTodoBtn").addEventListener("click", () => {
+  const confirmar = confirm("¿Estás seguro de que deseas restaurar la malla? Esto eliminará todos los cursos marcados como completados o arrastrados.");
+  if (confirmar) {
+    // 🧹 Limpiar todos los datos
+    localStorage.removeItem("estadoCursosULIMA");
+    localStorage.removeItem("electivosAsignados");
+
+    // Opcional: también podrías reiniciar carreraActual si tienes más de una malla
+    carreras[carreraActual] = [];
+
+    // 🔄 Recargar la página
+    location.reload();
+  }
+});
 function quitarElectivo(nombreCurso) {
   // Eliminar de la malla
   carreras[carreraActual] = carreras[carreraActual].filter(c => c.curso !== nombreCurso);
