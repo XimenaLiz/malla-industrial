@@ -774,28 +774,25 @@ body.dark-mode .descripcion {
   gap: 1rem;
   flex: 1;
 }
-#popup {
+.overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* fondo semitransparente */
-  display: none;
-  align-items: center;
-  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
 }
 
-#popup.active {
-  display: flex;
-}
 .popup-box {
-  background: var(--popup-background, white);
+  background: white;
+  margin: 10% auto;
   padding: 20px;
   border-radius: 10px;
-  max-width: 500px;
   width: 90%;
+  max-width: 400px;
+  position: relative;
+  z-index: 1001;
 }
 
   </style>
@@ -1087,7 +1084,8 @@ function renderPopup(curso) {
       </div>
       <p><strong>Promedio:</strong> <span id="promedio-curso">${promedio}</span></p>
     </div>
-
+<div id="overlay" class="hidden"></div>
+<div id="popup" class="hidden"></div>
     <div id="tab-notas" class="tab-content hidden">
       <textarea id="nota-personal" placeholder="Escribe tus notas personales aquí..." rows="6" style="width: 100%;">${notaGuardada}</textarea>
     </div>
@@ -1117,10 +1115,9 @@ function renderPopup(curso) {
 
     function cerrarPopup() {
       const popup = document.getElementById("popup");
-    popup.classList.remove("active");
-      document.getElementById("popup").classList.add("hidden");
+      popup.classList.remove("active"); // solo si usas esta clase para animaciones
+      popup.classList.add("hidden");
       document.getElementById("overlay").classList.add("hidden");
-
     }
     function imprimirCurso(nombreCurso) {
       const curso = carreras[carreraActual].find(c => c.curso === nombreCurso) || cursosElectivos.find(c => c.curso === nombreCurso);
@@ -1941,15 +1938,7 @@ function restaurarElectivosEnCiclos() {
     }
   }
 }
-document.addEventListener("click", function (e) {
-  const popup = document.getElementById("info");
-  const box = popup?.querySelector(".popup-box");
-
-  // Verifica si el popup está visible y si el clic fue fuera del popup-box
-  if (popup?.style.display === "flex" && box && !box.contains(e.target)) {
-    popup.style.display = "none";
-  }
-});
+document.getElementById("overlay").addEventListener("click", cerrarPopup);
 
 function quitarElectivo(nombreCurso) {
   // ✅ Eliminar de la malla
