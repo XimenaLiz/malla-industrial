@@ -1943,7 +1943,16 @@ function restaurarElectivosEnCiclos() {
     }
   }
 }
-document.getElementById("overlay").addEventListener("click", cerrarPopup);
+  document.addEventListener("click", function (event) {
+    const popup = document.getElementById("popup");
+    const content = document.querySelector(".popup-content");
+
+    if (popup && !popup.classList.contains("hidden")) {
+      if (!content.contains(event.target)) {
+        popup.classList.add("hidden");
+      }
+    }
+  });
 
 function quitarElectivo(nombreCurso) {
   // ✅ Eliminar de la malla
