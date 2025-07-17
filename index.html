@@ -888,8 +888,7 @@ body.dark-mode .descripcion {
       Última actualización: <span id="fecha-actualizacion"></span>
     </p>
   </footer>
-  <div id="overlay" class="overlay hidden"></div>
-  <div id="popup" class="popup hidden"></div>
+
   <script>
     document.getElementById("fecha-actualizacion").textContent = new Date().toLocaleDateString("es-PE", {
       year: 'numeric', month: 'long', day: 'numeric'
@@ -1958,5 +1957,7 @@ function quitarElectivo(nombreCurso) {
 }
 
   </script>
+  <div id="overlay" class="overlay hidden"></div>
+  <div id="popup" class="popup hidden"></div>
 </body>
 </html>
