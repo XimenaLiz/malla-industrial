@@ -1120,10 +1120,21 @@ function renderPopup(curso) {
 
     function cerrarPopup() {
       const popup = document.getElementById("popup");
-      popup.classList.remove("active"); // solo si usas esta clase para animaciones
+      popup.classList.remove("active");
       popup.classList.add("hidden");
-      document.getElementById("overlay").classList.add("hidden");
     }
+    document.addEventListener("click", function (event) {
+  const popup = document.getElementById("popup");
+  const popupContent = document.getElementById("popup-content");
+
+  if (
+    popup.classList.contains("active") &&
+    !popupContent.contains(event.target) &&
+    !event.target.classList.contains("info-btn")
+  ) {
+    cerrarPopup();
+  }
+});
     function imprimirCurso(nombreCurso) {
       const curso = carreras[carreraActual].find(c => c.curso === nombreCurso) || cursosElectivos.find(c => c.curso === nombreCurso);
       const evaluaciones = JSON.parse(localStorage.getItem("evaluaciones_" + nombreCurso)) || [];
@@ -1916,22 +1927,6 @@ document.getElementById("modoToggle").addEventListener("click", () => {
 });
 window.addEventListener("load", actualizarVisibilidadFlechas);
 document.getElementById("malla-container").addEventListener("scroll", actualizarVisibilidadFlechas);
-
-// Cierre del popup al hacer clic fuera del cuadro
-document.addEventListener("click", function (event) {
-  const popup = document.getElementById("popup");
-  const popupContent = popup.querySelector(".popup-box");
-  if (popup.classList.contains("active") && !popupContent.contains(event.target)) {
-    cerrarPopup();
-  }
-});
-
-// Cierre del popup al presionar Escape
-document.addEventListener("keydown", function (event) {
-  if (event.key === "Escape") {
-    cerrarPopup();
-  }
-});
 
 function restaurarElectivosEnCiclos() {
   const asignaciones = JSON.parse(localStorage.getItem("electivosAsignados")) || {};
