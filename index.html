@@ -1245,14 +1245,22 @@ function desplazarMalla(direccion) {
       guardarCursosPersonalizados();
       renderMalla();
     }
-    function cambiarTabPopup(tab) {
-      pestañaActiva = tab; // ⬅️ Guardamos cuál está activa
-      document.querySelectorAll(".popup-tabs .tab-button").forEach(btn => btn.classList.remove("active"));
-      document.querySelectorAll(".tab-content").forEach(div => div.classList.remove("active"));
+function cambiarTabPopup(tab) {
+  pestañaActiva = tab;
 
-      document.querySelector(`.popup-tabs .tab-button[onclick*="${tab}"]`).classList.add("active");
-      document.getElementById(`tab-${tab}`).classList.add("active");
-    }
+  // Activar el botón de la pestaña correcta
+  document.querySelectorAll(".popup-tabs .tab-button").forEach(btn => {
+    const esActiva = btn.getAttribute("onclick")?.includes(tab);
+    btn.classList.toggle("active", esActiva);
+  });
+
+  // Mostrar solo el contenido de la pestaña activa
+  document.querySelectorAll(".tab-content").forEach(div => {
+    const esActiva = div.id === `tab-${tab}`;
+    div.classList.toggle("active", esActiva);
+    div.classList.toggle("hidden", !esActiva);
+  });
+}
 
     function eliminarCurso(nombre) {
       if (!confirm(`¿Eliminar "${nombre}"?`)) return;
