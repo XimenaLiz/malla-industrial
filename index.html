@@ -1877,6 +1877,10 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.removeItem("electivosAsignados");
         localStorage.removeItem("cursosPersonalizados");
         for (const key in estadoCursos) delete estadoCursos[key];
+        // Elimina electivos agregados a la malla principal (NO personalizado)
+        carreras.ingenieria = carreras.ingenieria.filter(
+          c => !cursosElectivos.some(e => e.curso === c.curso)
+        );
         carreras.personalizada = [];
         diplomaSeleccionado = "todos";
         renderMalla();
