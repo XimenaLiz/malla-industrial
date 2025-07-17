@@ -780,14 +780,16 @@ body.dark-mode .descripcion {
 
 .overlay {
   position: fixed;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
-  background: transparent;
+  background: transparent !important;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 999;
+  pointer-events: auto;
 }
 
 .popup {
@@ -809,12 +811,7 @@ body.dark-mode .descripcion {
 .tab-content.active {
   display: block;
 }
-.overlay {
-  z-index: 999;
-}
-.popup {
-  z-index: 1000;
-}
+
   </style>
 </head>
 <body>
