@@ -774,7 +774,7 @@ body.dark-mode .descripcion {
   gap: 1rem;
   flex: 1;
 }
-#infoPopup {
+#info {
   display: none;
   position: fixed;
   top: 0; left: 0;
@@ -1909,7 +1909,7 @@ function restaurarElectivosEnCiclos() {
   }
 }
 document.addEventListener("click", function (e) {
-  const popup = document.getElementById("infoPopup");
+  const popup = document.getElementById("info");
   const box = popup?.querySelector(".popup-box");
 
   // Verifica si el popup está visible y si el clic fue fuera del popup-box
