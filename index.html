@@ -1747,6 +1747,11 @@ function agregarEval(event, cursoNombre) {
   localStorage.setItem("evaluaciones_" + cursoNombre, JSON.stringify(evaluaciones));
   renderPopup({ ...carreras[carreraActual].find(c => c.curso === cursoNombre) });
 }
+function guardarElectivoEnCiclo(nombreCurso, ciclo) {
+  let asignaciones = JSON.parse(localStorage.getItem("electivosAsignados")) || {};
+  asignaciones[nombreCurso] = ciclo;
+  localStorage.setItem("electivosAsignados", JSON.stringify(asignaciones));
+}
 
 function eliminarEval(cursoNombre, index) {
   const evaluaciones = JSON.parse(localStorage.getItem("evaluaciones_" + cursoNombre)) || [];
@@ -1787,6 +1792,7 @@ document.addEventListener("DOMContentLoaded", () => {
         renderElectivos();
         estadoCursos[encontrado.curso] = false;
         localStorage.setItem("estadoCursosULIMA", JSON.stringify(estadoCursos));
+        guardarElectivoEnCiclo(encontrado.curso, ciclo); // ← AQUI
       }
     }
   });
