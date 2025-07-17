@@ -1767,6 +1767,7 @@ function eliminarEval(cursoNombre, index) {
     }
 
     window.onload = () => {
+      restaurarElectivosEnCiclos(); // ← AQUI
       renderMalla();
       filtrarDiploma("todos");
       mostrarCreditosAprobados();
@@ -1787,13 +1788,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const encontrado = cursosElectivos.find(c => c.curso === nombreCurso);
       if (encontrado && !carreras[carreraActual].some(c => c.curso === encontrado.curso)) {
-        carreras[carreraActual].push({ ...encontrado, ciclo });
-        renderMalla();
-        renderElectivos();
-        estadoCursos[encontrado.curso] = false;
-        localStorage.setItem("estadoCursosULIMA", JSON.stringify(estadoCursos));
-        guardarElectivoEnCiclo(encontrado.curso, ciclo); // ← AQUI
-      }
+              carreras[carreraActual].push({ ...encontrado, ciclo });
+                      renderMalla();
+                              renderElectivos();
+                                      estadoCursos[encontrado.curso] = false;
+                                              localStorage.setItem("estadoCursosULIMA", JSON.stringify(estadoCursos));
+                                                      guardarElectivoEnCiclo(encontrado.curso, ciclo); // ← AQUI
+                                                            }
     }
   });
 });
@@ -1853,6 +1854,16 @@ document.getElementById("modoToggle").addEventListener("click", () => {
 window.addEventListener("load", actualizarVisibilidadFlechas);
 document.getElementById("malla-container").addEventListener("scroll", actualizarVisibilidadFlechas);
 
+function restaurarElectivosEnCiclos() {
+  const asignaciones = JSON.parse(localStorage.getItem("electivosAsignados")) || {};
+  for (const [nombreCurso, ciclo] of Object.entries(asignaciones)) {
+    const encontrado = cursosElectivos.find(c => c.curso === nombreCurso);
+    if (encontrado && !carreras[carreraActual].some(c => c.curso === nombreCurso)) {
+      carreras[carreraActual].push({ ...encontrado, ciclo: parseInt(ciclo) });
+      estadoCursos[nombreCurso] = false;
+    }
+  }
+}
 function quitarElectivo(nombreCurso) {
   // Eliminar de la malla
   carreras[carreraActual] = carreras[carreraActual].filter(c => c.curso !== nombreCurso);
