@@ -1867,24 +1867,6 @@ function restaurarElectivosEnCiclos() {
   }
 }
 
-  document.addEventListener("DOMContentLoaded", function () {
-    const btnRestaurar = document.getElementById("restaurarTodoBtn");
-
-    if (btnRestaurar) {
-      btnRestaurar.addEventListener("click", () => {
-        const confirmar = confirm("¿Estás seguro de que deseas restaurar toda la malla curricular?\nEsto borrará cursos completados y electivos asignados.");
-
-        if (confirmar) {
-          // Borra todos los estados guardados en localStorage
-          localStorage.removeItem("estadoCursosULIMA");
-          localStorage.removeItem("electivosAsignados");
-
-          // Recarga la página para reflejar los cambios
-          location.reload();
-        }
-      });
-    }
-  });
 function quitarElectivo(nombreCurso) {
   // ✅ Eliminar de la malla
   carreras[carreraActual] = carreras[carreraActual].filter(c => c.curso !== nombreCurso);
@@ -1903,6 +1885,31 @@ function quitarElectivo(nombreCurso) {
   renderMalla();
   renderElectivos();
 }
+  document.addEventListener("DOMContentLoaded", function () {
+    const btnRestaurar = document.getElementById("restaurarTodoBtn");
+
+    if (btnRestaurar) {
+      btnRestaurar.addEventListener("click", () => {
+        const confirmar = confirm("¿Estás seguro de que deseas restaurar toda la malla curricular?\nEsto borrará cursos completados y electivos asignados.");
+
+        if (confirmar) {
+          // Borra todos los estados guardados
+          localStorage.removeItem("estadoCursosULIMA");
+          localStorage.removeItem("electivosAsignados");
+
+          // 👇 También borrar evaluaciones si usas eso
+          Object.keys(localStorage).forEach((key) => {
+            if (key.startsWith("evaluaciones_")) {
+              localStorage.removeItem(key);
+            }
+          });
+
+          // Recargar
+          location.reload();
+        }
+      });
+    }
+  });
   </script>
 </body>
 </html>
