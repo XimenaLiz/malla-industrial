@@ -1034,6 +1034,7 @@ function renderPopup(curso) {
   promedio = totalPeso > 0 ? (promedio / totalPeso).toFixed(2) : "-";
 
   popup.innerHTML = `
+  <div class="popup-content">
     <div class="popup-tabs">
       <button class="tab-button active" onclick="cambiarTabPopup('info')"> Información</button>
       <button class="tab-button" onclick="cambiarTabPopup('eval')"> Evaluaciones</button>
