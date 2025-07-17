@@ -1,3 +1,5 @@
+CODIGO COMPLETO
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -274,7 +276,7 @@
     }
     .popup h3 {
       margin-top: 0;
-      color: #8c62db;
+      color: #5d3d9c;
     }
     .popup small {
       display: block;
@@ -562,7 +564,6 @@
 .tab-content.active {
   display: block;
 }
-
 .modo-btn {
   position: fixed;
   top: 1rem;
@@ -672,15 +673,7 @@ body.dark-mode .popup h3 {
 body.dark-mode .popup small {
   color: #95959554;
 }
-body.dark-mode .ciclo-title {
-  color:#f7f7f8
-}
-body.dark-mode  h4 {
-  color: #000000f6 !important;
-}
-body.dark-mode  h3 {
-  color: #fffffff6 !important;
-}
+
 /* Botón del popup */
 body.dark-mode .popup button {
   background-color: #7c66e3;
@@ -775,36 +768,6 @@ body.dark-mode .descripcion {
   gap: 1rem;
   flex: 1;
 }
-.hidden {
-  display: none;
-}
-
-.overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-}
-
-.popup {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 500px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.3);
-  z-index: 1000;
-}
-.hidden {
-  display: none !important;
-}
-
-
   </style>
 </head>
 <body>
@@ -844,9 +807,6 @@ body.dark-mode .descripcion {
   <div style="background: #eee; height: 20px; border-radius: 10px; overflow: hidden;">
     <div id="creditos-barra" style="height: 100%; width: 0%; background: #4caf50; transition: width 0.3s;"></div>
   </div>
-  <button id="restaurarTodoBtn" style="margin: 10px; background-color: #d9534f; color: white; padding: 8px 16px; border: none; border-radius: 8px; cursor: pointer;">
-  Restaurar todo
-</button></div>
 </div>
 
   <div class="tabs" id="carreras">
@@ -862,19 +822,22 @@ body.dark-mode .descripcion {
 </div>
 
   <form id="formulario-personalizado" class="hidden" onsubmit="agregarCurso(event)">
-    <h4>Agregar curso personalizado</h4>
+    <h3>Agregar curso personalizado</h3>
     <input type="text" id="curso-nombre" placeholder="Nombre del curso" required>
     <input type="text" id="curso-codigo" placeholder="Código del curso">
     <input type="number" id="curso-creditos" placeholder="Créditos" required>
     <input type="number" id="curso-ciclo" placeholder="Ciclo" required>
-    <input type="text" id="curso-prerreq" placeholder="Prerrequisitos (separados por coma) Ej. créditos:80">
+    <input type="text" id="curso-prerreq" placeholder="Prerrequisitos (separados por coma)">
     <textarea id="curso-descripcion" placeholder="Descripción del curso"></textarea>
     <button type="submit">Agregar curso</button>
   </form>
 
+<div id="overlay" class="overlay hidden"></div>
+<div id="popup" class="popup hidden"></div>
+
 <!-- Cursos Electivos sin agrupación -->
 <div id="electivos-contenedor" style="margin-top: 2rem;">
-<h2 style="text-align: center; color: #b397ec;">Cursos Electivos</h2>
+<h2 style="text-align: center; color: #5d3d9c;">Cursos Electivos</h2>
 <!-- Filtros por diploma -->
 <div class="filtros-diplomas">
   <button onclick="filtrarDiploma('todos')" class="active">Todos</button>
@@ -1036,7 +999,6 @@ function renderPopup(curso) {
   promedio = totalPeso > 0 ? (promedio / totalPeso).toFixed(2) : "-";
 
   popup.innerHTML = `
-  <div class="popup-content">
     <div class="popup-tabs">
       <button class="tab-button active" onclick="cambiarTabPopup('info')"> Información</button>
       <button class="tab-button" onclick="cambiarTabPopup('eval')"> Evaluaciones</button>
@@ -1092,6 +1054,7 @@ function renderPopup(curso) {
       </div>
       <p><strong>Promedio:</strong> <span id="promedio-curso">${promedio}</span></p>
     </div>
+
     <div id="tab-notas" class="tab-content hidden">
       <textarea id="nota-personal" placeholder="Escribe tus notas personales aquí..." rows="6" style="width: 100%;">${notaGuardada}</textarea>
     </div>
@@ -1119,23 +1082,10 @@ function renderPopup(curso) {
 });
 }
 
-
     function cerrarPopup() {
-  const popup = document.getElementById("popup");
-  const overlay = document.getElementById("overlay");
-  popup.classList.add("hidden");
-  overlay.classList.add("hidden");
-}
-    document.addEventListener("click", function (event) {
-      const popup = document.getElementById("popup");
-      const popupContent = popup.querySelector(".popup-content");
-
-      if (popup.classList.contains("popup") && !popup.classList.contains("hidden")) {
-        if (!popupContent.contains(event.target)) {
-          cerrarPopup();
-        }
-      }
-    });
+      document.getElementById("popup").classList.add("hidden");
+      document.getElementById("overlay").classList.add("hidden");
+    }
     function imprimirCurso(nombreCurso) {
       const curso = carreras[carreraActual].find(c => c.curso === nombreCurso) || cursosElectivos.find(c => c.curso === nombreCurso);
       const evaluaciones = JSON.parse(localStorage.getItem("evaluaciones_" + nombreCurso)) || [];
@@ -1799,11 +1749,6 @@ function agregarEval(event, cursoNombre) {
   localStorage.setItem("evaluaciones_" + cursoNombre, JSON.stringify(evaluaciones));
   renderPopup({ ...carreras[carreraActual].find(c => c.curso === cursoNombre) });
 }
-function guardarElectivoEnCiclo(nombreCurso, ciclo) {
-  let asignaciones = JSON.parse(localStorage.getItem("electivosAsignados")) || {};
-  asignaciones[nombreCurso] = ciclo;
-  localStorage.setItem("electivosAsignados", JSON.stringify(asignaciones));
-}
 
 function eliminarEval(cursoNombre, index) {
   const evaluaciones = JSON.parse(localStorage.getItem("evaluaciones_" + cursoNombre)) || [];
@@ -1819,7 +1764,6 @@ function eliminarEval(cursoNombre, index) {
     }
 
     window.onload = () => {
-      restaurarElectivosEnCiclos(); // ← AQUI
       renderMalla();
       filtrarDiploma("todos");
       mostrarCreditosAprobados();
@@ -1840,13 +1784,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const encontrado = cursosElectivos.find(c => c.curso === nombreCurso);
       if (encontrado && !carreras[carreraActual].some(c => c.curso === encontrado.curso)) {
-              carreras[carreraActual].push({ ...encontrado, ciclo });
-                      renderMalla();
-                              renderElectivos();
-                                      estadoCursos[encontrado.curso] = false;
-                                              localStorage.setItem("estadoCursosULIMA", JSON.stringify(estadoCursos));
-                                                      guardarElectivoEnCiclo(encontrado.curso, ciclo); // ← AQUI
-                                                            }
+        carreras[carreraActual].push({ ...encontrado, ciclo });
+        renderMalla();
+        renderElectivos();
+        estadoCursos[encontrado.curso] = false;
+        localStorage.setItem("estadoCursosULIMA", JSON.stringify(estadoCursos));
+      }
     }
   });
 });
@@ -1880,29 +1823,6 @@ function habilitarBotonEliminarElectivo(card, curso) {
 
   card.appendChild(boton);
 }
-document.addEventListener("DOMContentLoaded", function () {
-  const restaurarTodoBtn = document.getElementById("restaurarTodoBtn");
-  if (restaurarTodoBtn) {
-    restaurarTodoBtn.addEventListener("click", () => {
-      const confirmar = confirm("¿Estás seguro de que deseas restaurar toda la malla curricular?\nEsto borrará cursos completados, electivos asignados y cursos personalizados.");
-      if (confirmar) {
-        localStorage.removeItem("estadoCursosULIMA");
-        localStorage.removeItem("electivosAsignados");
-        localStorage.removeItem("cursosPersonalizados");
-        for (const key in estadoCursos) delete estadoCursos[key];
-        // Elimina electivos agregados a la malla principal (NO personalizado)
-        carreras.ingenieria = carreras.ingenieria.filter(
-          c => !cursosElectivos.some(e => e.curso === c.curso)
-        );
-        carreras.personalizada = [];
-        diplomaSeleccionado = "todos";
-        renderMalla();
-        renderElectivos();
-        mostrarCreditosAprobados();
-      }
-    });
-  }
-});
 document.addEventListener("DOMContentLoaded", () => {
   const btnModo = document.getElementById("modo-toggle");
 
@@ -1929,38 +1849,18 @@ document.getElementById("modoToggle").addEventListener("click", () => {
 window.addEventListener("load", actualizarVisibilidadFlechas);
 document.getElementById("malla-container").addEventListener("scroll", actualizarVisibilidadFlechas);
 
-function restaurarElectivosEnCiclos() {
-  const asignaciones = JSON.parse(localStorage.getItem("electivosAsignados")) || {};
-  for (const [nombreCurso, ciclo] of Object.entries(asignaciones)) {
-    const encontrado = cursosElectivos.find(c => c.curso === nombreCurso);
-    if (encontrado && !carreras[carreraActual].some(c => c.curso === nombreCurso)) {
-      carreras[carreraActual].push({ ...encontrado, ciclo: parseInt(ciclo) });
-      estadoCursos[nombreCurso] = false;
-    }
-  }
-}
-
 function quitarElectivo(nombreCurso) {
-  // ✅ Eliminar de la malla
+  // Eliminar de la malla
   carreras[carreraActual] = carreras[carreraActual].filter(c => c.curso !== nombreCurso);
-
-  // ✅ Quitar su estado (aprobado o no)
+  
+  // También quitar su estado si tenía alguno
   delete estadoCursos[nombreCurso];
   localStorage.setItem("estadoCursosULIMA", JSON.stringify(estadoCursos));
 
-  // ✅ Quitar del localStorage de asignaciones
-  const asignaciones = JSON.parse(localStorage.getItem("electivosAsignados")) || {};
-  delete asignaciones[nombreCurso];
-  localStorage.setItem("electivosAsignados", JSON.stringify(asignaciones));
-
-  // ✅ Volver a renderizar
   mostrarCreditosAprobados();
   renderMalla();
   renderElectivos();
 }
   </script>
-
 </body>
-    <div id="overlay" class="overlay hidden"></div>
-    <div id="popup" class="popup hidden"></div>
 </html>
