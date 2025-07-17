@@ -1867,24 +1867,25 @@ function restaurarElectivosEnCiclos() {
   }
 }
 
-  document.addEventListener("DOMContentLoaded", function () {
-    const btnRestaurar = document.getElementById("restaurarTodoBtn");
-
-    if (btnRestaurar) {
-      btnRestaurar.addEventListener("click", () => {
-        const confirmar = confirm("¿Estás seguro de que deseas restaurar toda la malla curricular?\nEsto borrará cursos completados y electivos asignados.");
-
-        if (confirmar) {
-          // Borra todos los estados guardados en localStorage
-          localStorage.removeItem("estadoCursosULIMA");
-          localStorage.removeItem("electivosAsignados");
-
-          // Recarga la página para reflejar los cambios
-          location.reload();
-        }
-      });
-    }
-  });
+document.addEventListener("DOMContentLoaded", function () {
+  const btnRestaurar = document.getElementById("restaurarTodoBtn");
+  if (btnRestaurar) {
+    btnRestaurar.addEventListener("click", () => {
+      const confirmar = confirm("¿Estás seguro de que deseas restaurar toda la malla curricular?\nEsto borrará cursos completados, electivos asignados y cursos personalizados.");
+      if (confirmar) {
+        localStorage.removeItem("estadoCursosULIMA");
+        localStorage.removeItem("electivosAsignados");
+        localStorage.removeItem("cursosPersonalizados");
+        for (const key in estadoCursos) delete estadoCursos[key];
+        carreras.personalizada = [];
+        diplomaSeleccionado = "todos";
+        renderMalla();
+        renderElectivos();
+        mostrarCreditosAprobados();
+      }
+    });
+  }
+});
 function quitarElectivo(nombreCurso) {
   // ✅ Eliminar de la malla
   carreras[carreraActual] = carreras[carreraActual].filter(c => c.curso !== nombreCurso);
