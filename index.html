@@ -865,24 +865,6 @@ body.dark-mode .descripcion {
     document.getElementById("fecha-actualizacion").textContent = new Date().toLocaleDateString("es-PE", {
       year: 'numeric', month: 'long', day: 'numeric'
     });
-    // Oculta el overlay y muestra la app al hacer click
-    document.addEventListener("DOMContentLoaded", () => {
-      const bienvenida = document.getElementById("bienvenida-overlay");
-      if (bienvenida) {
-        bienvenida.addEventListener("click", () => {
-          // Lanza confeti
-          confetti({
-            particleCount: 1000,
-            spread: 90,
-            origin: { y: 0.6 }
-          });
-
-          // Oculta la bienvenida
-          bienvenida.style.opacity = 0;
-          setTimeout(() => bienvenida.style.display = "none", 600);
-        });
-      }
-    });
 
     const carreras = {
       ingenieria: [
@@ -1775,32 +1757,7 @@ function eliminarEval(cursoNombre, index) {
       filtrarDiploma("todos");
       mostrarCreditosAprobados();
     };
-document.addEventListener("DOMContentLoaded", () => {
-  const malla = document.getElementById("malla");
 
-  malla.addEventListener("dragover", e => {
-    e.preventDefault();
-    const dragged = document.querySelector(".electivo.dragging");
-    if (dragged && e.target.closest(".ciclo-col")) {
-      const targetCol = e.target.closest(".ciclo-col");
-      targetCol.appendChild(dragged);
-
-      const nombreCurso = dragged.dataset.curso;
-      const cicloText = targetCol.querySelector(".ciclo-title")?.textContent || "";
-      const ciclo = parseInt(cicloText.replace("Ciclo ", "")) || 1;
-
-      const encontrado = cursosElectivos.find(c => c.curso === nombreCurso);
-      if (encontrado && !carreras[carreraActual].some(c => c.curso === encontrado.curso)) {
-              carreras[carreraActual].push({ ...encontrado, ciclo });
-                      renderMalla();
-                              renderElectivos();
-                                      estadoCursos[encontrado.curso] = false;
-                                              localStorage.setItem("estadoCursosULIMA", JSON.stringify(estadoCursos));
-                                                      guardarElectivoEnCiclo(encontrado.curso, ciclo); // ← AQUI
-                                                            }
-    }
-  });
-});
   // Permitir regresar electivos desde la malla general
 function habilitarBotonEliminarElectivo(card, curso) {
   const boton = document.createElement("button");
@@ -1868,29 +1825,6 @@ function restaurarElectivosEnCiclos() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  const btnRestaurar = document.getElementById("restaurarTodoBtn");
-  if (btnRestaurar) {
-    btnRestaurar.addEventListener("click", () => {
-      const confirmar = confirm("¿Estás seguro de que deseas restaurar toda la malla curricular?\nEsto borrará cursos completados, electivos asignados y cursos personalizados.");
-      if (confirmar) {
-        localStorage.removeItem("estadoCursosULIMA");
-        localStorage.removeItem("electivosAsignados");
-        localStorage.removeItem("cursosPersonalizados");
-        for (const key in estadoCursos) delete estadoCursos[key];
-        // Elimina electivos agregados a la malla principal (NO personalizado)
-        carreras.ingenieria = carreras.ingenieria.filter(
-          c => !cursosElectivos.some(e => e.curso === c.curso)
-        );
-        carreras.personalizada = [];
-        diplomaSeleccionado = "todos";
-        renderMalla();
-        renderElectivos();
-        mostrarCreditosAprobados();
-      }
-    });
-  }
-});
 function quitarElectivo(nombreCurso) {
   // ✅ Eliminar de la malla
   carreras[carreraActual] = carreras[carreraActual].filter(c => c.curso !== nombreCurso);
@@ -1909,6 +1843,97 @@ function quitarElectivo(nombreCurso) {
   renderMalla();
   renderElectivos();
 }
+// 1. Listener para la bienvenida (confetti y ocultar)
+document.addEventListener("DOMContentLoaded", () => {
+  const bienvenida = document.getElementById("bienvenida-overlay");
+  if (bienvenida) {
+    bienvenida.addEventListener("click", () => {
+      confetti({particleCount: 1000, spread: 90, origin: {y: 0.6}});
+      bienvenida.style.opacity = 0;
+      setTimeout(() => bienvenida.style.display = "none", 600);
+    });
+  }
+});
+
+// 2. Listener para el botón Restaurar todo
+document.addEventListener("DOMContentLoaded", function () {
+  const btnRestaurar = document.getElementById("restaurarTodoBtn");
+  if (btnRestaurar) {
+    btnRestaurar.addEventListener("click", () => {
+      const confirmar = confirm("¿Estás seguro de que deseas restaurar toda la malla curricular?\nEsto borrará cursos completados, electivos asignados y cursos personalizados.");
+      if (confirmar) {
+        localStorage.removeItem("estadoCursosULIMA");
+        localStorage.removeItem("electivosAsignados");
+        localStorage.removeItem("cursosPersonalizados");
+        for (const key in estadoCursos) delete estadoCursos[key];
+        carreras.ingenieria = carreras.ingenieria.filter(
+          c => !cursosElectivos.some(e => e.curso === c.curso)
+        );
+        carreras.personalizada = [];
+        diplomaSeleccionado = "todos";
+        renderMalla();
+        renderElectivos();
+        mostrarCreditosAprobados();
+      }
+    });
+  }
+});
+
+// 3. Listener para el botón de modo oscuro
+document.addEventListener("DOMContentLoaded", function() {
+  const btnModo = document.getElementById("modoToggle");
+  if (btnModo) {
+    btnModo.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+    });
+  }
+});
+
+// 4. Listener para drag & drop de electivos en la malla
+document.addEventListener("DOMContentLoaded", () => {
+  const malla = document.getElementById("malla");
+  if (malla) {
+    malla.addEventListener("dragover", e => {
+      e.preventDefault();
+      const dragged = document.querySelector(".electivo.dragging");
+      if (dragged && e.target.closest(".ciclo-col")) {
+        const targetCol = e.target.closest(".ciclo-col");
+        targetCol.appendChild(dragged);
+
+        const nombreCurso = dragged.dataset.curso;
+        const cicloText = targetCol.querySelector(".ciclo-title")?.textContent || "";
+        const ciclo = parseInt(cicloText.replace("Ciclo ", "")) || 1;
+
+        const encontrado = cursosElectivos.find(c => c.curso === nombreCurso);
+        if (encontrado && !carreras[carreraActual].some(c => c.curso === encontrado.curso)) {
+          carreras[carreraActual].push({ ...encontrado, ciclo });
+          renderMalla();
+          renderElectivos();
+          estadoCursos[encontrado.curso] = false;
+          localStorage.setItem("estadoCursosULIMA", JSON.stringify(estadoCursos));
+          guardarElectivoEnCiclo(encontrado.curso, ciclo);
+        }
+      }
+    });
+  }
+});
+
+// 5. Listeners para flechas de scroll de la malla
+window.addEventListener("load", actualizarVisibilidadFlechas);
+document.addEventListener("DOMContentLoaded", function() {
+  const mallaContainer = document.getElementById("malla-container");
+  if (mallaContainer) {
+    mallaContainer.addEventListener("scroll", actualizarVisibilidadFlechas);
+  }
+});
+
+// 6. Listener para inicialización de la app (cuando carga)
+window.onload = () => {
+  restaurarElectivosEnCiclos();
+  renderMalla();
+  filtrarDiploma("todos");
+  mostrarCreditosAprobados();
+};
   </script>
 </body>
 </html>
