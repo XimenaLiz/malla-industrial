@@ -1092,8 +1092,6 @@ function renderPopup(curso) {
     <div id="tab-notas" class="tab-content hidden">
       <textarea id="nota-personal" placeholder="Escribe tus notas personales aquí..." rows="6" style="width: 100%;">${notaGuardada}</textarea>
     </div>
-    <div id="overlay" class="overlay hidden"></div>
-    <div id="popup" class="popup hidden"></div>
     <button onclick="imprimirCurso('${curso.curso}')">🖨️ Imprimir / Descargar</button>
     <br><button onclick="cerrarPopup()">Cerrar</button>
   `;
@@ -1118,21 +1116,21 @@ function renderPopup(curso) {
 });
 }
 
+
     function cerrarPopup() {
-      const popup = document.getElementById("popup");
-      popup.classList.remove("active");
-      popup.classList.add("hidden");
-    }
+  const popup = document.getElementById("popup");
+  const overlay = document.getElementById("overlay");
+  popup.classList.add("hidden");
+  overlay.classList.add("hidden");
+}
     document.addEventListener("click", function (event) {
       const popup = document.getElementById("popup");
-      const popupContent = document.getElementById("popup-content");
+      const popupContent = popup.querySelector(".popup-content");
 
-      if (
-        popup.classList.contains("active") &&
-        !popupContent.contains(event.target) &&
-        !event.target.classList.contains("info-btn")
-      ) {
-        cerrarPopup();
+      if (popup.classList.contains("popup") && !popup.classList.contains("hidden")) {
+        if (!popupContent.contains(event.target)) {
+          cerrarPopup();
+        }
       }
     });
     function imprimirCurso(nombreCurso) {
@@ -1960,4 +1958,6 @@ function quitarElectivo(nombreCurso) {
   </script>
 
 </body>
+    <div id="overlay" class="overlay hidden"></div>
+    <div id="popup" class="popup hidden"></div>
 </html>
