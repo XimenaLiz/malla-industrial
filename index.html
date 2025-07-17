@@ -562,6 +562,9 @@
 .tab-content.active {
   display: block;
 }
+.tab-content.active {
+  display: block;
+}
 .modo-btn {
   position: fixed;
   top: 1rem;
@@ -1043,10 +1046,10 @@ function renderPopup(curso) {
   popup.innerHTML = `
   <div class="popup-content">
     <div class="popup-tabs">
-      <button class="tab-button active" onclick="cambiarTabPopup('info')"> Información</button>
-      <button class="tab-button" onclick="cambiarTabPopup('eval')"> Evaluaciones</button>
-      <button class="tab-button" onclick="cambiarTabPopup('notas')">📝 Notas</button>
-    </div>
+  <button class="tab-button active" onclick="cambiarTabPopup('info')">Información</button>
+  <button class="tab-button" onclick="cambiarTabPopup('evaluaciones')">Evaluaciones</button>
+  <button class="tab-button" onclick="cambiarTabPopup('notas')">Notas</button>
+</div>
 
     <div id="tab-info" class="tab-content active popup-content">
       <h3>${curso.curso}</h3>
