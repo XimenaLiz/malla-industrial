@@ -1865,6 +1865,20 @@ function restaurarElectivosEnCiclos() {
   }
 }
 function quitarElectivo(nombreCurso) {
+  carreras[carreraActual] = carreras[carreraActual].filter(c => c.curso !== nombreCurso);
+  delete estadoCursos[nombreCurso];
+  localStorage.setItem("estadoCursosULIMA", JSON.stringify(estadoCursos));
+
+  // ❌ También eliminar de asignaciones guardadas
+  const asignaciones = JSON.parse(localStorage.getItem("electivosAsignados")) || {};
+  delete asignaciones[nombreCurso];
+  localStorage.setItem("electivosAsignados", JSON.stringify(asignaciones));
+
+  mostrarCreditosAprobados();
+  renderMalla();
+  renderElectivos();
+}
+function quitarElectivo(nombreCurso) {
   // Eliminar de la malla
   carreras[carreraActual] = carreras[carreraActual].filter(c => c.curso !== nombreCurso);
   
