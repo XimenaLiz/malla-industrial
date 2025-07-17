@@ -1832,9 +1832,9 @@ function habilitarBotonEliminarElectivo(card, curso) {
   card.appendChild(boton);
 }
 document.addEventListener("DOMContentLoaded", function () {
-  const btnRestaurar = document.getElementById("restaurarTodoBtn");
-  if (btnRestaurar) {
-    btnRestaurar.addEventListener("click", () => {
+  const restaurarTodoBtn = document.getElementById("restaurarTodoBtn");
+  if (restaurarTodoBtn) {
+    restaurarTodoBtn.addEventListener("click", () => {
       const confirmar = confirm("¿Estás seguro de que deseas restaurar toda la malla curricular?\nEsto borrará cursos completados, electivos asignados y cursos personalizados.");
       if (confirmar) {
         localStorage.removeItem("estadoCursosULIMA");
