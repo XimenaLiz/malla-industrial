@@ -1124,17 +1124,17 @@ function renderPopup(curso) {
       popup.classList.add("hidden");
     }
     document.addEventListener("click", function (event) {
-  const popup = document.getElementById("popup");
-  const popupContent = document.getElementById("popup-content");
+      const popup = document.getElementById("popup");
+      const popupContent = document.getElementById("popup-content");
 
-  if (
-    popup.classList.contains("active") &&
-    !popupContent.contains(event.target) &&
-    !event.target.classList.contains("info-btn")
-  ) {
-    cerrarPopup();
-  }
-});
+      if (
+        popup.classList.contains("active") &&
+        !popupContent.contains(event.target) &&
+        !event.target.classList.contains("info-btn")
+      ) {
+        cerrarPopup();
+      }
+    });
     function imprimirCurso(nombreCurso) {
       const curso = carreras[carreraActual].find(c => c.curso === nombreCurso) || cursosElectivos.find(c => c.curso === nombreCurso);
       const evaluaciones = JSON.parse(localStorage.getItem("evaluaciones_" + nombreCurso)) || [];
@@ -1938,16 +1938,6 @@ function restaurarElectivosEnCiclos() {
     }
   }
 }
-  document.addEventListener("click", function (event) {
-    const popup = document.getElementById("popup");
-    const content = document.querySelector(".popup-content");
-
-    if (popup && !popup.classList.contains("hidden")) {
-      if (!content.contains(event.target)) {
-        popup.classList.add("hidden");
-      }
-    }
-  });
 
 function quitarElectivo(nombreCurso) {
   // ✅ Eliminar de la malla
