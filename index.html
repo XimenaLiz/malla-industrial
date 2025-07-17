@@ -774,26 +774,29 @@ body.dark-mode .descripcion {
   gap: 1rem;
   flex: 1;
 }
+.hidden {
+  display: none;
+}
+
 .overlay {
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 0; left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 999;
 }
 
-.popup-box {
-  background-color: var(--popup-bg, white);
-  padding: 1.5em;
-  border-radius: 1em;
+.popup {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
   width: 90%;
   max-width: 500px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
   z-index: 1000;
 }
 
@@ -1955,9 +1958,9 @@ function quitarElectivo(nombreCurso) {
   renderMalla();
   renderElectivos();
 }
-
   </script>
   <div id="overlay" class="overlay hidden"></div>
   <div id="popup" class="popup hidden"></div>
+
 </body>
 </html>
