@@ -1886,30 +1886,28 @@ function quitarElectivo(nombreCurso) {
   renderElectivos();
 }
   document.addEventListener("DOMContentLoaded", function () {
-    const btnRestaurar = document.getElementById("restaurarTodoBtn");
-
-    if (btnRestaurar) {
-      btnRestaurar.addEventListener("click", () => {
-        const confirmar = confirm("¿Estás seguro de que deseas restaurar toda la malla curricular?\nEsto borrará cursos completados y electivos asignados.");
-
-        if (confirmar) {
-          // Borra todos los estados guardados
-          localStorage.removeItem("estadoCursosULIMA");
-          localStorage.removeItem("electivosAsignados");
-
-          // 👇 También borrar evaluaciones si usas eso
-          Object.keys(localStorage).forEach((key) => {
-            if (key.startsWith("evaluaciones_")) {
-              localStorage.removeItem(key);
-            }
-          });
-
-          // Recargar
-          location.reload();
+  const btnRestaurar = document.getElementById("restaurarTodoBtn");
+if (btnRestaurar) {
+  btnRestaurar.addEventListener("click", () => {
+    const confirmar = confirm(
+      "⚠️ ¿Estás segura de que deseas restaurar toda la malla curricular?\n\nSe eliminarán todos los cursos completados, electivos asignados y evaluaciones guardadas."
+    );
+    if (confirmar) {
+      // Eliminar todo del almacenamiento
+      localStorage.removeItem("estadoCursosULIMA");
+      localStorage.removeItem("electivosAsignados");
+      Object.keys(localStorage).forEach((key) => {
+        if (key.startsWith("evaluaciones_")) {
+          localStorage.removeItem(key);
         }
       });
+
+      // Mostrar mensaje de éxito
+      alert("✅ Malla curricular restaurada con éxito.\nSe recargará la página.");
+      location.reload();
     }
   });
+}
   </script>
 </body>
 </html>
