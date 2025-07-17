@@ -276,7 +276,7 @@ CODIGO COMPLETO
     }
     .popup h3 {
       margin-top: 0;
-      color: #5d3d9c;
+      color: #c6aef4;
     }
     .popup small {
       display: block;
@@ -673,7 +673,15 @@ body.dark-mode .popup h3 {
 body.dark-mode .popup small {
   color: #95959554;
 }
-
+body.dark-mode .ciclo-title {
+  color:#f7f7f8
+}
+body.dark-mode  h4 {
+  color: #000000f6 !important;
+}
+body.dark-mode  h3 {
+  color: #fffffff6 !important;
+}
 /* Botón del popup */
 body.dark-mode .popup button {
   background-color: #7c66e3;
@@ -768,6 +776,42 @@ body.dark-mode .descripcion {
   gap: 1rem;
   flex: 1;
 }
+.hidden {
+  display: none;
+}
+
+.overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.popup {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  z-index: 1000;
+}
+.hidden {
+  display: none !important;
+}
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
   </style>
 </head>
 <body>
