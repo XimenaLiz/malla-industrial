@@ -806,6 +806,9 @@ body.dark-mode .descripcion {
   <div id="creditos-texto" style="font-weight: bold; margin-bottom: 0.5rem;">Créditos aprobados: 0 / 200</div>
   <div style="background: #eee; height: 20px; border-radius: 10px; overflow: hidden;">
     <div id="creditos-barra" style="height: 100%; width: 0%; background: #4caf50; transition: width 0.3s;"></div>
+      <button id="restaurarTodoBtn" style="margin: 10px; background-color: #d9534f; color: white; padding: 8px 16px; border: none; border-radius: 8px; cursor: pointer;">
+  Restaurar todo
+</button></div>
   </div>
 </div>
 
@@ -1823,6 +1826,29 @@ function habilitarBotonEliminarElectivo(card, curso) {
 
   card.appendChild(boton);
 }
+document.addEventListener("DOMContentLoaded", function () {
+  const restaurarTodoBtn = document.getElementById("restaurarTodoBtn");
+  if (restaurarTodoBtn) {
+    restaurarTodoBtn.addEventListener("click", () => {
+      const confirmar = confirm("¿Estás seguro de que deseas restaurar toda la malla curricular?\nEsto borrará cursos completados, electivos asignados y cursos personalizados.");
+      if (confirmar) {
+        localStorage.removeItem("estadoCursosULIMA");
+        localStorage.removeItem("electivosAsignados");
+        localStorage.removeItem("cursosPersonalizados");
+        for (const key in estadoCursos) delete estadoCursos[key];
+        // Elimina electivos agregados a la malla principal (NO personalizado)
+        carreras.ingenieria = carreras.ingenieria.filter(
+          c => !cursosElectivos.some(e => e.curso === c.curso)
+        );
+        carreras.personalizada = [];
+        diplomaSeleccionado = "todos";
+        renderMalla();
+        renderElectivos();
+        mostrarCreditosAprobados();
+      }
+    });
+  }
+});
 document.addEventListener("DOMContentLoaded", () => {
   const btnModo = document.getElementById("modo-toggle");
 
