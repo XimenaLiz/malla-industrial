@@ -2008,7 +2008,12 @@ function restaurarElectivosEnCiclos() {
     }
   }
 }
-document.addEventListener("DOMContentLoaded", () => {
+window.onload = () => {
+  restaurarElectivosEnCiclos();
+  renderMalla();
+  filtrarDiploma("todos");
+  mostrarCreditosAprobados();
+
   const titulo = document.getElementById("titulo-malla");
   const boton = document.getElementById("editar-titulo-btn");
 
@@ -2038,7 +2043,8 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem("tituloMalla", titulo.textContent.trim());
     }
   });
-});
+};
+
 
 function quitarElectivo(nombreCurso) {
   // ✅ Eliminar de la malla
