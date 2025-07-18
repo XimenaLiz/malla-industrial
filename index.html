@@ -2010,28 +2010,31 @@ function restaurarElectivosEnCiclos() {
   }
 }
 // ===== FUNCIÓN PARA EDITAR TÍTULO (VERSIÓN FINAL) =====
-const tituloGuardado = localStorage.getItem("tituloMalla");
-if (tituloGuardado) {
-  document.getElementById("titulo-malla").innerText = tituloGuardado;
-}
-
-// Activar botón de edición
-document.addEventListener("DOMContentLoaded", () => {
+function editarTitulo() {
   const titulo = document.getElementById("titulo-malla");
   const boton = document.getElementById("editar-titulo-btn");
 
-  boton.addEventListener("click", () => {
-    if (titulo.isContentEditable) {
-      titulo.contentEditable = "false";
-      boton.innerText = "✏️";
-      localStorage.setItem("tituloMalla", titulo.innerText.trim());
-    } else {
-      titulo.contentEditable = "true";
-      titulo.focus();
-      boton.innerText = "💾";
-    }
-  });
-});
+  if (titulo.isContentEditable) {
+    titulo.contentEditable = "false";
+    boton.innerHTML = "✏️";
+    // Guardar el título cuando se desactiva la edición
+    const nuevoTitulo = titulo.innerText.trim();
+    localStorage.setItem("tituloMalla", nuevoTitulo);
+  } else {
+    titulo.contentEditable = "true";
+    titulo.focus();
+    boton.innerHTML = "💾";
+  }
+}
+
+// Elimina el evento blur separado que tenías antes
+// Y asegúrate de cargar el título al inicio así:
+document.addEventListener("DOMContentLoaded", () => {
+  const tituloGuardado = localStorage.getItem("tituloMalla");
+  if (tituloGuardado) {
+    document.getElementById("titulo-malla").textContent = tituloGuardado;
+  }
+});  
 function quitarElectivo(nombreCurso) {
   // ✅ Eliminar de la malla
   carreras[carreraActual] = carreras[carreraActual].filter(c => c.curso !== nombreCurso);
