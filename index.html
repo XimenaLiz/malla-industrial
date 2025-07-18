@@ -2010,89 +2010,62 @@ function restaurarElectivosEnCiclos() {
   }
 }
 // ===== FUNCIÓN PARA EDITAR TÍTULO (VERSIÓN FINAL) =====
+// ===== FUNCIÓN PARA EDITAR TÍTULO =====
 function editarTitulo() {
   const titulo = document.getElementById("titulo-malla");
   const boton = document.getElementById("editar-titulo-btn");
 
-  // Verificación de elementos (para evitar errores)
-  if (!titulo || !boton) {
-    console.error("Error: No se encontraron los elementos del título");
-    return;
-  }
+  if (!titulo || !boton) return;
 
   if (titulo.isContentEditable) {
-    // MODO GUARDAR
+    // Guardar cambios
     titulo.contentEditable = "false";
-    boton.innerHTML = "✏️";
-    
-    // Guardar en localStorage y en la variable de carreras
-    const nuevoTitulo = titulo.textContent.trim();
-    localStorage.setItem("tituloMalla", nuevoTitulo);
-    
-    // Actualizar en todas las estructuras de datos necesarias
+    boton.innerText = "✏️";
+    const nuevoTitulo = titulo.innerText.trim();
+    const carreraActual = localStorage.getItem("carreraSeleccionada") || "default";
+    localStorage.setItem(`tituloMalla-${carreraActual}`, nuevoTitulo);
     if (carreras[carreraActual]) {
       carreras[carreraActual].nombreMalla = nuevoTitulo;
     }
-    
-    console.log("Título guardado:", nuevoTitulo);
   } else {
-    // MODO EDITAR
+    // Activar edición
     titulo.contentEditable = "true";
-    boton.innerHTML = "💾";
-    
-    // Enfocar y seleccionar todo el texto
+    boton.innerText = "💾";
     titulo.focus();
-    const seleccion = window.getSelection();
-    const rango = document.createRange();
-    rango.selectNodeContents(titulo);
-    seleccion.removeAllRanges();
-    seleccion.addRange(rango);
+    const sel = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(titulo);
+    sel.removeAllRanges();
+    sel.addRange(range);
   }
 }
 
-// ===== EVENTO PARA GUARDAR AL PRESIONAR ENTER =====
-document.getElementById("titulo-malla").addEventListener("keydown", function(e) {
+// ===== GUARDAR CON ENTER =====
+document.getElementById("titulo-malla").addEventListener("keydown", function (e) {
   if (e.key === "Enter") {
     e.preventDefault();
-    document.getElementById("editar-titulo-btn").click();
+    editarTitulo(); // Simula clic
   }
 });
 
-// ===== INICIALIZACIÓN DEL TÍTULO AL CARGAR =====
-  function editarTitulo() {
-    const titulo = document.getElementById("titulo-malla");
-    const boton = document.getElementById("editar-titulo-btn");
-
-    if (titulo.isContentEditable) {
-      titulo.contentEditable = "false";
-      titulo.blur(); // dispara el blur y guarda
-      boton.innerText = "✏️";
-    } else {
-      titulo.contentEditable = "true";
-      titulo.focus();
-      boton.innerText = "💾";
-    }
+// ===== CARGAR TÍTULO DESDE LOCALSTORAGE AL INICIO =====
+document.addEventListener("DOMContentLoaded", () => {
+  const titulo = document.getElementById("titulo-malla");
+  const carreraActual = localStorage.getItem("carreraSeleccionada") || "default";
+  const tituloGuardado = localStorage.getItem(`tituloMalla-${carreraActual}`);
+  if (tituloGuardado) {
+    titulo.innerText = tituloGuardado;
   }
 
-  // Cuando el documento esté cargado
-  document.addEventListener("DOMContentLoaded", () => {
-    const titulo = document.getElementById("titulo-malla");
-
-    // Reemplaza esto con la forma en la que tu código obtiene carreraActual
-    const carreraActual = localStorage.getItem("carreraSeleccionada") || "default";
-
-    // Cargar título guardado (si existe)
-    const tituloGuardado = localStorage.getItem(`tituloMalla-${carreraActual}`);
-    if (tituloGuardado) {
-      titulo.innerText = tituloGuardado;
-    }
-
-    // Guardar al salir del campo
-    titulo.addEventListener("blur", () => {
+  // Guardar al salir del campo
+  titulo.addEventListener("blur", () => {
+    if (titulo.isContentEditable) {
       const nuevoTitulo = titulo.innerText.trim();
       localStorage.setItem(`tituloMalla-${carreraActual}`, nuevoTitulo);
-    });
+    }
   });
+});
+
 function quitarElectivo(nombreCurso) {
   // ✅ Eliminar de la malla
   carreras[carreraActual] = carreras[carreraActual].filter(c => c.curso !== nombreCurso);
