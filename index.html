@@ -839,7 +839,8 @@ body.dark-mode .descripcion {
 <div id="bienvenida-overlay">
   <div class="bienvenida-fondo"></div>
   <div class="bienvenida-content">
-    <h1>¡Bienvenido a la Malla Interactiva ULIMA!</h1>
+    <h1 id="titulo-malla" contenteditable="false">¡Bienvenido a la Malla Interactiva ULIMA!</h1>
+    <button onclick="editarTitulo()">✏️</button>
 
     <div class="bienvenida-flex">
       <!-- Imagen 1 con etiquetas -->
@@ -1018,6 +1019,25 @@ body.dark-mode .descripcion {
     let cursoAnterior = null
     let carreraActual = 'ingenieria';
     const estadoCursos = JSON.parse(localStorage.getItem("estadoCursosULIMA")) || {};
+
+    function editarTitulo() {
+  const titulo = document.getElementById("titulo-malla");
+      if (titulo.isContentEditable) {
+        titulo.contentEditable = "false";
+        localStorage.setItem("tituloMalla", titulo.innerText);
+      } else {
+        titulo.contentEditable = "true";
+        titulo.focus();
+      }
+    }
+
+    // Al cargar la página, recupera el título personalizado
+    window.addEventListener("DOMContentLoaded", () => {
+      const tituloGuardado = localStorage.getItem("tituloMalla");
+      if (tituloGuardado) {
+        document.getElementById("titulo-malla").innerText = tituloGuardado;
+      }
+    });
 
     function guardarCursosPersonalizados() {
       localStorage.setItem("cursosPersonalizados", JSON.stringify(carreras.personalizada));
