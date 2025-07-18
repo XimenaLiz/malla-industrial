@@ -2010,48 +2010,54 @@ function restaurarElectivosEnCiclos() {
   }
 }
 // ===== FUNCIÓN PARA EDITAR TÍTULO (VERSIÓN FINAL) =====
-    document.addEventListener("DOMContentLoaded", () => {
-      const titulo = document.getElementById("titulo-malla");
-      const boton = document.getElementById("editar-titulo-btn");
+document.addEventListener("DOMContentLoaded", () => {
+  const titulo = document.getElementById("titulo-malla");
+  const boton = document.getElementById("editar-titulo-btn");
 
-      const carreraActual = localStorage.getItem("carreraSeleccionada") || "default";
-      const claveTitulo = `tituloMalla-${carreraActual}`;
+  // Usamos clave distinta por carrera
+  const carreraActual = localStorage.getItem("carreraSeleccionada") || "default";
+  const claveTitulo = `tituloMalla-${carreraActual}`;
 
-      const tituloGuardado = localStorage.getItem(claveTitulo);
-      if (tituloGuardado) {
-        titulo.innerText = tituloGuardado;
-      }
+  // Cargar título guardado
+  const tituloGuardado = localStorage.getItem(claveTitulo);
+  if (tituloGuardado) {
+    titulo.innerText = tituloGuardado;
+  }
 
-      titulo.addEventListener("blur", () => {
-        const nuevoTitulo = titulo.innerText.trim();
-        localStorage.setItem(claveTitulo, nuevoTitulo);
-        boton.innerText = "✏️";
-        titulo.contentEditable = "false";
-      });
+  // Guardar al salir del foco
+  titulo.addEventListener("blur", () => {
+    const nuevoTitulo = titulo.innerText.trim();
+    localStorage.setItem(claveTitulo, nuevoTitulo);
+    boton.innerText = "✏️";
+    titulo.contentEditable = "false";
+  });
 
-      titulo.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-          e.preventDefault();
-          titulo.blur();
-        }
-      });
+  // Permitir guardar con Enter
+  titulo.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); // evita salto de línea
+      titulo.blur(); // dispara blur para guardar
+    }
+  });
 
-      boton.addEventListener("click", () => {
-        if (titulo.contentEditable === "true") {
-          titulo.blur();
-        } else {
-          titulo.contentEditable = "true";
-          boton.innerText = "💾";
-          titulo.focus();
+  // Botón de edición
+  boton.addEventListener("click", () => {
+    if (titulo.contentEditable === "true") {
+      titulo.blur(); // guarda y cierra edición
+    } else {
+      titulo.contentEditable = "true";
+      boton.innerText = "💾";
+      titulo.focus();
 
-          const seleccion = window.getSelection();
-          const rango = document.createRange();
-          rango.selectNodeContents(titulo);
-          seleccion.removeAllRanges();
-          seleccion.addRange(rango);
-        }
-      });
-    });
+      // Seleccionar todo el texto automáticamente
+      const seleccion = window.getSelection();
+      const rango = document.createRange();
+      rango.selectNodeContents(titulo);
+      seleccion.removeAllRanges();
+      seleccion.addRange(rango);
+    }
+  });
+});
 
 function quitarElectivo(nombreCurso) {
   // ✅ Eliminar de la malla
