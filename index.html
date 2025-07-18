@@ -2014,17 +2014,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const titulo = document.getElementById("titulo-malla");
   const boton = document.getElementById("editar-titulo-btn");
 
-  // Usamos clave distinta por carrera
+  if (!titulo || !boton) {
+    console.error("No se encontró el título o el botón");
+    return;
+  }
+
   const carreraActual = localStorage.getItem("carreraSeleccionada") || "default";
   const claveTitulo = `tituloMalla-${carreraActual}`;
 
-  // Cargar título guardado
   const tituloGuardado = localStorage.getItem(claveTitulo);
   if (tituloGuardado) {
     titulo.innerText = tituloGuardado;
   }
 
-  // Guardar al salir del foco
   titulo.addEventListener("blur", () => {
     const nuevoTitulo = titulo.innerText.trim();
     localStorage.setItem(claveTitulo, nuevoTitulo);
@@ -2032,24 +2034,21 @@ document.addEventListener("DOMContentLoaded", () => {
     titulo.contentEditable = "false";
   });
 
-  // Permitir guardar con Enter
   titulo.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
-      e.preventDefault(); // evita salto de línea
-      titulo.blur(); // dispara blur para guardar
+      e.preventDefault();
+      titulo.blur();
     }
   });
 
-  // Botón de edición
   boton.addEventListener("click", () => {
     if (titulo.contentEditable === "true") {
-      titulo.blur(); // guarda y cierra edición
+      titulo.blur();
     } else {
       titulo.contentEditable = "true";
       boton.innerText = "💾";
       titulo.focus();
 
-      // Seleccionar todo el texto automáticamente
       const seleccion = window.getSelection();
       const rango = document.createRange();
       rango.selectNodeContents(titulo);
@@ -2058,7 +2057,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-
 function quitarElectivo(nombreCurso) {
   // ✅ Eliminar de la malla
   carreras[carreraActual] = carreras[carreraActual].filter(c => c.curso !== nombreCurso);
