@@ -897,8 +897,11 @@ body.dark-mode .descripcion {
 <!-- Botón de modo oscuro -->
 <button class="modo-btn" id="modoToggle">🌙 Modo Oscuro</button>
   <div class="titulo-malla-container">
-  <h1 id="titulo-malla" contenteditable="false">Malla Curricular - ULIMA</h1>
-  <button id="editar-titulo-btn" type="button">✏️</button>
+  <h1 id="titulo-malla" contenteditable="false">Malla Curricular ULIMA</h1>
+  <button id="editar-titulo-btn" onclick="editarTitulo()" title="Editar título">
+    ✏️
+  </button>
+</div>
 </div>
   <div id="creditos-container" style="margin: 1rem auto; max-width: 500px; text-align: center;">
   <div id="creditos-texto" style="font-weight: bold; margin-bottom: 0.5rem;">Créditos aprobados: 0 / 200</div>
@@ -2008,37 +2011,34 @@ function restaurarElectivosEnCiclos() {
     }
   }
 }
-  document.addEventListener("DOMContentLoaded", function () {
-    const titulo = document.getElementById("titulo-malla");
-    const boton = document.getElementById("editar-titulo-btn");
+function editarTitulo() {
+  const titulo = document.getElementById("titulo-malla");
+  const boton = document.getElementById("editar-titulo-btn");
 
-    const tituloGuardado = localStorage.getItem("tituloMalla");
-    if (tituloGuardado) {
-      titulo.textContent = tituloGuardado;
-    }
+  if (titulo.isContentEditable) {
+    titulo.contentEditable = "false";
+    titulo.blur(); // para asegurar que dispare el guardado
+    boton.innerText = "✏️";
+  } else {
+    titulo.contentEditable = "true";
+    titulo.focus();
+    boton.innerText = "💾";
+  }
+}
 
-    boton.addEventListener("click", () => {
-      const editando = titulo.isContentEditable;
+// Guardar automáticamente al perder el foco
+document.getElementById("titulo-malla").addEventListener("blur", () => {
+  const nuevoTitulo = document.getElementById("titulo-malla").innerText.trim();
+  localStorage.setItem("tituloMalla", nuevoTitulo);
+});
 
-      if (!editando) {
-        titulo.contentEditable = "true";
-        titulo.focus();
-        boton.textContent = "💾";
-      } else {
-        titulo.contentEditable = "false";
-        boton.textContent = "✏️";
-        localStorage.setItem("tituloMalla", titulo.textContent.trim());
-      }
-    });
-
-    titulo.addEventListener("blur", () => {
-      if (titulo.isContentEditable) {
-        titulo.contentEditable = "false";
-        boton.textContent = "✏️";
-        localStorage.setItem("tituloMalla", titulo.textContent.trim());
-      }
-    });
-  });
+// Cargar al inicio
+window.addEventListener("DOMContentLoaded", () => {
+  const tituloGuardado = localStorage.getItem("tituloMalla");
+  if (tituloGuardado) {
+    document.getElementById("titulo-malla").innerText = tituloGuardado;
+  }
+});
 
 
 function quitarElectivo(nombreCurso) {
