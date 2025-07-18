@@ -896,8 +896,10 @@ body.dark-mode .descripcion {
 </div>
 <!-- Botón de modo oscuro -->
 <button class="modo-btn" id="modoToggle">🌙 Modo Oscuro</button>
-  <h1 id="titulo-malla">Mi Malla Curricular</h1>
-<button id="editar-titulo-btn">✏️</button>
+  <div class="titulo-malla-container">
+  <h1 id="titulo-malla" contenteditable="false">Malla Curricular ULIMA</h1>
+  <button id="editar-titulo-btn" onclick="editarTitulo()">✏️</button>
+</div>
 </div>
   <div id="creditos-container" style="margin: 1rem auto; max-width: 500px; text-align: center;">
   <div id="creditos-texto" style="font-weight: bold; margin-bottom: 0.5rem;">Créditos aprobados: 0 / 200</div>
@@ -2057,51 +2059,22 @@ document.getElementById("titulo-malla").addEventListener("keydown", function(e) 
 });
 
 // ===== INICIALIZACIÓN DEL TÍTULO AL CARGAR =====
-document.addEventListener("DOMContentLoaded", function () {
-  const titulo = document.getElementById("titulo-malla");
-  const boton = document.getElementById("editar-titulo-btn");
-
-  // Cargar el título desde localStorage
+document.addEventListener("DOMContentLoaded", function() {
   const tituloGuardado = localStorage.getItem("tituloMalla");
-  if (tituloGuardado) {
-    titulo.textContent = tituloGuardado;
+  const tituloElement = document.getElementById("titulo-malla");
+  
+  if (tituloGuardado && tituloElement) {
+    tituloElement.textContent = tituloGuardado;
+    console.log("Título cargado desde localStorage:", tituloGuardado);
   }
-
-  // Evento para editar el título
-  boton.addEventListener("click", () => {
-    if (titulo.isContentEditable) {
-      // Guardar
-      titulo.contentEditable = "false";
-      boton.innerText = "✏️";
-
-      const nuevoTitulo = titulo.textContent.trim();
-      localStorage.setItem("tituloMalla", nuevoTitulo);
-
-      if (typeof carreras !== "undefined" && carreras[carreraActual]) {
-        carreras[carreraActual].nombreMalla = nuevoTitulo;
-      }
-    } else {
-      // Editar
-      titulo.contentEditable = "true";
-      titulo.focus();
-      boton.innerText = "💾";
-
-      // Selecciona el texto automáticamente
-      const seleccion = window.getSelection();
-      const rango = document.createRange();
-      rango.selectNodeContents(titulo);
-      seleccion.removeAllRanges();
-      seleccion.addRange(rango);
-    }
-  });
-
-  // Guardar al presionar Enter
-  titulo.addEventListener("keydown", function (e) {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      boton.click();
-    }
-  });
+  
+  // Verificar si el botón existe antes de agregar evento
+  const editarBtn = document.getElementById("editar-titulo-btn");
+  if (editarBtn) {
+    editarBtn.addEventListener("click", editarTitulo);
+  } else {
+    console.error("Botón de edición no encontrado");
+  }
 });
 function quitarElectivo(nombreCurso) {
   // ✅ Eliminar de la malla
