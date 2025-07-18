@@ -834,10 +834,9 @@ body.dark-mode .descripcion {
 }
 .titulo-malla-container {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 1.5rem;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 #titulo-malla {
@@ -847,17 +846,13 @@ body.dark-mode .descripcion {
 }
 
 #editar-titulo-btn {
-  background-color: #f0f0f0;
-  border: none;
+  background: white;
+  border: 1px solid #ccc;
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  font-size: 1.2rem;
+  width: 32px;
+  height: 32px;
+  font-size: 16px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.3s ease;
 }
 
 #editar-titulo-btn:hover {
@@ -898,7 +893,7 @@ body.dark-mode .descripcion {
 <!-- Botón de modo oscuro -->
 <button class="modo-btn" id="modoToggle">🌙 Modo Oscuro</button>
   <div class="titulo-malla-container">
-  <h1 id="titulo-malla" contenteditable="false">Malla Curricular-ULIMA</h1>
+  <h1 id="titulo-malla" contenteditable="false">Malla Curricular - ULIMA</h1>
   <button id="editar-titulo-btn" title="Editar título">✏️</button>
 </div>
   <div id="creditos-container" style="margin: 1rem auto; max-width: 500px; text-align: center;">
@@ -2009,39 +2004,38 @@ function restaurarElectivosEnCiclos() {
     }
   }
 }
-document.addEventListener("DOMContentLoaded", function () {
-  function editarTitulo() {
-    const titulo = document.getElementById("titulo-malla");
-    const boton = document.getElementById("editar-titulo-btn");
+  const titulo = document.getElementById("titulo-malla");
+  const boton = document.getElementById("editar-titulo-btn");
 
-    if (titulo.isContentEditable) {
-      titulo.contentEditable = "false";
-      titulo.blur(); // dispara el blur manualmente
-      boton.innerText = "✏️";
-    } else {
-      titulo.contentEditable = "true";
-      titulo.focus();
-      boton.innerText = "💾";
-    }
+  // Al cargar la página, poner el título guardado si existe
+  const tituloGuardado = localStorage.getItem("tituloMalla");
+  if (tituloGuardado) {
+    titulo.textContent = tituloGuardado;
   }
 
-  // Asignar al botón
-  document.getElementById("editar-titulo-btn").addEventListener("click", editarTitulo);
+  // Manejador del botón para editar o guardar
+  boton.addEventListener("click", () => {
+    const editando = titulo.isContentEditable;
 
-  // Guardar título al perder foco
-  document.getElementById("titulo-malla").addEventListener("blur", () => {
-    const nuevoTitulo = document.getElementById("titulo-malla").innerText.trim();
-    if (nuevoTitulo !== "") {
-      localStorage.setItem("tituloMalla", nuevoTitulo);
+    if (!editando) {
+      titulo.contentEditable = "true";
+      titulo.focus();
+      boton.textContent = "💾"; // Cambia a ícono de guardar
+    } else {
+      titulo.contentEditable = "false";
+      boton.textContent = "✏️"; // Regresa al ícono de editar
+      localStorage.setItem("tituloMalla", titulo.textContent.trim());
     }
   });
 
-  // Cargar título guardado al iniciar
-  const tituloGuardado = localStorage.getItem("tituloMalla");
-  if (tituloGuardado) {
-    document.getElementById("titulo-malla").innerText = tituloGuardado;
-  }
-});
+  // Si se hace clic fuera del título, guardar también
+  titulo.addEventListener("blur", () => {
+    if (titulo.isContentEditable) {
+      titulo.contentEditable = "false";
+      boton.textContent = "✏️";
+      localStorage.setItem("tituloMalla", titulo.textContent.trim());
+    }
+  });
 
 function quitarElectivo(nombreCurso) {
   // ✅ Eliminar de la malla
