@@ -2011,32 +2011,44 @@ function restaurarElectivosEnCiclos() {
     }
   }
 }
-function editarTitulo() {
+document.addEventListener("DOMContentLoaded", () => {
   const titulo = document.getElementById("titulo-malla");
   const boton = document.getElementById("editar-titulo-btn");
 
-  if (titulo.isContentEditable) {
-    titulo.contentEditable = "false";
-    titulo.blur(); // para asegurar que dispare el guardado
-    boton.innerText = "✏️";
-  } else {
-    titulo.contentEditable = "true";
-    titulo.focus();
-    boton.innerText = "💾";
-  }
-}
-
-// Guardar automáticamente al perder el foco
-document.getElementById("titulo-malla").addEventListener("blur", () => {
-  const nuevoTitulo = document.getElementById("titulo-malla").innerText.trim();
-  localStorage.setItem("tituloMalla", nuevoTitulo);
-});
-
-// Cargar al inicio
-window.addEventListener("DOMContentLoaded", () => {
+  // 1. Cargar el título guardado si existe
   const tituloGuardado = localStorage.getItem("tituloMalla");
   if (tituloGuardado) {
-    document.getElementById("titulo-malla").innerText = tituloGuardado;
+    titulo.textContent = tituloGuardado;
+  }
+
+  // 2. Función para activar/desactivar edición
+  boton.addEventListener("click", () => {
+    const editando = titulo.isContentEditable;
+
+    if (!editando) {
+      titulo.contentEditable = "true";
+      titulo.focus();
+      boton.textContent = "💾";
+    } else {
+      titulo.contentEditable = "false";
+      boton.textContent = "✏️";
+      guardarTitulo();
+    }
+  });
+
+  // 3. Guardar al hacer clic fuera
+  titulo.addEventListener("blur", () => {
+    if (titulo.isContentEditable) {
+      titulo.contentEditable = "false";
+      boton.textContent = "✏️";
+      guardarTitulo();
+    }
+  });
+
+  // 4. Función que guarda en localStorage
+  function guardarTitulo() {
+    const texto = titulo.textContent.trim();
+    localStorage.setItem("tituloMalla", texto);
   }
 });
 
