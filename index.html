@@ -898,7 +898,7 @@ body.dark-mode .descripcion {
 <!-- Botón de modo oscuro -->
 <button class="modo-btn" id="modoToggle">🌙 Modo Oscuro</button>
   <div class="titulo-malla-container">
-  <h1 id="titulo-malla" contenteditable="false">Malla Curricular ULIMA</h1>
+  <h1 id="titulo-malla" contenteditable="false">Malla Curricular-ULIMA</h1>
   <button id="editar-titulo-btn" onclick="editarTitulo()" title="Editar título">
     ✏️
   </button>
@@ -2011,31 +2011,34 @@ function restaurarElectivosEnCiclos() {
     }
   }
 }
-function editarTitulo() {
-  const titulo = document.getElementById("titulo-malla");
-  const boton = document.getElementById("editar-titulo-btn");
+document.addEventListener("DOMContentLoaded", function () {
+  function editarTitulo() {
+    const titulo = document.getElementById("titulo-malla");
+    const boton = document.getElementById("editar-titulo-btn");
 
-  if (titulo.isContentEditable) {
-    titulo.contentEditable = "false";
-    titulo.blur(); // dispara el blur manualmente
-    boton.innerText = "✏️";
-  } else {
-    titulo.contentEditable = "true";
-    titulo.focus();
-    boton.innerText = "💾";
+    if (titulo.isContentEditable) {
+      titulo.contentEditable = "false";
+      titulo.blur(); // dispara el blur manualmente
+      boton.innerText = "✏️";
+    } else {
+      titulo.contentEditable = "true";
+      titulo.focus();
+      boton.innerText = "💾";
+    }
   }
-}
 
-// Guardar título al perder foco
-document.getElementById("titulo-malla").addEventListener("blur", () => {
-  const nuevoTitulo = document.getElementById("titulo-malla").innerText.trim();
-  if (nuevoTitulo !== "") {
-    localStorage.setItem("tituloMalla", nuevoTitulo);
-  }
-});
+  // Asignar al botón
+  document.getElementById("editar-titulo-btn").addEventListener("click", editarTitulo);
 
-// Cargar título al iniciar la página
-window.addEventListener("DOMContentLoaded", () => {
+  // Guardar título al perder foco
+  document.getElementById("titulo-malla").addEventListener("blur", () => {
+    const nuevoTitulo = document.getElementById("titulo-malla").innerText.trim();
+    if (nuevoTitulo !== "") {
+      localStorage.setItem("tituloMalla", nuevoTitulo);
+    }
+  });
+
+  // Cargar título guardado al iniciar
   const tituloGuardado = localStorage.getItem("tituloMalla");
   if (tituloGuardado) {
     document.getElementById("titulo-malla").innerText = tituloGuardado;
