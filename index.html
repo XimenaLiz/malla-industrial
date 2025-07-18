@@ -832,6 +832,25 @@ body.dark-mode .descripcion {
   border: none !important;
   box-shadow: none !important;
 }
+.titulo-malla-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+#editar-titulo-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0.2rem;
+  transition: transform 0.2s ease;
+}
+
+#editar-titulo-btn:hover {
+  transform: scale(1.2);
+}
   </style>
 </head>
 <body>
@@ -865,8 +884,12 @@ body.dark-mode .descripcion {
 </div>
 <!-- Botón de modo oscuro -->
 <button class="modo-btn" id="modoToggle">🌙 Modo Oscuro</button>
-  <h1 id="titulo-malla" contenteditable="false">Malla Curricular - ULIMA</h1>
-  <button onclick="editarTitulo()">✏️</button>
+  <div class="titulo-malla-container">
+  <h1 id="titulo-malla" contenteditable="false">Malla Curricular ULIMA</h1>
+  <button id="editar-titulo-btn" onclick="editarTitulo()" title="Editar título">
+    ✏️
+  </button>
+</div>
   <div id="creditos-container" style="margin: 1rem auto; max-width: 500px; text-align: center;">
   <div id="creditos-texto" style="font-weight: bold; margin-bottom: 0.5rem;">Créditos aprobados: 0 / 200</div>
   <div style="background: #eee; height: 20px; border-radius: 10px; overflow: hidden;">
@@ -1977,17 +2000,26 @@ function restaurarElectivosEnCiclos() {
 }
 function editarTitulo() {
   const titulo = document.getElementById("titulo-malla");
+  const boton = document.getElementById("editar-titulo-btn");
 
   if (titulo.isContentEditable) {
     titulo.contentEditable = "false";
-    localStorage.setItem("tituloMalla", titulo.innerText);
+    titulo.blur(); // para asegurar que dispare el guardado
+    boton.innerText = "✏️";
   } else {
     titulo.contentEditable = "true";
     titulo.focus();
+    boton.innerText = "💾";
   }
 }
 
-// Al cargar la página, recupera el título personalizado
+// Guardar automáticamente al perder el foco
+document.getElementById("titulo-malla").addEventListener("blur", () => {
+  const nuevoTitulo = document.getElementById("titulo-malla").innerText.trim();
+  localStorage.setItem("tituloMalla", nuevoTitulo);
+});
+
+// Cargar al inicio
 window.addEventListener("DOMContentLoaded", () => {
   const tituloGuardado = localStorage.getItem("tituloMalla");
   if (tituloGuardado) {
