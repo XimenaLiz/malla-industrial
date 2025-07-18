@@ -2010,70 +2010,36 @@ function restaurarElectivosEnCiclos() {
   }
 }
 // ===== FUNCIÓN PARA EDITAR TÍTULO (VERSIÓN FINAL) =====
+let tituloEditando = false;
+
 function editarTitulo() {
   const titulo = document.getElementById("titulo-malla");
   const boton = document.getElementById("editar-titulo-btn");
-
-  // Verificación de elementos (para evitar errores)
-  if (!titulo || !boton) {
-    console.error("Error: No se encontraron los elementos del título");
-    return;
-  }
-
-  if (titulo.isContentEditable) {
-    // MODO GUARDAR
-    titulo.contentEditable = "false";
-    boton.innerHTML = "✏️";
-    
-    // Guardar en localStorage y en la variable de carreras
-    const nuevoTitulo = titulo.textContent.trim();
-    localStorage.setItem("tituloMalla", nuevoTitulo);
-    
-    // Actualizar en todas las estructuras de datos necesarias
-    if (carreras[carreraActual]) {
-      carreras[carreraActual].nombreMalla = nuevoTitulo;
-    }
-    
-    console.log("Título guardado:", nuevoTitulo);
-  } else {
-    // MODO EDITAR
-    titulo.contentEditable = "true";
-    boton.innerHTML = "💾";
-    
-    // Enfocar y seleccionar todo el texto
+  
+  tituloEditando = !tituloEditando;
+  
+  if (tituloEditando) {
+    titulo.contentEditable = true;
+    boton.textContent = "💾";
     titulo.focus();
-    const seleccion = window.getSelection();
-    const rango = document.createRange();
-    rango.selectNodeContents(titulo);
-    seleccion.removeAllRanges();
-    seleccion.addRange(rango);
+  } else {
+    titulo.contentEditable = false;
+    boton.textContent = "✏️";
+    localStorage.setItem("tituloMalla", titulo.textContent.trim());
+    
+    // Disparar evento personalizado para otros componentes
+    const evento = new CustomEvent('tituloCambiado', {
+      detail: { nuevoTitulo: titulo.textContent.trim() }
+    });
+    document.dispatchEvent(evento);
   }
 }
 
-// ===== EVENTO PARA GUARDAR AL PRESIONAR ENTER =====
-document.getElementById("titulo-malla").addEventListener("keydown", function(e) {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    document.getElementById("editar-titulo-btn").click();
-  }
-});
-
-// ===== INICIALIZACIÓN DEL TÍTULO AL CARGAR =====
-document.addEventListener("DOMContentLoaded", function() {
+// Cargar título al inicio
+window.addEventListener('load', function() {
   const tituloGuardado = localStorage.getItem("tituloMalla");
-  const tituloElement = document.getElementById("titulo-malla");
-  
-  if (tituloGuardado && tituloElement) {
-    tituloElement.textContent = tituloGuardado;
-    console.log("Título cargado desde localStorage:", tituloGuardado);
-  }
-  
-  // Verificar si el botón existe antes de agregar evento
-  const editarBtn = document.getElementById("editar-titulo-btn");
-  if (editarBtn) {
-    editarBtn.addEventListener("click", editarTitulo);
-  } else {
-    console.error("Botón de edición no encontrado");
+  if (tituloGuardado) {
+    document.getElementById("titulo-malla").textContent = tituloGuardado;
   }
 });
 function quitarElectivo(nombreCurso) {
