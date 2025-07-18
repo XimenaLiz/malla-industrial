@@ -2059,23 +2059,38 @@ document.getElementById("titulo-malla").addEventListener("keydown", function(e) 
 });
 
 // ===== INICIALIZACIÓN DEL TÍTULO AL CARGAR =====
-document.addEventListener("DOMContentLoaded", function() {
-  const tituloGuardado = localStorage.getItem("tituloMalla");
-  const tituloElement = document.getElementById("titulo-malla");
-  
-  if (tituloGuardado && tituloElement) {
-    tituloElement.textContent = tituloGuardado;
-    console.log("Título cargado desde localStorage:", tituloGuardado);
+  function editarTitulo() {
+    const titulo = document.getElementById("titulo-malla");
+    const boton = document.getElementById("editar-titulo-btn");
+
+    if (titulo.isContentEditable) {
+      titulo.contentEditable = "false";
+      titulo.blur(); // dispara el blur que guarda
+      boton.innerText = "✏️";
+    } else {
+      titulo.contentEditable = "true";
+      titulo.focus();
+      boton.innerText = "💾";
+    }
   }
-  
-  // Verificar si el botón existe antes de agregar evento
-  const editarBtn = document.getElementById("editar-titulo-btn");
-  if (editarBtn) {
-    editarBtn.addEventListener("click", editarTitulo);
-  } else {
-    console.error("Botón de edición no encontrado");
-  }
-});
+
+  // Guardar al salir del campo (al hacer blur)
+  document.addEventListener("DOMContentLoaded", () => {
+    const titulo = document.getElementById("titulo-malla");
+    const boton = document.getElementById("editar-titulo-btn");
+
+    // Cargar título guardado
+    const tituloGuardado = localStorage.getItem("tituloMalla");
+    if (tituloGuardado) {
+      titulo.innerText = tituloGuardado;
+    }
+
+    // Guardar al perder el foco
+    titulo.addEventListener("blur", () => {
+      const nuevoTitulo = titulo.innerText.trim();
+      localStorage.setItem("tituloMalla", nuevoTitulo);
+    });
+  });
 function quitarElectivo(nombreCurso) {
   // ✅ Eliminar de la malla
   carreras[carreraActual] = carreras[carreraActual].filter(c => c.curso !== nombreCurso);
