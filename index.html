@@ -2008,42 +2008,37 @@ function restaurarElectivosEnCiclos() {
     }
   }
 }
-window.onload = () => {
-  restaurarElectivosEnCiclos();
-  renderMalla();
-  filtrarDiploma("todos");
-  mostrarCreditosAprobados();
+  document.addEventListener("DOMContentLoaded", function () {
+    const titulo = document.getElementById("titulo-malla");
+    const boton = document.getElementById("editar-titulo-btn");
 
-  const titulo = document.getElementById("titulo-malla");
-  const boton = document.getElementById("editar-titulo-btn");
-
-  const tituloGuardado = localStorage.getItem("tituloMalla");
-  if (tituloGuardado) {
-    titulo.textContent = tituloGuardado;
-  }
-
-  boton.addEventListener("click", () => {
-    const editando = titulo.isContentEditable;
-
-    if (!editando) {
-      titulo.contentEditable = "true";
-      titulo.focus();
-      boton.textContent = "💾";
-    } else {
-      titulo.contentEditable = "false";
-      boton.textContent = "✏️";
-      localStorage.setItem("tituloMalla", titulo.textContent.trim());
+    const tituloGuardado = localStorage.getItem("tituloMalla");
+    if (tituloGuardado) {
+      titulo.textContent = tituloGuardado;
     }
-  });
 
-  titulo.addEventListener("blur", () => {
-    if (titulo.isContentEditable) {
-      titulo.contentEditable = "false";
-      boton.textContent = "✏️";
-      localStorage.setItem("tituloMalla", titulo.textContent.trim());
-    }
+    boton.addEventListener("click", () => {
+      const editando = titulo.isContentEditable;
+
+      if (!editando) {
+        titulo.contentEditable = "true";
+        titulo.focus();
+        boton.textContent = "💾";
+      } else {
+        titulo.contentEditable = "false";
+        boton.textContent = "✏️";
+        localStorage.setItem("tituloMalla", titulo.textContent.trim());
+      }
+    });
+
+    titulo.addEventListener("blur", () => {
+      if (titulo.isContentEditable) {
+        titulo.contentEditable = "false";
+        boton.textContent = "✏️";
+        localStorage.setItem("tituloMalla", titulo.textContent.trim());
+      }
+    });
   });
-};
 
 
 function quitarElectivo(nombreCurso) {
