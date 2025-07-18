@@ -2011,34 +2011,34 @@ function restaurarElectivosEnCiclos() {
     }
   }
 }
-function editarTitulo() {
-  const titulo = document.getElementById("titulo-malla");
-  const boton = document.getElementById("editar-titulo-btn");
+    function editarTitulo() {
+    const titulo = document.getElementById("titulo-malla");
+    const boton = document.getElementById("editar-titulo-btn");
 
-  if (titulo.isContentEditable) {
-    titulo.contentEditable = "false";
-    titulo.blur(); // para asegurar que dispare el guardado
-    boton.innerText = "✏️";
-  } else {
-    titulo.contentEditable = "true";
-    titulo.focus();
-    boton.innerText = "💾";
+    if (titulo.isContentEditable) {
+      titulo.contentEditable = "false";
+      titulo.blur(); // para asegurar que dispare el guardado
+      boton.innerText = "✏️";
+    } else {
+      titulo.contentEditable = "true";
+      titulo.focus();
+      boton.innerText = "💾";
+    }
   }
-}
 
-// Guardar automáticamente al perder el foco
-document.getElementById("titulo-malla").addEventListener("blur", () => {
-  const nuevoTitulo = document.getElementById("titulo-malla").innerText.trim();
-  localStorage.setItem("tituloMalla", nuevoTitulo);
-});
+  // Guardar automáticamente al perder el foco
+  document.getElementById("titulo-malla").addEventListener("blur", () => {
+    const nuevoTitulo = document.getElementById("titulo-malla").innerText.trim();
+    localStorage.setItem("tituloMalla", nuevoTitulo);
+  });
 
-// Cargar al inicio
-window.addEventListener("DOMContentLoaded", () => {
-  const tituloGuardado = localStorage.getItem("tituloMalla");
-  if (tituloGuardado) {
-    document.getElementById("titulo-malla").innerText = tituloGuardado;
-  }
-});
+  // Cargar al inicio
+  window.addEventListener("DOMContentLoaded", () => {
+    const tituloGuardado = localStorage.getItem("tituloMalla");
+    if (tituloGuardado) {
+      document.getElementById("titulo-malla").innerText = tituloGuardado;
+    }
+  });
 
 
 function quitarElectivo(nombreCurso) {
