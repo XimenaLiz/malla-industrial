@@ -898,9 +898,7 @@ body.dark-mode .descripcion {
 <button class="modo-btn" id="modoToggle">🌙 Modo Oscuro</button>
   <div class="titulo-malla-container">
   <h1 id="titulo-malla" contenteditable="false">Malla Curricular ULIMA</h1>
-  <button id="editar-titulo-btn" onclick="editarTitulo()" title="Editar título">
-    ✏️
-  </button>
+  <button id="editar-titulo-btn" onclick="editarTitulo()">✏️</button>
 </div>
 </div>
   <div id="creditos-container" style="margin: 1rem auto; max-width: 500px; text-align: center;">
@@ -2011,33 +2009,73 @@ function restaurarElectivosEnCiclos() {
     }
   }
 }
+// ===== FUNCIÓN PARA EDITAR TÍTULO (VERSIÓN FINAL) =====
 function editarTitulo() {
   const titulo = document.getElementById("titulo-malla");
   const boton = document.getElementById("editar-titulo-btn");
 
+  // Verificación de elementos (para evitar errores)
   if (!titulo || !boton) {
-    console.error("Elementos del título no encontrados");
+    console.error("Error: No se encontraron los elementos del título");
     return;
   }
 
   if (titulo.isContentEditable) {
-    // Guardar cambios
+    // MODO GUARDAR
     titulo.contentEditable = "false";
     boton.innerHTML = "✏️";
-    localStorage.setItem("tituloMalla", titulo.textContent.trim());
+    
+    // Guardar en localStorage y en la variable de carreras
+    const nuevoTitulo = titulo.textContent.trim();
+    localStorage.setItem("tituloMalla", nuevoTitulo);
+    
+    // Actualizar en todas las estructuras de datos necesarias
+    if (carreras[carreraActual]) {
+      carreras[carreraActual].nombreMalla = nuevoTitulo;
+    }
+    
+    console.log("Título guardado:", nuevoTitulo);
   } else {
-    // Activar edición
+    // MODO EDITAR
     titulo.contentEditable = "true";
     boton.innerHTML = "💾";
-    titulo.focus();
     
-    // Seleccionar todo el texto automáticamente
-    const range = document.createRange();
-    range.selectNodeContents(titulo);
-    window.getSelection().removeAllRanges().addRange(range);
+    // Enfocar y seleccionar todo el texto
+    titulo.focus();
+    const seleccion = window.getSelection();
+    const rango = document.createRange();
+    rango.selectNodeContents(titulo);
+    seleccion.removeAllRanges();
+    seleccion.addRange(rango);
   }
 }
 
+// ===== EVENTO PARA GUARDAR AL PRESIONAR ENTER =====
+document.getElementById("titulo-malla").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    document.getElementById("editar-titulo-btn").click();
+  }
+});
+
+// ===== INICIALIZACIÓN DEL TÍTULO AL CARGAR =====
+document.addEventListener("DOMContentLoaded", function() {
+  const tituloGuardado = localStorage.getItem("tituloMalla");
+  const tituloElement = document.getElementById("titulo-malla");
+  
+  if (tituloGuardado && tituloElement) {
+    tituloElement.textContent = tituloGuardado;
+    console.log("Título cargado desde localStorage:", tituloGuardado);
+  }
+  
+  // Verificar si el botón existe antes de agregar evento
+  const editarBtn = document.getElementById("editar-titulo-btn");
+  if (editarBtn) {
+    editarBtn.addEventListener("click", editarTitulo);
+  } else {
+    console.error("Botón de edición no encontrado");
+  }
+});
 function quitarElectivo(nombreCurso) {
   // ✅ Eliminar de la malla
   carreras[carreraActual] = carreras[carreraActual].filter(c => c.curso !== nombreCurso);
