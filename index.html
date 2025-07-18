@@ -834,23 +834,36 @@ body.dark-mode .descripcion {
 }
 .titulo-malla-container {
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+#titulo-malla {
+  font-size: 2rem;
+  text-align: center;
+  margin: 0;
 }
 
 #editar-titulo-btn {
-  background: none;
+  background-color: #f0f0f0;
   border: none;
-  cursor: pointer;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
   font-size: 1.2rem;
-  padding: 0.2rem;
-  transition: transform 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
 }
 
 #editar-titulo-btn:hover {
-  transform: scale(1.2);
+  background-color: #e0e0e0;
 }
+
   </style>
 </head>
 <body>
@@ -2004,7 +2017,7 @@ function editarTitulo() {
 
   if (titulo.isContentEditable) {
     titulo.contentEditable = "false";
-    titulo.blur(); // para asegurar que dispare el guardado
+    titulo.blur(); // dispara el blur manualmente
     boton.innerText = "✏️";
   } else {
     titulo.contentEditable = "true";
@@ -2013,13 +2026,15 @@ function editarTitulo() {
   }
 }
 
-// Guardar automáticamente al perder el foco
+// Guardar título al perder foco
 document.getElementById("titulo-malla").addEventListener("blur", () => {
   const nuevoTitulo = document.getElementById("titulo-malla").innerText.trim();
-  localStorage.setItem("tituloMalla", nuevoTitulo);
+  if (nuevoTitulo !== "") {
+    localStorage.setItem("tituloMalla", nuevoTitulo);
+  }
 });
 
-// Cargar al inicio
+// Cargar título al iniciar la página
 window.addEventListener("DOMContentLoaded", () => {
   const tituloGuardado = localStorage.getItem("tituloMalla");
   if (tituloGuardado) {
