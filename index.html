@@ -2093,6 +2093,7 @@ document.getElementById("titulo-malla").addEventListener("keydown", function(e) 
       localStorage.setItem(`tituloMalla-${carreraActual}`, nuevoTitulo);
       console.log("Guardado:", `tituloMalla-${carreraActual}`, nuevoTitulo);
     });
+  });
 function quitarElectivo(nombreCurso) {
   // ✅ Eliminar de la malla
   carreras[carreraActual] = carreras[carreraActual].filter(c => c.curso !== nombreCurso);
