@@ -2010,12 +2010,14 @@ function restaurarElectivosEnCiclos() {
   }
 }
 // ===== FUNCIÓN PARA EDITAR TÍTULO (VERSIÓN FINAL) =====
-document.addEventListener("DOMContentLoaded", () => {
   const titulo = document.getElementById("titulo-malla");
   const boton = document.getElementById("editar-titulo-btn");
 
+  // Cargar título guardado si existe
   const tituloGuardado = localStorage.getItem("tituloMalla");
-  if (tituloGuardado) titulo.innerText = tituloGuardado;
+  if (tituloGuardado) {
+    titulo.innerText = tituloGuardado;
+  }
 
   boton.addEventListener("click", () => {
     if (titulo.isContentEditable) {
@@ -2029,12 +2031,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // También guardar al salir del campo por si acaso
   titulo.addEventListener("blur", () => {
     if (titulo.isContentEditable) {
       localStorage.setItem("tituloMalla", titulo.innerText.trim());
     }
   });
-});
 function quitarElectivo(nombreCurso) {
   // ✅ Eliminar de la malla
   carreras[carreraActual] = carreras[carreraActual].filter(c => c.curso !== nombreCurso);
