@@ -2011,32 +2011,39 @@ function restaurarElectivosEnCiclos() {
     }
   }
 }
+// ========== FUNCIÓN PARA EDITAR TÍTULO (CORREGIDA) ==========
 function editarTitulo() {
   const titulo = document.getElementById("titulo-malla");
   const boton = document.getElementById("editar-titulo-btn");
 
   if (titulo.isContentEditable) {
+    // Modo guardar
     titulo.contentEditable = "false";
     boton.innerHTML = "✏️";
-    // Guardar el título cuando se desactiva la edición
-    const nuevoTitulo = titulo.innerText.trim();
+    
+    // Guardar en localStorage
+    const nuevoTitulo = titulo.textContent.trim();
     localStorage.setItem("tituloMalla", nuevoTitulo);
+    
+    // Cambiar el cursor a normal
+    titulo.style.cursor = "default";
   } else {
+    // Modo edición
     titulo.contentEditable = "true";
-    titulo.focus();
     boton.innerHTML = "💾";
+    titulo.focus();
+    
+    // Cambiar el cursor a texto
+    titulo.style.cursor = "text";
+    
+    // Seleccionar todo el texto para facilitar edición
+    const range = document.createRange();
+    range.selectNodeContents(titulo);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
   }
 }
-
-// Elimina el evento blur separado que tenías antes
-// Y asegúrate de cargar el título al inicio así:
-document.addEventListener("DOMContentLoaded", () => {
-  const tituloGuardado = localStorage.getItem("tituloMalla");
-  if (tituloGuardado) {
-    document.getElementById("titulo-malla").textContent = tituloGuardado;
-  }
-});                                                                                        
-
 
 function quitarElectivo(nombreCurso) {
   // ✅ Eliminar de la malla
