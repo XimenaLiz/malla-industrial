@@ -2011,37 +2011,30 @@ function restaurarElectivosEnCiclos() {
     }
   }
 }
-// ========== FUNCIÓN PARA EDITAR TÍTULO (CORREGIDA) ==========
 function editarTitulo() {
   const titulo = document.getElementById("titulo-malla");
   const boton = document.getElementById("editar-titulo-btn");
 
+  if (!titulo || !boton) {
+    console.error("Elementos del título no encontrados");
+    return;
+  }
+
   if (titulo.isContentEditable) {
-    // Modo guardar
+    // Guardar cambios
     titulo.contentEditable = "false";
     boton.innerHTML = "✏️";
-    
-    // Guardar en localStorage
-    const nuevoTitulo = titulo.textContent.trim();
-    localStorage.setItem("tituloMalla", nuevoTitulo);
-    
-    // Cambiar el cursor a normal
-    titulo.style.cursor = "default";
+    localStorage.setItem("tituloMalla", titulo.textContent.trim());
   } else {
-    // Modo edición
+    // Activar edición
     titulo.contentEditable = "true";
     boton.innerHTML = "💾";
     titulo.focus();
     
-    // Cambiar el cursor a texto
-    titulo.style.cursor = "text";
-    
-    // Seleccionar todo el texto para facilitar edición
+    // Seleccionar todo el texto automáticamente
     const range = document.createRange();
     range.selectNodeContents(titulo);
-    const selection = window.getSelection();
-    selection.removeAllRanges();
-    selection.addRange(range);
+    window.getSelection().removeAllRanges().addRange(range);
   }
 }
 
