@@ -2065,7 +2065,7 @@ document.getElementById("titulo-malla").addEventListener("keydown", function(e) 
 
     if (titulo.isContentEditable) {
       titulo.contentEditable = "false";
-      titulo.blur(); // dispara el blur que guarda
+      titulo.blur(); // dispara el blur y guarda
       boton.innerText = "✏️";
     } else {
       titulo.contentEditable = "true";
@@ -2074,21 +2074,23 @@ document.getElementById("titulo-malla").addEventListener("keydown", function(e) 
     }
   }
 
-  // Guardar al salir del campo (al hacer blur)
+  // Cuando el documento esté cargado
   document.addEventListener("DOMContentLoaded", () => {
     const titulo = document.getElementById("titulo-malla");
-    const boton = document.getElementById("editar-titulo-btn");
 
-    // Cargar título guardado
-    const tituloGuardado = localStorage.getItem("tituloMalla");
+    // Reemplaza esto con la forma en la que tu código obtiene carreraActual
+    const carreraActual = localStorage.getItem("carreraSeleccionada") || "default";
+
+    // Cargar título guardado (si existe)
+    const tituloGuardado = localStorage.getItem(`tituloMalla-${carreraActual}`);
     if (tituloGuardado) {
       titulo.innerText = tituloGuardado;
     }
 
-    // Guardar al perder el foco
+    // Guardar al salir del campo
     titulo.addEventListener("blur", () => {
       const nuevoTitulo = titulo.innerText.trim();
-      localStorage.setItem("tituloMalla", nuevoTitulo);
+      localStorage.setItem(`tituloMalla-${carreraActual}`, nuevoTitulo);
     });
   });
 function quitarElectivo(nombreCurso) {
