@@ -2011,35 +2011,30 @@ function restaurarElectivosEnCiclos() {
 }
 // ===== FUNCIÓN PARA EDITAR TÍTULO (VERSIÓN FINAL) =====
 document.addEventListener("DOMContentLoaded", () => {
-    const titulo = document.getElementById("titulo-malla");
-    const boton = document.getElementById("editar-titulo-btn");
+  const titulo = document.getElementById("titulo-malla");
+  const boton = document.getElementById("editar-titulo-btn");
 
-    // 👉 Cargar título guardado
-    const tituloGuardado = localStorage.getItem("tituloMalla");
-    if (tituloGuardado) {
-      titulo.innerText = tituloGuardado;
+  const tituloGuardado = localStorage.getItem("tituloMalla");
+  if (tituloGuardado) titulo.innerText = tituloGuardado;
+
+  boton.addEventListener("click", () => {
+    if (titulo.isContentEditable) {
+      titulo.contentEditable = "false";
+      boton.innerText = "✏️";
+      localStorage.setItem("tituloMalla", titulo.innerText.trim());
+    } else {
+      titulo.contentEditable = "true";
+      titulo.focus();
+      boton.innerText = "💾";
     }
-
-    // 👉 Botón para editar o guardar
-    boton.addEventListener("click", () => {
-      if (titulo.isContentEditable) {
-        titulo.contentEditable = "false";
-        boton.innerText = "✏️";
-        localStorage.setItem("tituloMalla", titulo.innerText.trim()); // Guardar en localStorage
-      } else {
-        titulo.contentEditable = "true";
-        titulo.focus();
-        boton.innerText = "💾";
-      }
-    });
-
-    // 👉 Guardar automáticamente al perder foco
-    titulo.addEventListener("blur", () => {
-      if (titulo.isContentEditable) {
-        localStorage.setItem("tituloMalla", titulo.innerText.trim());
-      }
-    });
   });
+
+  titulo.addEventListener("blur", () => {
+    if (titulo.isContentEditable) {
+      localStorage.setItem("tituloMalla", titulo.innerText.trim());
+    }
+  });
+});
 function quitarElectivo(nombreCurso) {
   // ✅ Eliminar de la malla
   carreras[carreraActual] = carreras[carreraActual].filter(c => c.curso !== nombreCurso);
