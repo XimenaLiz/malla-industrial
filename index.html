@@ -896,10 +896,8 @@ body.dark-mode .descripcion {
 </div>
 <!-- Botón de modo oscuro -->
 <button class="modo-btn" id="modoToggle">🌙 Modo Oscuro</button>
-  <div class="titulo-malla-container">
-  <h1 id="titulo-malla" contenteditable="false">Malla Curricular ULIMA</h1>
-  <button id="editar-titulo-btn" onclick="editarTitulo()">✏️</button>
-</div>
+  <h1 id="titulo-malla">Malla Curricular de Ingeniería Industrial</h1>
+<button id="editar-titulo-btn">✏️</button>
 </div>
   <div id="creditos-container" style="margin: 1rem auto; max-width: 500px; text-align: center;">
   <div id="creditos-texto" style="font-weight: bold; margin-bottom: 0.5rem;">Créditos aprobados: 0 / 200</div>
@@ -2010,14 +2008,15 @@ function restaurarElectivosEnCiclos() {
   }
 }
 // ===== FUNCIÓN PARA EDITAR TÍTULO (VERSIÓN FINAL) =====
+const tituloGuardado = localStorage.getItem("tituloMalla");
+if (tituloGuardado) {
+  document.getElementById("titulo-malla").innerText = tituloGuardado;
+}
+
+// Activar botón de edición
+document.addEventListener("DOMContentLoaded", () => {
   const titulo = document.getElementById("titulo-malla");
   const boton = document.getElementById("editar-titulo-btn");
-
-  // Cargar título guardado si existe
-  const tituloGuardado = localStorage.getItem("tituloMalla");
-  if (tituloGuardado) {
-    titulo.innerText = tituloGuardado;
-  }
 
   boton.addEventListener("click", () => {
     if (titulo.isContentEditable) {
@@ -2030,13 +2029,7 @@ function restaurarElectivosEnCiclos() {
       boton.innerText = "💾";
     }
   });
-
-  // También guardar al salir del campo por si acaso
-  titulo.addEventListener("blur", () => {
-    if (titulo.isContentEditable) {
-      localStorage.setItem("tituloMalla", titulo.innerText.trim());
-    }
-  });
+});
 function quitarElectivo(nombreCurso) {
   // ✅ Eliminar de la malla
   carreras[carreraActual] = carreras[carreraActual].filter(c => c.curso !== nombreCurso);
