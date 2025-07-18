@@ -2012,31 +2012,29 @@ function restaurarElectivosEnCiclos() {
   }
 }
 // ===== FUNCIÓN PARA EDITAR TÍTULO (VERSIÓN FINAL) =====
-function editarTitulo() {
-  const titulo = document.getElementById("titulo-malla");
-  const boton = document.getElementById("editar-titulo-btn");
-
-  if (titulo.isContentEditable) {
-    titulo.contentEditable = "false";
-    boton.innerHTML = "✏️";
-    // Guardar el título cuando se desactiva la edición
-    const nuevoTitulo = titulo.innerText.trim();
-    localStorage.setItem("tituloMalla", nuevoTitulo);
-  } else {
-    titulo.contentEditable = "true";
-    titulo.focus();
-    boton.innerHTML = "💾";
-  }
-}
-
-// Elimina el evento blur separado que tenías antes
-// Y asegúrate de cargar el título al inicio así:
-document.addEventListener("DOMContentLoaded", () => {
-  const tituloGuardado = localStorage.getItem("tituloMalla");
+const tituloGuardado = localStorage.getItem("tituloMalla");
   if (tituloGuardado) {
-    document.getElementById("titulo-malla").textContent = tituloGuardado;
+    const titulo = document.getElementById("titulo-malla");
+    if (titulo) {
+      titulo.textContent = tituloGuardado;
+    }
   }
-});  
+
+  function editarTitulo() {
+    const titulo = document.getElementById("titulo-malla");
+    const boton = document.getElementById("editar-titulo-btn");
+
+    if (titulo.isContentEditable) {
+      titulo.contentEditable = "false";
+      boton.innerHTML = "✏️";
+      const nuevoTitulo = titulo.innerText.trim();
+      localStorage.setItem("tituloMalla", nuevoTitulo);
+    } else {
+      titulo.contentEditable = "true";
+      titulo.focus();
+      boton.innerHTML = "💾";
+    }
+  }
 function quitarElectivo(nombreCurso) {
   // ✅ Eliminar de la malla
   carreras[carreraActual] = carreras[carreraActual].filter(c => c.curso !== nombreCurso);
