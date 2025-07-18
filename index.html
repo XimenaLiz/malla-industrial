@@ -2008,31 +2008,29 @@ function restaurarElectivosEnCiclos() {
     }
   }
 }
+document.addEventListener("DOMContentLoaded", () => {
   const titulo = document.getElementById("titulo-malla");
   const boton = document.getElementById("editar-titulo-btn");
 
-  // Al cargar la página, poner el título guardado si existe
   const tituloGuardado = localStorage.getItem("tituloMalla");
   if (tituloGuardado) {
     titulo.textContent = tituloGuardado;
   }
 
-  // Manejador del botón para editar o guardar
   boton.addEventListener("click", () => {
     const editando = titulo.isContentEditable;
 
     if (!editando) {
       titulo.contentEditable = "true";
       titulo.focus();
-      boton.textContent = "💾"; // Cambia a ícono de guardar
+      boton.textContent = "💾";
     } else {
       titulo.contentEditable = "false";
-      boton.textContent = "✏️"; // Regresa al ícono de editar
+      boton.textContent = "✏️";
       localStorage.setItem("tituloMalla", titulo.textContent.trim());
     }
   });
 
-  // Si se hace clic fuera del título, guardar también
   titulo.addEventListener("blur", () => {
     if (titulo.isContentEditable) {
       titulo.contentEditable = "false";
@@ -2040,6 +2038,7 @@ function restaurarElectivosEnCiclos() {
       localStorage.setItem("tituloMalla", titulo.textContent.trim());
     }
   });
+});
 
 function quitarElectivo(nombreCurso) {
   // ✅ Eliminar de la malla
