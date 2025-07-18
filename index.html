@@ -2059,13 +2059,13 @@ document.getElementById("titulo-malla").addEventListener("keydown", function(e) 
 });
 
 // ===== INICIALIZACIÓN DEL TÍTULO AL CARGAR =====
-  function editarTitulo() {
+    function editarTitulo() {
     const titulo = document.getElementById("titulo-malla");
     const boton = document.getElementById("editar-titulo-btn");
 
     if (titulo.isContentEditable) {
       titulo.contentEditable = "false";
-      titulo.blur(); // dispara el blur y guarda
+      titulo.blur();
       boton.innerText = "✏️";
     } else {
       titulo.contentEditable = "true";
@@ -2074,25 +2074,25 @@ document.getElementById("titulo-malla").addEventListener("keydown", function(e) 
     }
   }
 
-  // Cuando el documento esté cargado
   document.addEventListener("DOMContentLoaded", () => {
     const titulo = document.getElementById("titulo-malla");
 
-    // Reemplaza esto con la forma en la que tu código obtiene carreraActual
-    const carreraActual = localStorage.getItem("carreraSeleccionada") || "default";
+    // Asegúrate de usar la misma variable que tu sistema usa para cursos completados
+    let carreraActual = localStorage.getItem("carreraSeleccionada");
+    if (!carreraActual) carreraActual = "default";
 
-    // Cargar título guardado (si existe)
+    // Leer título guardado
     const tituloGuardado = localStorage.getItem(`tituloMalla-${carreraActual}`);
     if (tituloGuardado) {
       titulo.innerText = tituloGuardado;
     }
 
-    // Guardar al salir del campo
+    // Guardar cuando el usuario deja de editar
     titulo.addEventListener("blur", () => {
       const nuevoTitulo = titulo.innerText.trim();
       localStorage.setItem(`tituloMalla-${carreraActual}`, nuevoTitulo);
+      console.log("Guardado:", `tituloMalla-${carreraActual}`, nuevoTitulo);
     });
-  });
 function quitarElectivo(nombreCurso) {
   // ✅ Eliminar de la malla
   carreras[carreraActual] = carreras[carreraActual].filter(c => c.curso !== nombreCurso);
